@@ -81,11 +81,13 @@
 #include "ble_advertising.h"
 #include "ble_conn_state.h"
 
-#define NRF_LOG_MODULE_NAME "APP"
+#define NRF_LOG_MODULE_NAME "MAIN.c"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
 #include "ble_sls.h"
+#include "bsp_btn_switch.h"
+
 
 #define IS_SRVC_CHANGED_CHARACT_PRESENT 1                                           /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
 
@@ -98,8 +100,8 @@
 #define CENTRAL_LINK_COUNT              0                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
 #define PERIPHERAL_LINK_COUNT           1                                           /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
-#define DEVICE_NAME                     "Nordic_Template"                           /**< Name of device. Will be included in the advertising data. */
-#define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
+#define DEVICE_NAME                     "SMART_LOCKER"                           /**< Name of device. Will be included in the advertising data. */
+#define MANUFACTURER_NAME               "CHANGHONG"                       /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                300                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
 #define APP_ADV_TIMEOUT_IN_SECONDS      180                                         /**< The advertising timeout in units of seconds. */
 
@@ -450,17 +452,17 @@ static void application_timers_start(void)
  */
 static void sleep_mode_enter(void)
 {
-    uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+//    uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 
-    APP_ERROR_CHECK(err_code);
+//    APP_ERROR_CHECK(err_code);
 
-    // Prepare wakeup buttons.
-    err_code = bsp_btn_ble_sleep_mode_prepare();
-    APP_ERROR_CHECK(err_code);
+//    // Prepare wakeup buttons.
+//    err_code = bsp_btn_ble_sleep_mode_prepare();
+//    APP_ERROR_CHECK(err_code);
 
-    // Go to system-off mode (this function will not return; wakeup will cause a reset).
-    err_code = sd_power_system_off();
-    APP_ERROR_CHECK(err_code);
+//    // Go to system-off mode (this function will not return; wakeup will cause a reset).
+//    err_code = sd_power_system_off();
+//    APP_ERROR_CHECK(err_code);
 }
 
 
@@ -483,7 +485,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
             break;
 
         case BLE_ADV_EVT_IDLE:
-            sleep_mode_enter();
+            //sleep_mode_enter();
             break;
 
         default:
@@ -506,6 +508,10 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             NRF_LOG_INFO("Disconnected.\r\n");
             err_code = bsp_indication_set(BSP_INDICATE_IDLE);
             APP_ERROR_CHECK(err_code);
+				
+				   err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
+				   APP_ERROR_CHECK(err_code);
+				   NRF_LOG_INFO("restart adverting...\r\n");
             break; // BLE_GAP_EVT_DISCONNECTED
 
         case BLE_GAP_EVT_CONNECTED:
@@ -594,7 +600,7 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     ble_conn_state_on_ble_evt(p_ble_evt);
     pm_on_ble_evt(p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
-    bsp_btn_ble_on_ble_evt(p_ble_evt);
+    //bsp_btn_ble_on_ble_evt(p_ble_evt);
     on_ble_evt(p_ble_evt);
     ble_advertising_on_ble_evt(p_ble_evt);
 	
@@ -744,6 +750,7 @@ static void bsp_event_handler(bsp_event_t event)
             break; // BSP_EVENT_KEY_0
 
         default:
+					bsp_btn_switch_event_handler(event);
             break;
     }
 }
@@ -780,9 +787,9 @@ static void advertising_init(void)
  *
  * @param[out] p_erase_bonds  Will be true if the clear bonding button was pressed to wake the application up.
  */
-static void buttons_leds_init(bool * p_erase_bonds)
+static void buttons_switchs_leds_init(bool * p_erase_bonds)
 {
-    bsp_event_t startup_event;
+   // bsp_event_t startup_event;
 
     uint32_t err_code = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS,
                                  APP_TIMER_TICKS(100, APP_TIMER_PRESCALER),
@@ -790,10 +797,12 @@ static void buttons_leds_init(bool * p_erase_bonds)
 
     APP_ERROR_CHECK(err_code);
 
-    err_code = bsp_btn_ble_init(NULL, &startup_event);
-    APP_ERROR_CHECK(err_code);
+	  err_code=bsp_btn_switch_init(APP_TIMER_PRESCALER);
+	  APP_ERROR_CHECK(err_code);
+   // err_code = bsp_btn_ble_init(NULL, &startup_event);
+   // APP_ERROR_CHECK(err_code);
 
-    *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
+   // *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
 }
 
 
@@ -829,7 +838,7 @@ int main(void)
     APP_ERROR_CHECK(err_code);
 
     timers_init();
-    buttons_leds_init(&erase_bonds);
+    buttons_switchs_leds_init(&erase_bonds);
     ble_stack_init();
     peer_manager_init(erase_bonds);
     if (erase_bonds == true)
@@ -842,7 +851,7 @@ int main(void)
     conn_params_init();
 
     // Start execution.
-    NRF_LOG_INFO("Template started\r\n");
+    NRF_LOG_INFO("smart locker started!\r\n");
     application_timers_start();
     err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
     APP_ERROR_CHECK(err_code);

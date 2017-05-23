@@ -3475,13 +3475,13 @@
 // <e> NRF_LOG_ENABLED - nrf_log - Logging
 //==========================================================
 #ifndef NRF_LOG_ENABLED
-#define NRF_LOG_ENABLED 0
+#define NRF_LOG_ENABLED 1
 #endif
 #if  NRF_LOG_ENABLED
 // <e> NRF_LOG_USES_COLORS - If enabled then ANSI escape code for colors is prefixed to every string
 //==========================================================
 #ifndef NRF_LOG_USES_COLORS
-#define NRF_LOG_USES_COLORS 0
+#define NRF_LOG_USES_COLORS 1
 #endif
 #if  NRF_LOG_USES_COLORS
 // <o> NRF_LOG_COLOR_DEFAULT  - ANSI escape code prefix.
@@ -3497,7 +3497,7 @@
 // <8=> White 
 
 #ifndef NRF_LOG_COLOR_DEFAULT
-#define NRF_LOG_COLOR_DEFAULT 0
+#define NRF_LOG_COLOR_DEFAULT 3
 #endif
 
 // <o> NRF_LOG_ERROR_COLOR  - ANSI escape code prefix.
@@ -3513,7 +3513,7 @@
 // <8=> White 
 
 #ifndef NRF_LOG_ERROR_COLOR
-#define NRF_LOG_ERROR_COLOR 0
+#define NRF_LOG_ERROR_COLOR 2
 #endif
 
 // <o> NRF_LOG_WARNING_COLOR  - ANSI escape code prefix.
@@ -3529,7 +3529,7 @@
 // <8=> White 
 
 #ifndef NRF_LOG_WARNING_COLOR
-#define NRF_LOG_WARNING_COLOR 0
+#define NRF_LOG_WARNING_COLOR 4
 #endif
 
 #endif //NRF_LOG_USES_COLORS
@@ -3625,7 +3625,7 @@
 
 // <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 #ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 9
+#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
 #endif
 
 // <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 

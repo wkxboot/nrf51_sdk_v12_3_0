@@ -180,6 +180,20 @@ uint32_t bsp_board_pin_to_button_idx(uint32_t pin_number);
  */
 uint32_t bsp_board_button_idx_to_pin(uint32_t button_idx);
 
+#if SWITCHS_NUMBER > 0
+bool bsp_board_switch_state_get(uint32_t switch_idx);
+void bsp_board_switch_on(uint32_t switch_idx);
+void bsp_board_switch_off(uint32_t switch_idx);
+void bsp_board_switchs_off(void);
+void bsp_board_switchs_on(void);
+void bsp_board_switch_invert(uint32_t switch_idx);
+uint32_t bsp_board_switch_idx_to_pin(uint32_t switch_idx);
+uint32_t bsp_board_pin_to_switch_idx(uint32_t pin_number);
+void bsp_board_switchs_init(void);
+#endif 
+
+
+
 #define BSP_BOARD_LED_0 0
 #define BSP_BOARD_LED_1 1
 #define BSP_BOARD_LED_2 2

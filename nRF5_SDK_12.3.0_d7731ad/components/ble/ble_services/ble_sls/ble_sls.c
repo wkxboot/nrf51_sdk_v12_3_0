@@ -21,7 +21,11 @@
 #include "ble_srv_common.h"
 #include "app_util.h"
 #include "ble_sls.h"
-//#include "bsp_btn_smart_locker.h"
+#define  NRF_LOG_MODULE_NAME   "BLE_SLS.c"
+#include "nrf_log.h"
+#include "nrf_log_ctrl.h"
+#include "bsp.h"
+#include "bsp_btn_switch.h"
 
 
 #define MAX_SLS_LEN        (BLE_L2CAP_MTU_DEF - OPCODE_LENGTH - HANDLE_LENGTH)  /**< Maximum size of a transmitted Heart Rate Measurement. */
@@ -86,15 +90,15 @@ static void on_write(ble_sls_t * p_sls, ble_evt_t * p_ble_evt)
 
 		   if (p_evt_write->handle == p_sls->fan_negative_ion_cmd_handles.value_handle)
     {
-        //bsp_cb_on_fan_negative_ion_cmd_write(p_sls, p_evt_write);
+        bsp_cb_on_fan_negative_ion_cmd_write(p_sls, p_evt_write);
     }
 		   else if (p_evt_write->handle == p_sls->uv_lamp_cmd_handles.value_handle)
     {
-       // bsp_cb_on_uv_lamp_cmd_write(p_sls, p_evt_write);
+       bsp_cb_on_uv_lamp_cmd_write(p_sls, p_evt_write);
     }
 		   else if (p_evt_write->handle == p_sls->elec_lock_cmd_handles.value_handle)
     {
-       // bsp_cb_on_elec_lock_cmd_write(p_sls, p_evt_write);
+       bsp_cb_on_elec_lock_cmd_write(p_sls, p_evt_write);
     }
 }
 
@@ -133,17 +137,17 @@ void ble_sls_on_ble_evt(ble_sls_t * p_sls, ble_evt_t * p_ble_evt)
     {
         case BLE_GAP_EVT_CONNECTED:
             on_connect(p_sls, p_ble_evt);
-				    //DEBUG_INFO("\r\nconnected!");
+				    NRF_LOG_INFO("sls connected!\r\n");
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
             on_disconnect(p_sls, p_ble_evt);
-				    //DEBUG_INFO("\r\ndisconnected!");
+				    NRF_LOG_INFO("sls disconnected!\r\n");
             break;
 
         case BLE_GATTS_EVT_WRITE:
             on_write(p_sls, p_ble_evt);
-				    //DEBUG_INFO("\r\nwrited!");
+				    NRF_LOG_INFO("sls writed!\r\n");
             break;
 
         default:

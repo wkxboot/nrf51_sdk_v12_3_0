@@ -50,7 +50,7 @@ static const uint8_t m_board_btn_list[BUTTONS_NUMBER] = BUTTONS_LIST;
 #endif
 
 #if SWITCHS_NUMBER > 0
-static const uint8_t m_board_sw_list[SWITCHS_NUMBER] = SWITCHS_LIST;
+static const uint8_t m_board_switch_list[SWITCHS_NUMBER] = SWITCHS_LIST;
 #endif
 
 #if LEDS_NUMBER > 0

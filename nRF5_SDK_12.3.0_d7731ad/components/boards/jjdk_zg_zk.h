@@ -65,7 +65,7 @@ extern "C" {
 #define BSP_LED_2           LED_3
 
 //
-#define SWITCH_NUMBER            4 
+#define SWITCHS_NUMBER           4 
 #define SWITCH_START             1
 #define SWITCH_1                 1  
 #define SWITCH_2                 6//SWITCH_UV_LAMP           6        //??????
@@ -74,7 +74,7 @@ extern "C" {
 #define SWITCH_STOP              11
 #define SWITCH_ACTIVE_STATE      1
 
-#define SWITCH_LIST { SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4 }
+#define SWITCHS_LIST { SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4 }
   
 #define BSP_SWITCH_0            SWITCH_1
 #define BSP_SWITCH_1            SWITCH_2
@@ -85,9 +85,9 @@ extern "C" {
 
 #define BUTTONS_NUMBER          3
 #define BUTTON_START            2
-#define BUTTON_1                2
-#define BUTTON_2                3
-#define BUTTON_3                4
+#define BUTTON_1                2 //电磁锁状态位
+#define BUTTON_2                3 //消毒们状态位
+#define BUTTON_3                4 //投币器状态位
 #define BUTTON_STOP             4
 #define BUTTON_PULL    NRF_GPIO_PIN_PULLUP
 

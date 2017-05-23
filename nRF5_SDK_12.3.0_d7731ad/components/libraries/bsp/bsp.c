@@ -469,7 +469,17 @@ uint32_t bsp_init(uint32_t type, uint32_t ticks_per_100ms, bsp_event_callback_t 
         {
             err_code = bsp_event_to_button_action_assign(num, BSP_BUTTON_ACTION_PUSH, BSP_EVENT_DEFAULT);
         }
-
+        //分别向按键分配行为和对应的事件 
+				err_code = bsp_event_to_button_action_assign(BSP_BUTTON_ELEC_LOCK, BSP_BUTTON_ACTION_PUSH, BSP_EVENT_ELEC_LOCK_CLOSE);
+				if(err_code == NRF_SUCCESS)
+				err_code = bsp_event_to_button_action_assign(BSP_BUTTON_ELEC_LOCK, BSP_BUTTON_ACTION_RELEASE, BSP_EVENT_ELEC_LOCK_OPEN);	
+				if(err_code == NRF_SUCCESS)
+				err_code = bsp_event_to_button_action_assign(BSP_BUTTON_UV_LAMP_DOOR, BSP_BUTTON_ACTION_PUSH, BSP_EVENT_UV_LAMP_DOOR_CLOSE);
+				if(err_code == NRF_SUCCESS)
+				err_code = bsp_event_to_button_action_assign(BSP_BUTTON_UV_LAMP_DOOR, BSP_BUTTON_ACTION_RELEASE, BSP_EVENT_UV_LAMP_DOOR_OPEN);
+				if(err_code == NRF_SUCCESS)
+				err_code = bsp_event_to_button_action_assign(BSP_BUTTON_COIN_BOX, BSP_BUTTON_ACTION_PUSH, BSP_EVENT_COIN_BOX_GET_COIN);
+				
         if (err_code == NRF_SUCCESS)
         {
             err_code = app_button_init((app_button_cfg_t *)app_buttons,
@@ -518,6 +528,13 @@ uint32_t bsp_init(uint32_t type, uint32_t ticks_per_100ms, bsp_event_callback_t 
     }
 #endif // LEDS_NUMBER > 0 && !(defined BSP_SIMPLE)
 
+#if SWITCHS_NUMBER > 0 && !(defined BSP_SIMPLE)
+
+    if (type & BSP_INIT_SWITCHS)
+    {
+        bsp_board_switchs_init();
+    }
+#endif
     return err_code;
 }
 

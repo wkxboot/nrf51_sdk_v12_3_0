@@ -1,0 +1,4691 @@
+L 1 "..\..\..\..\..\..\components\libraries\util\sdk_errors.c"
+N/**
+N * Copyright (c) 2016 - 2017, Nordic Semiconductor ASA
+N * 
+N * All rights reserved.
+N * 
+N * Redistribution and use in source and binary forms, with or without modification,
+N * are permitted provided that the following conditions are met:
+N * 
+N * 1. Redistributions of source code must retain the above copyright notice, this
+N *    list of conditions and the following disclaimer.
+N * 
+N * 2. Redistributions in binary form, except as embedded into a Nordic
+N *    Semiconductor ASA integrated circuit in a product or a software update for
+N *    such product, must reproduce the above copyright notice, this list of
+N *    conditions and the following disclaimer in the documentation and/or other
+N *    materials provided with the distribution.
+N * 
+N * 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+N *    contributors may be used to endorse or promote products derived from this
+N *    software without specific prior written permission.
+N * 
+N * 4. This software, with or without modification, must only be used with a
+N *    Nordic Semiconductor ASA integrated circuit.
+N * 
+N * 5. Any software provided in binary form under this license must not be reverse
+N *    engineered, decompiled, modified and/or disassembled.
+N * 
+N * THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+N * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+N * OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+N * DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+N * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+N * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+N * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+N * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+N * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+N * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+N * 
+N */
+N
+N#include "sdk_errors.h"
+L 1 "..\..\..\..\..\..\components\libraries\util\sdk_errors.h" 1
+N/**
+N * Copyright (c) 2013 - 2017, Nordic Semiconductor ASA
+N * 
+N * All rights reserved.
+N * 
+N * Redistribution and use in source and binary forms, with or without modification,
+N * are permitted provided that the following conditions are met:
+N * 
+N * 1. Redistributions of source code must retain the above copyright notice, this
+N *    list of conditions and the following disclaimer.
+N * 
+N * 2. Redistributions in binary form, except as embedded into a Nordic
+N *    Semiconductor ASA integrated circuit in a product or a software update for
+N *    such product, must reproduce the above copyright notice, this list of
+N *    conditions and the following disclaimer in the documentation and/or other
+N *    materials provided with the distribution.
+N * 
+N * 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+N *    contributors may be used to endorse or promote products derived from this
+N *    software without specific prior written permission.
+N * 
+N * 4. This software, with or without modification, must only be used with a
+N *    Nordic Semiconductor ASA integrated circuit.
+N * 
+N * 5. Any software provided in binary form under this license must not be reverse
+N *    engineered, decompiled, modified and/or disassembled.
+N * 
+N * THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+N * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+N * OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+N * DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+N * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+N * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+N * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+N * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+N * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+N * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+N * 
+N */
+N
+N/**@file
+N *
+N * @defgroup sdk_error SDK Error codes
+N * @{
+N * @ingroup app_common
+N * @{
+N * @details Error codes are 32-bit unsigned integers with the most significant 16-bit reserved for
+N *          identifying the module where the error occurred while the least least significant LSB
+N *          are used to provide the cause or nature of error. Each module is assigned a 16-bit
+N *          unsigned integer. Which it will use to identify all errors that occurred in it. 16-bit
+N *          LSB range is with module id as the MSB in the 32-bit error code is reserved for the
+N *          module. As an example, if 0x8800 identifies a certain SDK module, all values from
+N *          0x88000000 - 0x8800FFFF are reserved for this module.
+N *          It should be noted that common error reasons have been assigned values to make it
+N *          possible to decode error reason easily. As an example, lets module uninitialized has
+N *          been assigned an error code 0x000A0. Then, if application encounters an error code
+N *          0xZZZZ00A0, it knows that it accessing a certain module without initializing it.
+N *          Apart from this, each module is allowed to define error codes that are not covered by
+N *          the common ones, however, these values are defined in a range that does not conflict
+N *          with common error values. For module, specific error however, it is possible that the
+N *          same error value is used by two different modules to indicated errors of very different
+N *          nature. If error is already defined by the NRF common error codes, these are reused.
+N *          A range is reserved for application as well, it can use this range for defining
+N *          application specific errors.
+N *
+N * @note Success code, NRF_SUCCESS, does not include any module identifier.
+N
+N */
+N
+N#ifndef SDK_ERRORS_H__
+N#define SDK_ERRORS_H__
+N
+N#include <stdint.h>
+L 1 "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h" 1
+N/* Copyright (C) ARM Ltd., 1999,2014 */
+N/* All rights reserved */
+N
+N/*
+N * RCS $Revision: 185525 $
+N * Checkin $Date: 2014-05-29 12:44:48 +0100 (Thu, 29 May 2014) $
+N * Revising $Author: agrant $
+N */
+N
+N#ifndef __stdint_h
+N#define __stdint_h
+N#define __ARMCLIB_VERSION 5050041
+N
+N  #ifdef __INT64_TYPE__
+S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
+S    #define __INT64 __INT64_TYPE__
+N  #else
+N    /* armcc has builtin '__int64' which can be used in --strict mode */
+N    #define __INT64 __int64
+N    #define __INT64_C_SUFFIX__ ll
+N  #endif
+N  #define __PASTE2(x, y) x ## y
+N  #define __PASTE(x, y) __PASTE2(x, y)
+N  #define __INT64_C(x)  __ESCAPE__(__PASTE(x, __INT64_C_SUFFIX__))
+N  #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
+N  #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
+X  #if 0L || (1L && !0L)
+N    /* armclang and non-strict armcc allow 'long long' in system headers */
+N    #define __LONGLONG long long
+N  #else
+S    /* strict armcc has '__int64' */
+S    #define __LONGLONG __int64
+N  #endif
+N
+N  #ifndef __STDINT_DECLS
+N  #define __STDINT_DECLS
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S      namespace std {
+S          #define __CLIBNS std::
+S          extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N
+N/*
+N * 'signed' is redundant below, except for 'signed char' and if
+N * the typedef is used to declare a bitfield.
+N */
+N
+N    /* 7.18.1.1 */
+N
+N    /* exact-width signed integer types */
+Ntypedef   signed          char int8_t;
+Ntypedef   signed short     int int16_t;
+Ntypedef   signed           int int32_t;
+Ntypedef   signed       __INT64 int64_t;
+Xtypedef   signed       __int64 int64_t;
+N
+N    /* exact-width unsigned integer types */
+Ntypedef unsigned          char uint8_t;
+Ntypedef unsigned short     int uint16_t;
+Ntypedef unsigned           int uint32_t;
+Ntypedef unsigned       __INT64 uint64_t;
+Xtypedef unsigned       __int64 uint64_t;
+N
+N    /* 7.18.1.2 */
+N
+N    /* smallest type of at least n bits */
+N    /* minimum-width signed integer types */
+Ntypedef   signed          char int_least8_t;
+Ntypedef   signed short     int int_least16_t;
+Ntypedef   signed           int int_least32_t;
+Ntypedef   signed       __INT64 int_least64_t;
+Xtypedef   signed       __int64 int_least64_t;
+N
+N    /* minimum-width unsigned integer types */
+Ntypedef unsigned          char uint_least8_t;
+Ntypedef unsigned short     int uint_least16_t;
+Ntypedef unsigned           int uint_least32_t;
+Ntypedef unsigned       __INT64 uint_least64_t;
+Xtypedef unsigned       __int64 uint_least64_t;
+N
+N    /* 7.18.1.3 */
+N
+N    /* fastest minimum-width signed integer types */
+Ntypedef   signed           int int_fast8_t;
+Ntypedef   signed           int int_fast16_t;
+Ntypedef   signed           int int_fast32_t;
+Ntypedef   signed       __INT64 int_fast64_t;
+Xtypedef   signed       __int64 int_fast64_t;
+N
+N    /* fastest minimum-width unsigned integer types */
+Ntypedef unsigned           int uint_fast8_t;
+Ntypedef unsigned           int uint_fast16_t;
+Ntypedef unsigned           int uint_fast32_t;
+Ntypedef unsigned       __INT64 uint_fast64_t;
+Xtypedef unsigned       __int64 uint_fast64_t;
+N
+N    /* 7.18.1.4 integer types capable of holding object pointers */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+Stypedef   signed       __INT64 intptr_t;
+Stypedef unsigned       __INT64 uintptr_t;
+N#else
+Ntypedef   signed           int intptr_t;
+Ntypedef unsigned           int uintptr_t;
+N#endif
+N
+N    /* 7.18.1.5 greatest-width integer types */
+Ntypedef   signed     __LONGLONG intmax_t;
+Xtypedef   signed     long long intmax_t;
+Ntypedef unsigned     __LONGLONG uintmax_t;
+Xtypedef unsigned     long long uintmax_t;
+N
+N
+N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.2.1 */
+N
+N    /* minimum values of exact-width signed integer types */
+N#define INT8_MIN                   -128
+N#define INT16_MIN                -32768
+N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
+N#define INT64_MIN  __INT64_C(~0x7fffffffffffffff) /* -9223372036854775808 is unsigned */
+N
+N    /* maximum values of exact-width signed integer types */
+N#define INT8_MAX                    127
+N#define INT16_MAX                 32767
+N#define INT32_MAX            2147483647
+N#define INT64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of exact-width unsigned integer types */
+N#define UINT8_MAX                   255
+N#define UINT16_MAX                65535
+N#define UINT32_MAX           4294967295u
+N#define UINT64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.2 */
+N
+N    /* minimum values of minimum-width signed integer types */
+N#define INT_LEAST8_MIN                   -128
+N#define INT_LEAST16_MIN                -32768
+N#define INT_LEAST32_MIN          (~0x7fffffff)
+N#define INT_LEAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of minimum-width signed integer types */
+N#define INT_LEAST8_MAX                    127
+N#define INT_LEAST16_MAX                 32767
+N#define INT_LEAST32_MAX            2147483647
+N#define INT_LEAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of minimum-width unsigned integer types */
+N#define UINT_LEAST8_MAX                   255
+N#define UINT_LEAST16_MAX                65535
+N#define UINT_LEAST32_MAX           4294967295u
+N#define UINT_LEAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.3 */
+N
+N    /* minimum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MIN           (~0x7fffffff)
+N#define INT_FAST16_MIN          (~0x7fffffff)
+N#define INT_FAST32_MIN          (~0x7fffffff)
+N#define INT_FAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MAX             2147483647
+N#define INT_FAST16_MAX            2147483647
+N#define INT_FAST32_MAX            2147483647
+N#define INT_FAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of fastest minimum-width unsigned integer types */
+N#define UINT_FAST8_MAX            4294967295u
+N#define UINT_FAST16_MAX           4294967295u
+N#define UINT_FAST32_MAX           4294967295u
+N#define UINT_FAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.4 */
+N
+N    /* minimum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MIN INT64_MIN
+N#else
+N#define INTPTR_MIN INT32_MIN
+N#endif
+N
+N    /* maximum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MAX INT64_MAX
+N#else
+N#define INTPTR_MAX INT32_MAX
+N#endif
+N
+N    /* maximum value of pointer-holding unsigned integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define UINTPTR_MAX INT64_MAX
+N#else
+N#define UINTPTR_MAX INT32_MAX
+N#endif
+N
+N    /* 7.18.2.5 */
+N
+N    /* minimum value of greatest-width signed integer type */
+N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum value of greatest-width signed integer type */
+N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum value of greatest-width unsigned integer type */
+N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.3 */
+N
+N    /* limits of ptrdiff_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define PTRDIFF_MIN INT64_MIN
+S#define PTRDIFF_MAX INT64_MAX
+N#else
+N#define PTRDIFF_MIN INT32_MIN
+N#define PTRDIFF_MAX INT32_MAX
+N#endif
+N
+N    /* limits of sig_atomic_t */
+N#define SIG_ATOMIC_MIN (~0x7fffffff)
+N#define SIG_ATOMIC_MAX   2147483647
+N
+N    /* limit of size_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define SIZE_MAX UINT64_MAX
+N#else
+N#define SIZE_MAX UINT32_MAX
+N#endif
+N
+N    /* limits of wchar_t */
+N    /* NB we have to undef and redef because they're defined in both
+N     * stdint.h and wchar.h */
+N#undef WCHAR_MIN
+N#undef WCHAR_MAX
+N
+N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
+S  #define WCHAR_MIN   0
+S  #define WCHAR_MAX   0xffffffffU
+N#else
+N  #define WCHAR_MIN   0
+N  #define WCHAR_MAX   65535
+N#endif
+N
+N    /* limits of wint_t */
+N#define WINT_MIN (~0x7fffffff)
+N#define WINT_MAX 2147483647
+N
+N#endif /* __STDC_LIMIT_MACROS */
+N
+N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.4.1 macros for minimum-width integer constants */
+N#define INT8_C(x)   (x)
+N#define INT16_C(x)  (x)
+N#define INT32_C(x)  (x)
+N#define INT64_C(x)  __INT64_C(x)
+N
+N#define UINT8_C(x)  (x ## u)
+N#define UINT16_C(x) (x ## u)
+N#define UINT32_C(x) (x ## u)
+N#define UINT64_C(x) __UINT64_C(x)
+N
+N    /* 7.18.4.2 macros for greatest-width integer constants */
+N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
+N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
+N
+N#endif /* __STDC_CONSTANT_MACROS */
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STDINT_DECLS */
+N
+N  #ifdef __cplusplus
+S    #ifndef __STDINT_NO_EXPORTS
+S      using ::std::int8_t;
+S      using ::std::int16_t;
+S      using ::std::int32_t;
+S      using ::std::int64_t;
+S      using ::std::uint8_t;
+S      using ::std::uint16_t;
+S      using ::std::uint32_t;
+S      using ::std::uint64_t;
+S      using ::std::int_least8_t;
+S      using ::std::int_least16_t;
+S      using ::std::int_least32_t;
+S      using ::std::int_least64_t;
+S      using ::std::uint_least8_t;
+S      using ::std::uint_least16_t;
+S      using ::std::uint_least32_t;
+S      using ::std::uint_least64_t;
+S      using ::std::int_fast8_t;
+S      using ::std::int_fast16_t;
+S      using ::std::int_fast32_t;
+S      using ::std::int_fast64_t;
+S      using ::std::uint_fast8_t;
+S      using ::std::uint_fast16_t;
+S      using ::std::uint_fast32_t;
+S      using ::std::uint_fast64_t;
+S      using ::std::intptr_t;
+S      using ::std::uintptr_t;
+S      using ::std::intmax_t;
+S      using ::std::uintmax_t;
+S    #endif
+N  #endif /* __cplusplus */
+N
+N#undef __INT64
+N#undef __LONGLONG
+N
+N#endif /* __stdint_h */
+N
+N/* end of stdint.h */
+L 74 "..\..\..\..\..\..\components\libraries\util\sdk_errors.h" 2
+N#include "nrf_error.h"
+L 1 "..\..\..\..\..\..\components\softdevice\s130\headers\nrf_error.h" 1
+N/* 
+N * Copyright (c) Nordic Semiconductor ASA
+N * All rights reserved.
+N * 
+N * Redistribution and use in source and binary forms, with or without modification,
+N * are permitted provided that the following conditions are met:
+N * 
+N *   1. Redistributions of source code must retain the above copyright notice, this
+N *   list of conditions and the following disclaimer.
+N * 
+N *   2. Redistributions in binary form must reproduce the above copyright notice, this
+N *   list of conditions and the following disclaimer in the documentation and/or
+N *   other materials provided with the distribution.
+N * 
+N *   3. Neither the name of Nordic Semiconductor ASA nor the names of other
+N *   contributors to this software may be used to endorse or promote products
+N *   derived from this software without specific prior written permission.
+N * 
+N *   4. This software must only be used in a processor manufactured by Nordic
+N *   Semiconductor ASA, or in a processor manufactured by a third party that
+N *   is used in combination with a processor manufactured by Nordic Semiconductor.
+N * 
+N * 
+N * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+N * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+N * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+N * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+N * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+N * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+N * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+N * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+N * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+N * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+N * 
+N */ 
+N /**
+N  @defgroup nrf_error SoftDevice Global Error Codes
+N  @{
+N   
+N  @brief Global Error definitions
+N*/
+N
+N/* Header guard */
+N#ifndef NRF_ERROR_H__
+N#define NRF_ERROR_H__
+N
+N#ifdef __cplusplus
+Sextern "C" {
+N#endif
+N
+N/** @defgroup NRF_ERRORS_BASE Error Codes Base number definitions
+N * @{ */
+N#define NRF_ERROR_BASE_NUM      (0x0)       ///< Global error base
+N#define NRF_ERROR_SDM_BASE_NUM  (0x1000)    ///< SDM error base
+N#define NRF_ERROR_SOC_BASE_NUM  (0x2000)    ///< SoC error base
+N#define NRF_ERROR_STK_BASE_NUM  (0x3000)    ///< STK error base
+N/** @} */
+N
+N#define NRF_SUCCESS                           (NRF_ERROR_BASE_NUM + 0)  ///< Successful command
+N#define NRF_ERROR_SVC_HANDLER_MISSING         (NRF_ERROR_BASE_NUM + 1)  ///< SVC handler is missing
+N#define NRF_ERROR_SOFTDEVICE_NOT_ENABLED      (NRF_ERROR_BASE_NUM + 2)  ///< SoftDevice has not been enabled
+N#define NRF_ERROR_INTERNAL                    (NRF_ERROR_BASE_NUM + 3)  ///< Internal Error
+N#define NRF_ERROR_NO_MEM                      (NRF_ERROR_BASE_NUM + 4)  ///< No Memory for operation
+N#define NRF_ERROR_NOT_FOUND                   (NRF_ERROR_BASE_NUM + 5)  ///< Not found
+N#define NRF_ERROR_NOT_SUPPORTED               (NRF_ERROR_BASE_NUM + 6)  ///< Not supported
+N#define NRF_ERROR_INVALID_PARAM               (NRF_ERROR_BASE_NUM + 7)  ///< Invalid Parameter
+N#define NRF_ERROR_INVALID_STATE               (NRF_ERROR_BASE_NUM + 8)  ///< Invalid state, operation disallowed in this state
+N#define NRF_ERROR_INVALID_LENGTH              (NRF_ERROR_BASE_NUM + 9)  ///< Invalid Length
+N#define NRF_ERROR_INVALID_FLAGS               (NRF_ERROR_BASE_NUM + 10) ///< Invalid Flags
+N#define NRF_ERROR_INVALID_DATA                (NRF_ERROR_BASE_NUM + 11) ///< Invalid Data
+N#define NRF_ERROR_DATA_SIZE                   (NRF_ERROR_BASE_NUM + 12) ///< Invalid Data size
+N#define NRF_ERROR_TIMEOUT                     (NRF_ERROR_BASE_NUM + 13) ///< Operation timed out
+N#define NRF_ERROR_NULL                        (NRF_ERROR_BASE_NUM + 14) ///< Null Pointer
+N#define NRF_ERROR_FORBIDDEN                   (NRF_ERROR_BASE_NUM + 15) ///< Forbidden Operation
+N#define NRF_ERROR_INVALID_ADDR                (NRF_ERROR_BASE_NUM + 16) ///< Bad Memory Address
+N#define NRF_ERROR_BUSY                        (NRF_ERROR_BASE_NUM + 17) ///< Busy
+N#define NRF_ERROR_CONN_COUNT                  (NRF_ERROR_BASE_NUM + 18) ///< Maximum connection count exceeded.
+N#define NRF_ERROR_RESOURCES                   (NRF_ERROR_BASE_NUM + 19) ///< Not enough resources for operation
+N
+N#ifdef __cplusplus
+S}
+N#endif
+N#endif // NRF_ERROR_H__
+N
+N/**
+N  @}
+N*/
+L 75 "..\..\..\..\..\..\components\libraries\util\sdk_errors.h" 2
+N#include "sdk_config.h"
+L 1 "..\config\sdk_config.h" 1
+N
+N
+N#ifndef SDK_CONFIG_H
+N#define SDK_CONFIG_H
+N// <<< Use Configuration Wizard in Context Menu >>>\n
+N#ifdef USE_APP_CONFIG
+S#include "app_config.h"
+N#endif
+N// <h> nRF_BLE 
+N
+N//==========================================================
+N// <q> BLE_ADVERTISING_ENABLED  - ble_advertising - Advertising module
+N 
+N
+N#ifndef BLE_ADVERTISING_ENABLED
+N#define BLE_ADVERTISING_ENABLED 1
+N#endif
+N
+N// <q> BLE_DTM_ENABLED  - ble_dtm - Module for testing RF/PHY using DTM commands
+N 
+N
+N#ifndef BLE_DTM_ENABLED
+N#define BLE_DTM_ENABLED 0
+N#endif
+N
+N// <q> BLE_RACP_ENABLED  - ble_racp - Record Access Control Point library
+N 
+N
+N#ifndef BLE_RACP_ENABLED
+N#define BLE_RACP_ENABLED 0
+N#endif
+N
+N// <q> NRF_BLE_QWR_ENABLED  - nrf_ble_qwr - Queued writes support module (prepare/execute write)
+N 
+N
+N#ifndef NRF_BLE_QWR_ENABLED
+N#define NRF_BLE_QWR_ENABLED 0
+N#endif
+N
+N// <q> PEER_MANAGER_ENABLED  - peer_manager - Peer Manager
+N 
+N
+N#ifndef PEER_MANAGER_ENABLED
+N#define PEER_MANAGER_ENABLED 1
+N#endif
+N
+N// </h> 
+N//==========================================================
+N
+N// <h> nRF_BLE_Services 
+N
+N//==========================================================
+N// <q> BLE_ANCS_C_ENABLED  - ble_ancs_c - Apple Notification Service Client
+N 
+N
+N#ifndef BLE_ANCS_C_ENABLED
+N#define BLE_ANCS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_ANS_C_ENABLED  - ble_ans_c - Alert Notification Service Client
+N 
+N
+N#ifndef BLE_ANS_C_ENABLED
+N#define BLE_ANS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_BAS_C_ENABLED  - ble_bas_c - Battery Service Client
+N 
+N
+N#ifndef BLE_BAS_C_ENABLED
+N#define BLE_BAS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_BAS_ENABLED  - ble_bas - Battery Service
+N 
+N
+N#ifndef BLE_BAS_ENABLED
+N#define BLE_BAS_ENABLED 0
+N#endif
+N
+N// <q> BLE_CSCS_ENABLED  - ble_cscs - Cycling Speed and Cadence Service
+N 
+N
+N#ifndef BLE_CSCS_ENABLED
+N#define BLE_CSCS_ENABLED 0
+N#endif
+N
+N// <q> BLE_CTS_C_ENABLED  - ble_cts_c - Current Time Service Client
+N 
+N
+N#ifndef BLE_CTS_C_ENABLED
+N#define BLE_CTS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_DIS_ENABLED  - ble_dis - Device Information Service
+N 
+N
+N#ifndef BLE_DIS_ENABLED
+N#define BLE_DIS_ENABLED 0
+N#endif
+N
+N// <q> BLE_GLS_ENABLED  - ble_gls - Glucose Service
+N 
+N
+N#ifndef BLE_GLS_ENABLED
+N#define BLE_GLS_ENABLED 0
+N#endif
+N
+N// <q> BLE_HIDS_ENABLED  - ble_hids - Human Interface Device Service
+N 
+N
+N#ifndef BLE_HIDS_ENABLED
+N#define BLE_HIDS_ENABLED 0
+N#endif
+N
+N// <e> BLE_HRS_C_ENABLED - ble_hrs_c - Heart Rate Service Client
+N//==========================================================
+N#ifndef BLE_HRS_C_ENABLED
+N#define BLE_HRS_C_ENABLED 0
+N#endif
+N#if  BLE_HRS_C_ENABLED
+X#if  0
+S// <o> BLE_HRS_C_RR_INTERVALS_MAX_CNT - Maximum number of RR_INTERVALS per notification to be decoded 
+S#ifndef BLE_HRS_C_RR_INTERVALS_MAX_CNT
+S#define BLE_HRS_C_RR_INTERVALS_MAX_CNT 30
+S#endif
+S
+N#endif //BLE_HRS_C_ENABLED
+N// </e>
+N
+N// <q> BLE_HRS_ENABLED  - ble_hrs - Heart Rate Service
+N 
+N
+N#ifndef BLE_HRS_ENABLED
+N#define BLE_HRS_ENABLED 0
+N#endif
+N
+N// <q> BLE_HTS_ENABLED  - ble_hts - Health Thermometer Service
+N 
+N
+N#ifndef BLE_HTS_ENABLED
+N#define BLE_HTS_ENABLED 0
+N#endif
+N
+N// <q> BLE_IAS_C_ENABLED  - ble_ias_c - Immediate Alert Service Client
+N 
+N
+N#ifndef BLE_IAS_C_ENABLED
+N#define BLE_IAS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_IAS_ENABLED  - ble_ias - Immediate Alert Service
+N 
+N
+N#ifndef BLE_IAS_ENABLED
+N#define BLE_IAS_ENABLED 0
+N#endif
+N
+N// <q> BLE_LBS_C_ENABLED  - ble_lbs_c - Nordic LED Button Service Client
+N 
+N
+N#ifndef BLE_LBS_C_ENABLED
+N#define BLE_LBS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_LBS_ENABLED  - ble_lbs - LED Button Service
+N 
+N
+N#ifndef BLE_LBS_ENABLED
+N#define BLE_LBS_ENABLED 0
+N#endif
+N
+N// <q> BLE_LLS_ENABLED  - ble_lls - Link Loss Service
+N 
+N
+N#ifndef BLE_LLS_ENABLED
+N#define BLE_LLS_ENABLED 0
+N#endif
+N
+N// <q> BLE_NUS_C_ENABLED  - ble_nus_c - Nordic UART Central Service
+N 
+N
+N#ifndef BLE_NUS_C_ENABLED
+N#define BLE_NUS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_NUS_ENABLED  - ble_nus - Nordic UART Service
+N 
+N
+N#ifndef BLE_NUS_ENABLED
+N#define BLE_NUS_ENABLED 0
+N#endif
+N
+N// <q> BLE_RSCS_C_ENABLED  - ble_rscs_c - Running Speed and Cadence Client
+N 
+N
+N#ifndef BLE_RSCS_C_ENABLED
+N#define BLE_RSCS_C_ENABLED 0
+N#endif
+N
+N// <q> BLE_RSCS_ENABLED  - ble_rscs - Running Speed and Cadence Service
+N 
+N
+N#ifndef BLE_RSCS_ENABLED
+N#define BLE_RSCS_ENABLED 0
+N#endif
+N
+N// <q> BLE_TPS_ENABLED  - ble_tps - TX Power Service
+N 
+N
+N#ifndef BLE_TPS_ENABLED
+N#define BLE_TPS_ENABLED 0
+N#endif
+N
+N// </h> 
+N//==========================================================
+N
+N// <h> nRF_Drivers 
+N
+N//==========================================================
+N// <e> ADC_ENABLED - nrf_drv_adc - Driver for ADC peripheral (nRF51)
+N//==========================================================
+N#ifndef ADC_ENABLED
+N#define ADC_ENABLED 0
+N#endif
+N#if  ADC_ENABLED
+X#if  0
+S// <o> ADC_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef ADC_CONFIG_IRQ_PRIORITY
+S#define ADC_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> ADC_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef ADC_CONFIG_LOG_ENABLED
+S#define ADC_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  ADC_CONFIG_LOG_ENABLED
+S// <o> ADC_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef ADC_CONFIG_LOG_LEVEL
+S#define ADC_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> ADC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef ADC_CONFIG_INFO_COLOR
+S#define ADC_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> ADC_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef ADC_CONFIG_DEBUG_COLOR
+S#define ADC_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //ADC_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //ADC_ENABLED
+N// </e>
+N
+N// <e> APP_USBD_ENABLED - app_usbd - USB Device library
+N//==========================================================
+N#ifndef APP_USBD_ENABLED
+N#define APP_USBD_ENABLED 0
+N#endif
+N#if  APP_USBD_ENABLED
+X#if  0
+S// <o> APP_USBD_VID - Vendor ID  <0x0000-0xFFFF> 
+S
+S
+S// <i> Vendor ID ordered from USB IF: http://www.usb.org/developers/vendor/
+S
+S#ifndef APP_USBD_VID
+S#define APP_USBD_VID 0
+S#endif
+S
+S// <o> APP_USBD_PID - Product ID  <0x0000-0xFFFF> 
+S
+S
+S// <i> Selected Product ID
+S
+S#ifndef APP_USBD_PID
+S#define APP_USBD_PID 0
+S#endif
+S
+S// <o> APP_USBD_DEVICE_VER_MAJOR - Device version, major part  <0-99> 
+S
+S
+S// <i> Device version, will be converted automatically to BCD notation. Use just decimal values.
+S
+S#ifndef APP_USBD_DEVICE_VER_MAJOR
+S#define APP_USBD_DEVICE_VER_MAJOR 1
+S#endif
+S
+S// <o> APP_USBD_DEVICE_VER_MINOR - Device version, minor part  <0-99> 
+S
+S
+S// <i> Device version, will be converted automatically to BCD notation. Use just decimal values.
+S
+S#ifndef APP_USBD_DEVICE_VER_MINOR
+S#define APP_USBD_DEVICE_VER_MINOR 0
+S#endif
+S
+N#endif //APP_USBD_ENABLED
+N// </e>
+N
+N// <e> CLOCK_ENABLED - nrf_drv_clock - CLOCK peripheral driver
+N//==========================================================
+N#ifndef CLOCK_ENABLED
+N#define CLOCK_ENABLED 1
+N#endif
+N#if  CLOCK_ENABLED
+X#if  1
+N// <o> CLOCK_CONFIG_XTAL_FREQ  - HF XTAL Frequency
+N 
+N// <0=> Default (64 MHz) 
+N// <255=> Default (16 MHz) 
+N// <0=> 32 MHz 
+N
+N#ifndef CLOCK_CONFIG_XTAL_FREQ
+N#define CLOCK_CONFIG_XTAL_FREQ 255
+N#endif
+N
+N// <o> CLOCK_CONFIG_LF_SRC  - LF Clock Source
+N 
+N// <0=> RC 
+N// <1=> XTAL 
+N// <2=> Synth 
+N
+N#ifndef CLOCK_CONFIG_LF_SRC
+N#define CLOCK_CONFIG_LF_SRC 1
+N#endif
+N
+N// <o> CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
+N 
+N
+N// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+N// <0=> 0 (highest) 
+N// <1=> 1 
+N// <2=> 2 
+N// <3=> 3 
+N
+N#ifndef CLOCK_CONFIG_IRQ_PRIORITY
+N#define CLOCK_CONFIG_IRQ_PRIORITY 3
+N#endif
+N
+N// <e> CLOCK_CONFIG_LOG_ENABLED - Enables logging in the module.
+N//==========================================================
+N#ifndef CLOCK_CONFIG_LOG_ENABLED
+N#define CLOCK_CONFIG_LOG_ENABLED 0
+N#endif
+N#if  CLOCK_CONFIG_LOG_ENABLED
+X#if  0
+S// <o> CLOCK_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef CLOCK_CONFIG_LOG_LEVEL
+S#define CLOCK_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> CLOCK_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef CLOCK_CONFIG_INFO_COLOR
+S#define CLOCK_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> CLOCK_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef CLOCK_CONFIG_DEBUG_COLOR
+S#define CLOCK_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+N#endif //CLOCK_CONFIG_LOG_ENABLED
+N// </e>
+N
+N#endif //CLOCK_ENABLED
+N// </e>
+N
+N// <e> COMP_ENABLED - nrf_drv_comp - COMP peripheral driver
+N//==========================================================
+N#ifndef COMP_ENABLED
+N#define COMP_ENABLED 0
+N#endif
+N#if  COMP_ENABLED
+X#if  0
+S// <o> COMP_CONFIG_REF  - Reference voltage
+S 
+S// <0=> Internal 1.2V 
+S// <1=> Internal 1.8V 
+S// <2=> Internal 2.4V 
+S// <4=> VDD 
+S// <7=> ARef 
+S
+S#ifndef COMP_CONFIG_REF
+S#define COMP_CONFIG_REF 1
+S#endif
+S
+S// <o> COMP_CONFIG_MAIN_MODE  - Main mode
+S 
+S// <0=> Single ended 
+S// <1=> Differential 
+S
+S#ifndef COMP_CONFIG_MAIN_MODE
+S#define COMP_CONFIG_MAIN_MODE 0
+S#endif
+S
+S// <o> COMP_CONFIG_SPEED_MODE  - Speed mode
+S 
+S// <0=> Low power 
+S// <1=> Normal 
+S// <2=> High speed 
+S
+S#ifndef COMP_CONFIG_SPEED_MODE
+S#define COMP_CONFIG_SPEED_MODE 2
+S#endif
+S
+S// <o> COMP_CONFIG_HYST  - Hystheresis
+S 
+S// <0=> No 
+S// <1=> 50mV 
+S
+S#ifndef COMP_CONFIG_HYST
+S#define COMP_CONFIG_HYST 0
+S#endif
+S
+S// <o> COMP_CONFIG_ISOURCE  - Current Source
+S 
+S// <0=> Off 
+S// <1=> 2.5 uA 
+S// <2=> 5 uA 
+S// <3=> 10 uA 
+S
+S#ifndef COMP_CONFIG_ISOURCE
+S#define COMP_CONFIG_ISOURCE 0
+S#endif
+S
+S// <o> COMP_CONFIG_INPUT  - Analog input
+S 
+S// <0=> 0 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S// <4=> 4 
+S// <5=> 5 
+S// <6=> 6 
+S// <7=> 7 
+S
+S#ifndef COMP_CONFIG_INPUT
+S#define COMP_CONFIG_INPUT 0
+S#endif
+S
+S// <o> COMP_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef COMP_CONFIG_IRQ_PRIORITY
+S#define COMP_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> COMP_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef COMP_CONFIG_LOG_ENABLED
+S#define COMP_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  COMP_CONFIG_LOG_ENABLED
+S// <o> COMP_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef COMP_CONFIG_LOG_LEVEL
+S#define COMP_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> COMP_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef COMP_CONFIG_INFO_COLOR
+S#define COMP_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> COMP_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef COMP_CONFIG_DEBUG_COLOR
+S#define COMP_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //COMP_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //COMP_ENABLED
+N// </e>
+N
+N// <e> EGU_ENABLED - nrf_drv_swi - SWI(EGU) peripheral driver
+N//==========================================================
+N#ifndef EGU_ENABLED
+N#define EGU_ENABLED 0
+N#endif
+N#if  EGU_ENABLED
+X#if  0
+S// <e> SWI_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef SWI_CONFIG_LOG_ENABLED
+S#define SWI_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  SWI_CONFIG_LOG_ENABLED
+S// <o> SWI_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef SWI_CONFIG_LOG_LEVEL
+S#define SWI_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> SWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SWI_CONFIG_INFO_COLOR
+S#define SWI_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> SWI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SWI_CONFIG_DEBUG_COLOR
+S#define SWI_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //SWI_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //EGU_ENABLED
+N// </e>
+N
+N// <e> GPIOTE_ENABLED - nrf_drv_gpiote - GPIOTE peripheral driver
+N//==========================================================
+N#ifndef GPIOTE_ENABLED
+N#define GPIOTE_ENABLED 1
+N#endif
+N#if  GPIOTE_ENABLED
+X#if  1
+N// <o> GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins 
+N#ifndef GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
+N#define GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 4
+N#endif
+N
+N// <o> GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
+N 
+N
+N// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+N// <0=> 0 (highest) 
+N// <1=> 1 
+N// <2=> 2 
+N// <3=> 3 
+N
+N#ifndef GPIOTE_CONFIG_IRQ_PRIORITY
+N#define GPIOTE_CONFIG_IRQ_PRIORITY 3
+N#endif
+N
+N// <e> GPIOTE_CONFIG_LOG_ENABLED - Enables logging in the module.
+N//==========================================================
+N#ifndef GPIOTE_CONFIG_LOG_ENABLED
+N#define GPIOTE_CONFIG_LOG_ENABLED 0
+N#endif
+N#if  GPIOTE_CONFIG_LOG_ENABLED
+X#if  0
+S// <o> GPIOTE_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef GPIOTE_CONFIG_LOG_LEVEL
+S#define GPIOTE_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> GPIOTE_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef GPIOTE_CONFIG_INFO_COLOR
+S#define GPIOTE_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> GPIOTE_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef GPIOTE_CONFIG_DEBUG_COLOR
+S#define GPIOTE_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+N#endif //GPIOTE_CONFIG_LOG_ENABLED
+N// </e>
+N
+N#endif //GPIOTE_ENABLED
+N// </e>
+N
+N// <e> I2S_ENABLED - nrf_drv_i2s - I2S peripheral driver
+N//==========================================================
+N#ifndef I2S_ENABLED
+N#define I2S_ENABLED 0
+N#endif
+N#if  I2S_ENABLED
+X#if  0
+S// <o> I2S_CONFIG_SCK_PIN - SCK pin  <0-31> 
+S
+S
+S#ifndef I2S_CONFIG_SCK_PIN
+S#define I2S_CONFIG_SCK_PIN 31
+S#endif
+S
+S// <o> I2S_CONFIG_LRCK_PIN - LRCK pin  <1-31> 
+S
+S
+S#ifndef I2S_CONFIG_LRCK_PIN
+S#define I2S_CONFIG_LRCK_PIN 30
+S#endif
+S
+S// <o> I2S_CONFIG_MCK_PIN - MCK pin 
+S#ifndef I2S_CONFIG_MCK_PIN
+S#define I2S_CONFIG_MCK_PIN 255
+S#endif
+S
+S// <o> I2S_CONFIG_SDOUT_PIN - SDOUT pin  <0-31> 
+S
+S
+S#ifndef I2S_CONFIG_SDOUT_PIN
+S#define I2S_CONFIG_SDOUT_PIN 29
+S#endif
+S
+S// <o> I2S_CONFIG_SDIN_PIN - SDIN pin  <0-31> 
+S
+S
+S#ifndef I2S_CONFIG_SDIN_PIN
+S#define I2S_CONFIG_SDIN_PIN 28
+S#endif
+S
+S// <o> I2S_CONFIG_MASTER  - Mode
+S 
+S// <0=> Master 
+S// <1=> Slave 
+S
+S#ifndef I2S_CONFIG_MASTER
+S#define I2S_CONFIG_MASTER 0
+S#endif
+S
+S// <o> I2S_CONFIG_FORMAT  - Format
+S 
+S// <0=> I2S 
+S// <1=> Aligned 
+S
+S#ifndef I2S_CONFIG_FORMAT
+S#define I2S_CONFIG_FORMAT 0
+S#endif
+S
+S// <o> I2S_CONFIG_ALIGN  - Alignment
+S 
+S// <0=> Left 
+S// <1=> Right 
+S
+S#ifndef I2S_CONFIG_ALIGN
+S#define I2S_CONFIG_ALIGN 0
+S#endif
+S
+S// <o> I2S_CONFIG_SWIDTH  - Sample width (bits)
+S 
+S// <0=> 8 
+S// <1=> 16 
+S// <2=> 24 
+S
+S#ifndef I2S_CONFIG_SWIDTH
+S#define I2S_CONFIG_SWIDTH 1
+S#endif
+S
+S// <o> I2S_CONFIG_CHANNELS  - Channels
+S 
+S// <0=> Stereo 
+S// <1=> Left 
+S// <2=> Right 
+S
+S#ifndef I2S_CONFIG_CHANNELS
+S#define I2S_CONFIG_CHANNELS 1
+S#endif
+S
+S// <o> I2S_CONFIG_MCK_SETUP  - MCK behavior
+S 
+S// <0=> Disabled 
+S// <2147483648=> 32MHz/2 
+S// <1342177280=> 32MHz/3 
+S// <1073741824=> 32MHz/4 
+S// <805306368=> 32MHz/5 
+S// <671088640=> 32MHz/6 
+S// <536870912=> 32MHz/8 
+S// <402653184=> 32MHz/10 
+S// <369098752=> 32MHz/11 
+S// <285212672=> 32MHz/15 
+S// <268435456=> 32MHz/16 
+S// <201326592=> 32MHz/21 
+S// <184549376=> 32MHz/23 
+S// <142606336=> 32MHz/30 
+S// <138412032=> 32MHz/31 
+S// <134217728=> 32MHz/32 
+S// <100663296=> 32MHz/42 
+S// <68157440=> 32MHz/63 
+S// <34340864=> 32MHz/125 
+S
+S#ifndef I2S_CONFIG_MCK_SETUP
+S#define I2S_CONFIG_MCK_SETUP 536870912
+S#endif
+S
+S// <o> I2S_CONFIG_RATIO  - MCK/LRCK ratio
+S 
+S// <0=> 32x 
+S// <1=> 48x 
+S// <2=> 64x 
+S// <3=> 96x 
+S// <4=> 128x 
+S// <5=> 192x 
+S// <6=> 256x 
+S// <7=> 384x 
+S// <8=> 512x 
+S
+S#ifndef I2S_CONFIG_RATIO
+S#define I2S_CONFIG_RATIO 2000
+S#endif
+S
+S// <o> I2S_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef I2S_CONFIG_IRQ_PRIORITY
+S#define I2S_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> I2S_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef I2S_CONFIG_LOG_ENABLED
+S#define I2S_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  I2S_CONFIG_LOG_ENABLED
+S// <o> I2S_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef I2S_CONFIG_LOG_LEVEL
+S#define I2S_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> I2S_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef I2S_CONFIG_INFO_COLOR
+S#define I2S_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> I2S_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef I2S_CONFIG_DEBUG_COLOR
+S#define I2S_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //I2S_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //I2S_ENABLED
+N// </e>
+N
+N// <e> LPCOMP_ENABLED - nrf_drv_lpcomp - LPCOMP peripheral driver
+N//==========================================================
+N#ifndef LPCOMP_ENABLED
+N#define LPCOMP_ENABLED 0
+N#endif
+N#if  LPCOMP_ENABLED
+X#if  0
+S// <o> LPCOMP_CONFIG_REFERENCE  - Reference voltage
+S 
+S// <0=> Supply 1/8 
+S// <1=> Supply 2/8 
+S// <2=> Supply 3/8 
+S// <3=> Supply 4/8 
+S// <4=> Supply 5/8 
+S// <5=> Supply 6/8 
+S// <6=> Supply 7/8 
+S// <8=> Supply 1/16 (nRF52) 
+S// <9=> Supply 3/16 (nRF52) 
+S// <10=> Supply 5/16 (nRF52) 
+S// <11=> Supply 7/16 (nRF52) 
+S// <12=> Supply 9/16 (nRF52) 
+S// <13=> Supply 11/16 (nRF52) 
+S// <14=> Supply 13/16 (nRF52) 
+S// <15=> Supply 15/16 (nRF52) 
+S// <7=> External Ref 0 
+S// <65543=> External Ref 1 
+S
+S#ifndef LPCOMP_CONFIG_REFERENCE
+S#define LPCOMP_CONFIG_REFERENCE 3
+S#endif
+S
+S// <o> LPCOMP_CONFIG_DETECTION  - Detection
+S 
+S// <0=> Crossing 
+S// <1=> Up 
+S// <2=> Down 
+S
+S#ifndef LPCOMP_CONFIG_DETECTION
+S#define LPCOMP_CONFIG_DETECTION 2
+S#endif
+S
+S// <o> LPCOMP_CONFIG_INPUT  - Analog input
+S 
+S// <0=> 0 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S// <4=> 4 
+S// <5=> 5 
+S// <6=> 6 
+S// <7=> 7 
+S
+S#ifndef LPCOMP_CONFIG_INPUT
+S#define LPCOMP_CONFIG_INPUT 0
+S#endif
+S
+S// <q> LPCOMP_CONFIG_HYST  - Hysteresis
+S 
+S
+S#ifndef LPCOMP_CONFIG_HYST
+S#define LPCOMP_CONFIG_HYST 0
+S#endif
+S
+S// <o> LPCOMP_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef LPCOMP_CONFIG_IRQ_PRIORITY
+S#define LPCOMP_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> LPCOMP_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef LPCOMP_CONFIG_LOG_ENABLED
+S#define LPCOMP_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  LPCOMP_CONFIG_LOG_ENABLED
+S// <o> LPCOMP_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef LPCOMP_CONFIG_LOG_LEVEL
+S#define LPCOMP_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> LPCOMP_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef LPCOMP_CONFIG_INFO_COLOR
+S#define LPCOMP_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> LPCOMP_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef LPCOMP_CONFIG_DEBUG_COLOR
+S#define LPCOMP_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //LPCOMP_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //LPCOMP_ENABLED
+N// </e>
+N
+N// <e> PDM_ENABLED - nrf_drv_pdm - PDM peripheral driver
+N//==========================================================
+N#ifndef PDM_ENABLED
+N#define PDM_ENABLED 0
+N#endif
+N#if  PDM_ENABLED
+X#if  0
+S// <o> PDM_CONFIG_MODE  - Mode
+S 
+S// <0=> Stereo 
+S// <1=> Mono 
+S
+S#ifndef PDM_CONFIG_MODE
+S#define PDM_CONFIG_MODE 1
+S#endif
+S
+S// <o> PDM_CONFIG_EDGE  - Edge
+S 
+S// <0=> Left falling 
+S// <1=> Left rising 
+S
+S#ifndef PDM_CONFIG_EDGE
+S#define PDM_CONFIG_EDGE 0
+S#endif
+S
+S// <o> PDM_CONFIG_CLOCK_FREQ  - Clock frequency
+S 
+S// <134217728=> 1000k 
+S// <138412032=> 1032k (default) 
+S// <142606336=> 1067k 
+S
+S#ifndef PDM_CONFIG_CLOCK_FREQ
+S#define PDM_CONFIG_CLOCK_FREQ 138412032
+S#endif
+S
+S// <o> PDM_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef PDM_CONFIG_IRQ_PRIORITY
+S#define PDM_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> PDM_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef PDM_CONFIG_LOG_ENABLED
+S#define PDM_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  PDM_CONFIG_LOG_ENABLED
+S// <o> PDM_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef PDM_CONFIG_LOG_LEVEL
+S#define PDM_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> PDM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef PDM_CONFIG_INFO_COLOR
+S#define PDM_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> PDM_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef PDM_CONFIG_DEBUG_COLOR
+S#define PDM_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //PDM_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //PDM_ENABLED
+N// </e>
+N
+N// <e> PERIPHERAL_RESOURCE_SHARING_ENABLED - nrf_drv_common - Peripheral drivers common module
+N//==========================================================
+N#ifndef PERIPHERAL_RESOURCE_SHARING_ENABLED
+N#define PERIPHERAL_RESOURCE_SHARING_ENABLED 0
+N#endif
+N#if  PERIPHERAL_RESOURCE_SHARING_ENABLED
+X#if  0
+S// <e> COMMON_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef COMMON_CONFIG_LOG_ENABLED
+S#define COMMON_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  COMMON_CONFIG_LOG_ENABLED
+S// <o> COMMON_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef COMMON_CONFIG_LOG_LEVEL
+S#define COMMON_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> COMMON_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef COMMON_CONFIG_INFO_COLOR
+S#define COMMON_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> COMMON_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef COMMON_CONFIG_DEBUG_COLOR
+S#define COMMON_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //COMMON_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //PERIPHERAL_RESOURCE_SHARING_ENABLED
+N// </e>
+N
+N// <e> POWER_ENABLED - nrf_drv_power - POWER peripheral driver
+N//==========================================================
+N#ifndef POWER_ENABLED
+N#define POWER_ENABLED 0
+N#endif
+N#if  POWER_ENABLED
+X#if  0
+S// <o> POWER_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef POWER_CONFIG_IRQ_PRIORITY
+S#define POWER_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <q> POWER_CONFIG_DEFAULT_DCDCEN  - The default configuration of main DCDC regulator
+S 
+S
+S// <i> This settings means only that components for DCDC regulator are installed and it can be enabled.
+S
+S#ifndef POWER_CONFIG_DEFAULT_DCDCEN
+S#define POWER_CONFIG_DEFAULT_DCDCEN 0
+S#endif
+S
+S// <q> POWER_CONFIG_DEFAULT_DCDCENHV  - The default configuration of High Voltage DCDC regulator
+S 
+S
+S// <i> This settings means only that components for DCDC regulator are installed and it can be enabled.
+S
+S#ifndef POWER_CONFIG_DEFAULT_DCDCENHV
+S#define POWER_CONFIG_DEFAULT_DCDCENHV 0
+S#endif
+S
+N#endif //POWER_ENABLED
+N// </e>
+N
+N// <e> PPI_ENABLED - nrf_drv_ppi - PPI peripheral driver
+N//==========================================================
+N#ifndef PPI_ENABLED
+N#define PPI_ENABLED 0
+N#endif
+N#if  PPI_ENABLED
+X#if  0
+S// <e> PPI_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef PPI_CONFIG_LOG_ENABLED
+S#define PPI_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  PPI_CONFIG_LOG_ENABLED
+S// <o> PPI_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef PPI_CONFIG_LOG_LEVEL
+S#define PPI_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> PPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef PPI_CONFIG_INFO_COLOR
+S#define PPI_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> PPI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef PPI_CONFIG_DEBUG_COLOR
+S#define PPI_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //PPI_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //PPI_ENABLED
+N// </e>
+N
+N// <e> PWM_ENABLED - nrf_drv_pwm - PWM peripheral driver
+N//==========================================================
+N#ifndef PWM_ENABLED
+N#define PWM_ENABLED 0
+N#endif
+N#if  PWM_ENABLED
+X#if  0
+S// <o> PWM_DEFAULT_CONFIG_OUT0_PIN - Out0 pin  <0-31> 
+S
+S
+S#ifndef PWM_DEFAULT_CONFIG_OUT0_PIN
+S#define PWM_DEFAULT_CONFIG_OUT0_PIN 31
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_OUT1_PIN - Out1 pin  <0-31> 
+S
+S
+S#ifndef PWM_DEFAULT_CONFIG_OUT1_PIN
+S#define PWM_DEFAULT_CONFIG_OUT1_PIN 31
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_OUT2_PIN - Out2 pin  <0-31> 
+S
+S
+S#ifndef PWM_DEFAULT_CONFIG_OUT2_PIN
+S#define PWM_DEFAULT_CONFIG_OUT2_PIN 31
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_OUT3_PIN - Out3 pin  <0-31> 
+S
+S
+S#ifndef PWM_DEFAULT_CONFIG_OUT3_PIN
+S#define PWM_DEFAULT_CONFIG_OUT3_PIN 31
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_BASE_CLOCK  - Base clock
+S 
+S// <0=> 16 MHz 
+S// <1=> 8 MHz 
+S// <2=> 4 MHz 
+S// <3=> 2 MHz 
+S// <4=> 1 MHz 
+S// <5=> 500 kHz 
+S// <6=> 250 kHz 
+S// <7=> 125 MHz 
+S
+S#ifndef PWM_DEFAULT_CONFIG_BASE_CLOCK
+S#define PWM_DEFAULT_CONFIG_BASE_CLOCK 4
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_COUNT_MODE  - Count mode
+S 
+S// <0=> Up 
+S// <1=> Up and Down 
+S
+S#ifndef PWM_DEFAULT_CONFIG_COUNT_MODE
+S#define PWM_DEFAULT_CONFIG_COUNT_MODE 0
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_TOP_VALUE - Top value 
+S#ifndef PWM_DEFAULT_CONFIG_TOP_VALUE
+S#define PWM_DEFAULT_CONFIG_TOP_VALUE 1000
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_LOAD_MODE  - Load mode
+S 
+S// <0=> Common 
+S// <1=> Grouped 
+S// <2=> Individual 
+S// <3=> Waveform 
+S
+S#ifndef PWM_DEFAULT_CONFIG_LOAD_MODE
+S#define PWM_DEFAULT_CONFIG_LOAD_MODE 0
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_STEP_MODE  - Step mode
+S 
+S// <0=> Auto 
+S// <1=> Triggered 
+S
+S#ifndef PWM_DEFAULT_CONFIG_STEP_MODE
+S#define PWM_DEFAULT_CONFIG_STEP_MODE 0
+S#endif
+S
+S// <o> PWM_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S// <4=> 4 
+S// <5=> 5 
+S// <6=> 6 
+S// <7=> 7 
+S
+S#ifndef PWM_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define PWM_DEFAULT_CONFIG_IRQ_PRIORITY 7
+S#endif
+S
+S// <q> PWM0_ENABLED  - Enable PWM0 instance
+S 
+S
+S#ifndef PWM0_ENABLED
+S#define PWM0_ENABLED 0
+S#endif
+S
+S// <q> PWM1_ENABLED  - Enable PWM1 instance
+S 
+S
+S#ifndef PWM1_ENABLED
+S#define PWM1_ENABLED 0
+S#endif
+S
+S// <q> PWM2_ENABLED  - Enable PWM2 instance
+S 
+S
+S#ifndef PWM2_ENABLED
+S#define PWM2_ENABLED 0
+S#endif
+S
+S// <e> PWM_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef PWM_CONFIG_LOG_ENABLED
+S#define PWM_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  PWM_CONFIG_LOG_ENABLED
+S// <o> PWM_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef PWM_CONFIG_LOG_LEVEL
+S#define PWM_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> PWM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef PWM_CONFIG_INFO_COLOR
+S#define PWM_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> PWM_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef PWM_CONFIG_DEBUG_COLOR
+S#define PWM_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //PWM_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //PWM_ENABLED
+N// </e>
+N
+N// <e> QDEC_ENABLED - nrf_drv_qdec - QDEC peripheral driver
+N//==========================================================
+N#ifndef QDEC_ENABLED
+N#define QDEC_ENABLED 0
+N#endif
+N#if  QDEC_ENABLED
+X#if  0
+S// <o> QDEC_CONFIG_REPORTPER  - Report period
+S 
+S// <0=> 10 Samples 
+S// <1=> 40 Samples 
+S// <2=> 80 Samples 
+S// <3=> 120 Samples 
+S// <4=> 160 Samples 
+S// <5=> 200 Samples 
+S// <6=> 240 Samples 
+S// <7=> 280 Samples 
+S
+S#ifndef QDEC_CONFIG_REPORTPER
+S#define QDEC_CONFIG_REPORTPER 0
+S#endif
+S
+S// <o> QDEC_CONFIG_SAMPLEPER  - Sample period
+S 
+S// <0=> 128 us 
+S// <1=> 256 us 
+S// <2=> 512 us 
+S// <3=> 1024 us 
+S// <4=> 2048 us 
+S// <5=> 4096 us 
+S// <6=> 8192 us 
+S// <7=> 16384 us 
+S
+S#ifndef QDEC_CONFIG_SAMPLEPER
+S#define QDEC_CONFIG_SAMPLEPER 7
+S#endif
+S
+S// <o> QDEC_CONFIG_PIO_A - A pin  <0-31> 
+S
+S
+S#ifndef QDEC_CONFIG_PIO_A
+S#define QDEC_CONFIG_PIO_A 31
+S#endif
+S
+S// <o> QDEC_CONFIG_PIO_B - B pin  <0-31> 
+S
+S
+S#ifndef QDEC_CONFIG_PIO_B
+S#define QDEC_CONFIG_PIO_B 31
+S#endif
+S
+S// <o> QDEC_CONFIG_PIO_LED - LED pin  <0-31> 
+S
+S
+S#ifndef QDEC_CONFIG_PIO_LED
+S#define QDEC_CONFIG_PIO_LED 31
+S#endif
+S
+S// <o> QDEC_CONFIG_LEDPRE - LED pre 
+S#ifndef QDEC_CONFIG_LEDPRE
+S#define QDEC_CONFIG_LEDPRE 511
+S#endif
+S
+S// <o> QDEC_CONFIG_LEDPOL  - LED polarity
+S 
+S// <0=> Active low 
+S// <1=> Active high 
+S
+S#ifndef QDEC_CONFIG_LEDPOL
+S#define QDEC_CONFIG_LEDPOL 1
+S#endif
+S
+S// <q> QDEC_CONFIG_DBFEN  - Debouncing enable
+S 
+S
+S#ifndef QDEC_CONFIG_DBFEN
+S#define QDEC_CONFIG_DBFEN 0
+S#endif
+S
+S// <q> QDEC_CONFIG_SAMPLE_INTEN  - Sample ready interrupt enable
+S 
+S
+S#ifndef QDEC_CONFIG_SAMPLE_INTEN
+S#define QDEC_CONFIG_SAMPLE_INTEN 0
+S#endif
+S
+S// <o> QDEC_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef QDEC_CONFIG_IRQ_PRIORITY
+S#define QDEC_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> QDEC_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef QDEC_CONFIG_LOG_ENABLED
+S#define QDEC_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  QDEC_CONFIG_LOG_ENABLED
+S// <o> QDEC_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef QDEC_CONFIG_LOG_LEVEL
+S#define QDEC_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> QDEC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef QDEC_CONFIG_INFO_COLOR
+S#define QDEC_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> QDEC_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef QDEC_CONFIG_DEBUG_COLOR
+S#define QDEC_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //QDEC_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //QDEC_ENABLED
+N// </e>
+N
+N// <e> RNG_ENABLED - nrf_drv_rng - RNG peripheral driver
+N//==========================================================
+N#ifndef RNG_ENABLED
+N#define RNG_ENABLED 0
+N#endif
+N#if  RNG_ENABLED
+X#if  0
+S// <q> RNG_CONFIG_ERROR_CORRECTION  - Error correction
+S 
+S
+S#ifndef RNG_CONFIG_ERROR_CORRECTION
+S#define RNG_CONFIG_ERROR_CORRECTION 0
+S#endif
+S
+S// <o> RNG_CONFIG_POOL_SIZE - Pool size 
+S#ifndef RNG_CONFIG_POOL_SIZE
+S#define RNG_CONFIG_POOL_SIZE 32
+S#endif
+S
+S// <o> RNG_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef RNG_CONFIG_IRQ_PRIORITY
+S#define RNG_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> RNG_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef RNG_CONFIG_LOG_ENABLED
+S#define RNG_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  RNG_CONFIG_LOG_ENABLED
+S// <o> RNG_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef RNG_CONFIG_LOG_LEVEL
+S#define RNG_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> RNG_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef RNG_CONFIG_INFO_COLOR
+S#define RNG_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> RNG_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef RNG_CONFIG_DEBUG_COLOR
+S#define RNG_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //RNG_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //RNG_ENABLED
+N// </e>
+N
+N// <e> RTC_ENABLED - nrf_drv_rtc - RTC peripheral driver
+N//==========================================================
+N#ifndef RTC_ENABLED
+N#define RTC_ENABLED 0
+N#endif
+N#if  RTC_ENABLED
+X#if  0
+S// <o> RTC_DEFAULT_CONFIG_FREQUENCY - Frequency  <16-32768> 
+S
+S
+S#ifndef RTC_DEFAULT_CONFIG_FREQUENCY
+S#define RTC_DEFAULT_CONFIG_FREQUENCY 32768
+S#endif
+S
+S// <q> RTC_DEFAULT_CONFIG_RELIABLE  - Ensures safe compare event triggering
+S 
+S
+S#ifndef RTC_DEFAULT_CONFIG_RELIABLE
+S#define RTC_DEFAULT_CONFIG_RELIABLE 0
+S#endif
+S
+S// <o> RTC_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef RTC_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define RTC_DEFAULT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <q> RTC0_ENABLED  - Enable RTC0 instance
+S 
+S
+S#ifndef RTC0_ENABLED
+S#define RTC0_ENABLED 0
+S#endif
+S
+S// <q> RTC1_ENABLED  - Enable RTC1 instance
+S 
+S
+S#ifndef RTC1_ENABLED
+S#define RTC1_ENABLED 0
+S#endif
+S
+S// <q> RTC2_ENABLED  - Enable RTC2 instance
+S 
+S
+S#ifndef RTC2_ENABLED
+S#define RTC2_ENABLED 0
+S#endif
+S
+S// <o> NRF_MAXIMUM_LATENCY_US - Maximum possible time[us] in highest priority interrupt 
+S#ifndef NRF_MAXIMUM_LATENCY_US
+S#define NRF_MAXIMUM_LATENCY_US 2000
+S#endif
+S
+S// <e> RTC_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef RTC_CONFIG_LOG_ENABLED
+S#define RTC_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  RTC_CONFIG_LOG_ENABLED
+S// <o> RTC_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef RTC_CONFIG_LOG_LEVEL
+S#define RTC_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> RTC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef RTC_CONFIG_INFO_COLOR
+S#define RTC_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> RTC_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef RTC_CONFIG_DEBUG_COLOR
+S#define RTC_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //RTC_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //RTC_ENABLED
+N// </e>
+N
+N// <e> SAADC_ENABLED - nrf_drv_saadc - SAADC peripheral driver
+N//==========================================================
+N#ifndef SAADC_ENABLED
+N#define SAADC_ENABLED 0
+N#endif
+N#if  SAADC_ENABLED
+X#if  0
+S// <o> SAADC_CONFIG_RESOLUTION  - Resolution
+S 
+S// <0=> 8 bit 
+S// <1=> 10 bit 
+S// <2=> 12 bit 
+S// <3=> 14 bit 
+S
+S#ifndef SAADC_CONFIG_RESOLUTION
+S#define SAADC_CONFIG_RESOLUTION 1
+S#endif
+S
+S// <o> SAADC_CONFIG_OVERSAMPLE  - Sample period
+S 
+S// <0=> Disabled 
+S// <1=> 2x 
+S// <2=> 4x 
+S// <3=> 8x 
+S// <4=> 16x 
+S// <5=> 32x 
+S// <6=> 64x 
+S// <7=> 128x 
+S// <8=> 256x 
+S
+S#ifndef SAADC_CONFIG_OVERSAMPLE
+S#define SAADC_CONFIG_OVERSAMPLE 0
+S#endif
+S
+S// <q> SAADC_CONFIG_LP_MODE  - Enabling low power mode
+S 
+S
+S#ifndef SAADC_CONFIG_LP_MODE
+S#define SAADC_CONFIG_LP_MODE 0
+S#endif
+S
+S// <o> SAADC_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef SAADC_CONFIG_IRQ_PRIORITY
+S#define SAADC_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> SAADC_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef SAADC_CONFIG_LOG_ENABLED
+S#define SAADC_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  SAADC_CONFIG_LOG_ENABLED
+S// <o> SAADC_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef SAADC_CONFIG_LOG_LEVEL
+S#define SAADC_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> SAADC_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SAADC_CONFIG_INFO_COLOR
+S#define SAADC_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> SAADC_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SAADC_CONFIG_DEBUG_COLOR
+S#define SAADC_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //SAADC_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //SAADC_ENABLED
+N// </e>
+N
+N// <e> SPIS_ENABLED - nrf_drv_spis - SPI Slave driver
+N//==========================================================
+N#ifndef SPIS_ENABLED
+N#define SPIS_ENABLED 0
+N#endif
+N#if  SPIS_ENABLED
+X#if  0
+S// <o> SPIS_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef SPIS_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define SPIS_DEFAULT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <o> SPIS_DEFAULT_MODE  - Mode
+S 
+S// <0=> MODE_0 
+S// <1=> MODE_1 
+S// <2=> MODE_2 
+S// <3=> MODE_3 
+S
+S#ifndef SPIS_DEFAULT_MODE
+S#define SPIS_DEFAULT_MODE 0
+S#endif
+S
+S// <o> SPIS_DEFAULT_BIT_ORDER  - SPIS default bit order
+S 
+S// <0=> MSB first 
+S// <1=> LSB first 
+S
+S#ifndef SPIS_DEFAULT_BIT_ORDER
+S#define SPIS_DEFAULT_BIT_ORDER 0
+S#endif
+S
+S// <o> SPIS_DEFAULT_DEF - SPIS default DEF character  <0-255> 
+S
+S
+S#ifndef SPIS_DEFAULT_DEF
+S#define SPIS_DEFAULT_DEF 255
+S#endif
+S
+S// <o> SPIS_DEFAULT_ORC - SPIS default ORC character  <0-255> 
+S
+S
+S#ifndef SPIS_DEFAULT_ORC
+S#define SPIS_DEFAULT_ORC 255
+S#endif
+S
+S// <q> SPIS0_ENABLED  - Enable SPIS0 instance
+S 
+S
+S#ifndef SPIS0_ENABLED
+S#define SPIS0_ENABLED 0
+S#endif
+S
+S// <q> SPIS1_ENABLED  - Enable SPIS1 instance
+S 
+S
+S#ifndef SPIS1_ENABLED
+S#define SPIS1_ENABLED 0
+S#endif
+S
+S// <q> SPIS2_ENABLED  - Enable SPIS2 instance
+S 
+S
+S#ifndef SPIS2_ENABLED
+S#define SPIS2_ENABLED 0
+S#endif
+S
+S// <e> SPIS_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef SPIS_CONFIG_LOG_ENABLED
+S#define SPIS_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  SPIS_CONFIG_LOG_ENABLED
+S// <o> SPIS_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef SPIS_CONFIG_LOG_LEVEL
+S#define SPIS_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> SPIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SPIS_CONFIG_INFO_COLOR
+S#define SPIS_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> SPIS_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SPIS_CONFIG_DEBUG_COLOR
+S#define SPIS_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //SPIS_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //SPIS_ENABLED
+N// </e>
+N
+N// <e> SPI_ENABLED - nrf_drv_spi - SPI/SPIM peripheral driver
+N//==========================================================
+N#ifndef SPI_ENABLED
+N#define SPI_ENABLED 0
+N#endif
+N#if  SPI_ENABLED
+X#if  0
+S// <o> SPI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef SPI_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define SPI_DEFAULT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> SPI0_ENABLED - Enable SPI0 instance
+S//==========================================================
+S#ifndef SPI0_ENABLED
+S#define SPI0_ENABLED 0
+S#endif
+S#if  SPI0_ENABLED
+S// <q> SPI0_USE_EASY_DMA  - Use EasyDMA
+S 
+S
+S#ifndef SPI0_USE_EASY_DMA
+S#define SPI0_USE_EASY_DMA 0
+S#endif
+S
+S// <o> SPI0_DEFAULT_FREQUENCY  - SPI frequency
+S 
+S// <33554432=> 125 kHz 
+S// <67108864=> 250 kHz 
+S// <134217728=> 500 kHz 
+S// <268435456=> 1 MHz 
+S// <536870912=> 2 MHz 
+S// <1073741824=> 4 MHz 
+S// <2147483648=> 8 MHz 
+S
+S#ifndef SPI0_DEFAULT_FREQUENCY
+S#define SPI0_DEFAULT_FREQUENCY 1073741824
+S#endif
+S
+S#endif //SPI0_ENABLED
+S// </e>
+S
+S// <e> SPI1_ENABLED - Enable SPI1 instance
+S//==========================================================
+S#ifndef SPI1_ENABLED
+S#define SPI1_ENABLED 0
+S#endif
+S#if  SPI1_ENABLED
+S// <q> SPI1_USE_EASY_DMA  - Use EasyDMA
+S 
+S
+S#ifndef SPI1_USE_EASY_DMA
+S#define SPI1_USE_EASY_DMA 0
+S#endif
+S
+S// <o> SPI1_DEFAULT_FREQUENCY  - SPI frequency
+S 
+S// <33554432=> 125 kHz 
+S// <67108864=> 250 kHz 
+S// <134217728=> 500 kHz 
+S// <268435456=> 1 MHz 
+S// <536870912=> 2 MHz 
+S// <1073741824=> 4 MHz 
+S// <2147483648=> 8 MHz 
+S
+S#ifndef SPI1_DEFAULT_FREQUENCY
+S#define SPI1_DEFAULT_FREQUENCY 1073741824
+S#endif
+S
+S#endif //SPI1_ENABLED
+S// </e>
+S
+S// <e> SPI2_ENABLED - Enable SPI2 instance
+S//==========================================================
+S#ifndef SPI2_ENABLED
+S#define SPI2_ENABLED 0
+S#endif
+S#if  SPI2_ENABLED
+S// <q> SPI2_USE_EASY_DMA  - Use EasyDMA
+S 
+S
+S#ifndef SPI2_USE_EASY_DMA
+S#define SPI2_USE_EASY_DMA 0
+S#endif
+S
+S// <q> SPI2_DEFAULT_FREQUENCY  - Use EasyDMA
+S 
+S
+S#ifndef SPI2_DEFAULT_FREQUENCY
+S#define SPI2_DEFAULT_FREQUENCY 0
+S#endif
+S
+S#endif //SPI2_ENABLED
+S// </e>
+S
+S// <e> SPI_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef SPI_CONFIG_LOG_ENABLED
+S#define SPI_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  SPI_CONFIG_LOG_ENABLED
+S// <o> SPI_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef SPI_CONFIG_LOG_LEVEL
+S#define SPI_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> SPI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SPI_CONFIG_INFO_COLOR
+S#define SPI_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> SPI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef SPI_CONFIG_DEBUG_COLOR
+S#define SPI_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //SPI_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //SPI_ENABLED
+N// </e>
+N
+N// <e> TIMER_ENABLED - nrf_drv_timer - TIMER periperal driver
+N//==========================================================
+N#ifndef TIMER_ENABLED
+N#define TIMER_ENABLED 0
+N#endif
+N#if  TIMER_ENABLED
+X#if  0
+S// <o> TIMER_DEFAULT_CONFIG_FREQUENCY  - Timer frequency if in Timer mode
+S 
+S// <0=> 16 MHz 
+S// <1=> 8 MHz 
+S// <2=> 4 MHz 
+S// <3=> 2 MHz 
+S// <4=> 1 MHz 
+S// <5=> 500 kHz 
+S// <6=> 250 kHz 
+S// <7=> 125 kHz 
+S// <8=> 62.5 kHz 
+S// <9=> 31.25 kHz 
+S
+S#ifndef TIMER_DEFAULT_CONFIG_FREQUENCY
+S#define TIMER_DEFAULT_CONFIG_FREQUENCY 0
+S#endif
+S
+S// <o> TIMER_DEFAULT_CONFIG_MODE  - Timer mode or operation
+S 
+S// <0=> Timer 
+S// <1=> Counter 
+S
+S#ifndef TIMER_DEFAULT_CONFIG_MODE
+S#define TIMER_DEFAULT_CONFIG_MODE 0
+S#endif
+S
+S// <o> TIMER_DEFAULT_CONFIG_BIT_WIDTH  - Timer counter bit width
+S 
+S// <0=> 16 bit 
+S// <1=> 8 bit 
+S// <2=> 24 bit 
+S// <3=> 32 bit 
+S
+S#ifndef TIMER_DEFAULT_CONFIG_BIT_WIDTH
+S#define TIMER_DEFAULT_CONFIG_BIT_WIDTH 0
+S#endif
+S
+S// <o> TIMER_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef TIMER_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define TIMER_DEFAULT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <q> TIMER0_ENABLED  - Enable TIMER0 instance
+S 
+S
+S#ifndef TIMER0_ENABLED
+S#define TIMER0_ENABLED 0
+S#endif
+S
+S// <q> TIMER1_ENABLED  - Enable TIMER1 instance
+S 
+S
+S#ifndef TIMER1_ENABLED
+S#define TIMER1_ENABLED 0
+S#endif
+S
+S// <q> TIMER2_ENABLED  - Enable TIMER2 instance
+S 
+S
+S#ifndef TIMER2_ENABLED
+S#define TIMER2_ENABLED 0
+S#endif
+S
+S// <q> TIMER3_ENABLED  - Enable TIMER3 instance
+S 
+S
+S#ifndef TIMER3_ENABLED
+S#define TIMER3_ENABLED 0
+S#endif
+S
+S// <q> TIMER4_ENABLED  - Enable TIMER4 instance
+S 
+S
+S#ifndef TIMER4_ENABLED
+S#define TIMER4_ENABLED 0
+S#endif
+S
+S// <e> TIMER_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef TIMER_CONFIG_LOG_ENABLED
+S#define TIMER_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  TIMER_CONFIG_LOG_ENABLED
+S// <o> TIMER_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef TIMER_CONFIG_LOG_LEVEL
+S#define TIMER_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> TIMER_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef TIMER_CONFIG_INFO_COLOR
+S#define TIMER_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> TIMER_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef TIMER_CONFIG_DEBUG_COLOR
+S#define TIMER_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //TIMER_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //TIMER_ENABLED
+N// </e>
+N
+N// <e> TWIS_ENABLED - nrf_drv_twis - TWIS peripheral driver
+N//==========================================================
+N#ifndef TWIS_ENABLED
+N#define TWIS_ENABLED 0
+N#endif
+N#if  TWIS_ENABLED
+X#if  0
+S// <o> TWIS_DEFAULT_CONFIG_ADDR0 - Address0 
+S#ifndef TWIS_DEFAULT_CONFIG_ADDR0
+S#define TWIS_DEFAULT_CONFIG_ADDR0 0
+S#endif
+S
+S// <o> TWIS_DEFAULT_CONFIG_ADDR1 - Address1 
+S#ifndef TWIS_DEFAULT_CONFIG_ADDR1
+S#define TWIS_DEFAULT_CONFIG_ADDR1 0
+S#endif
+S
+S// <o> TWIS_DEFAULT_CONFIG_SCL_PULL  - SCL pin pull configuration
+S 
+S// <0=> Disabled 
+S// <1=> Pull down 
+S// <3=> Pull up 
+S
+S#ifndef TWIS_DEFAULT_CONFIG_SCL_PULL
+S#define TWIS_DEFAULT_CONFIG_SCL_PULL 0
+S#endif
+S
+S// <o> TWIS_DEFAULT_CONFIG_SDA_PULL  - SDA pin pull configuration
+S 
+S// <0=> Disabled 
+S// <1=> Pull down 
+S// <3=> Pull up 
+S
+S#ifndef TWIS_DEFAULT_CONFIG_SDA_PULL
+S#define TWIS_DEFAULT_CONFIG_SDA_PULL 0
+S#endif
+S
+S// <o> TWIS_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef TWIS_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define TWIS_DEFAULT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <q> TWIS0_ENABLED  - Enable TWIS0 instance
+S 
+S
+S#ifndef TWIS0_ENABLED
+S#define TWIS0_ENABLED 0
+S#endif
+S
+S// <q> TWIS1_ENABLED  - Enable TWIS1 instance
+S 
+S
+S#ifndef TWIS1_ENABLED
+S#define TWIS1_ENABLED 0
+S#endif
+S
+S// <q> TWIS_ASSUME_INIT_AFTER_RESET_ONLY  - Assume that any instance would be initialized only once
+S 
+S
+S// <i> Optimization flag. Registers used by TWIS are shared by other peripherals. Normally, during initialization driver tries to clear all registers to known state before doing the initialization itself. This gives initialization safe procedure, no matter when it would be called. If you activate TWIS only once and do never uninitialize it - set this flag to 1 what gives more optimal code.
+S
+S#ifndef TWIS_ASSUME_INIT_AFTER_RESET_ONLY
+S#define TWIS_ASSUME_INIT_AFTER_RESET_ONLY 0
+S#endif
+S
+S// <q> TWIS_NO_SYNC_MODE  - Remove support for synchronous mode
+S 
+S
+S// <i> Synchronous mode would be used in specific situations. And it uses some additional code and data memory to safely process state machine by polling it in status functions. If this functionality is not required it may be disabled to free some resources.
+S
+S#ifndef TWIS_NO_SYNC_MODE
+S#define TWIS_NO_SYNC_MODE 0
+S#endif
+S
+S// <e> TWIS_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef TWIS_CONFIG_LOG_ENABLED
+S#define TWIS_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  TWIS_CONFIG_LOG_ENABLED
+S// <o> TWIS_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef TWIS_CONFIG_LOG_LEVEL
+S#define TWIS_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> TWIS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef TWIS_CONFIG_INFO_COLOR
+S#define TWIS_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> TWIS_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef TWIS_CONFIG_DEBUG_COLOR
+S#define TWIS_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //TWIS_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //TWIS_ENABLED
+N// </e>
+N
+N// <e> TWI_ENABLED - nrf_drv_twi - TWI/TWIM peripheral driver
+N//==========================================================
+N#ifndef TWI_ENABLED
+N#define TWI_ENABLED 0
+N#endif
+N#if  TWI_ENABLED
+X#if  0
+S// <o> TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
+S 
+S// <26738688=> 100k 
+S// <67108864=> 250k 
+S// <104857600=> 400k 
+S
+S#ifndef TWI_DEFAULT_CONFIG_FREQUENCY
+S#define TWI_DEFAULT_CONFIG_FREQUENCY 26738688
+S#endif
+S
+S// <q> TWI_DEFAULT_CONFIG_CLR_BUS_INIT  - Enables bus clearing procedure during init
+S 
+S
+S#ifndef TWI_DEFAULT_CONFIG_CLR_BUS_INIT
+S#define TWI_DEFAULT_CONFIG_CLR_BUS_INIT 0
+S#endif
+S
+S// <q> TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
+S 
+S
+S#ifndef TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT
+S#define TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
+S#endif
+S
+S// <o> TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef TWI_DEFAULT_CONFIG_IRQ_PRIORITY
+S#define TWI_DEFAULT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> TWI0_ENABLED - Enable TWI0 instance
+S//==========================================================
+S#ifndef TWI0_ENABLED
+S#define TWI0_ENABLED 0
+S#endif
+S#if  TWI0_ENABLED
+S// <q> TWI0_USE_EASY_DMA  - Use EasyDMA (if present)
+S 
+S
+S#ifndef TWI0_USE_EASY_DMA
+S#define TWI0_USE_EASY_DMA 0
+S#endif
+S
+S#endif //TWI0_ENABLED
+S// </e>
+S
+S// <e> TWI1_ENABLED - Enable TWI1 instance
+S//==========================================================
+S#ifndef TWI1_ENABLED
+S#define TWI1_ENABLED 0
+S#endif
+S#if  TWI1_ENABLED
+S// <q> TWI1_USE_EASY_DMA  - Use EasyDMA (if present)
+S 
+S
+S#ifndef TWI1_USE_EASY_DMA
+S#define TWI1_USE_EASY_DMA 0
+S#endif
+S
+S#endif //TWI1_ENABLED
+S// </e>
+S
+S// <e> TWI_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef TWI_CONFIG_LOG_ENABLED
+S#define TWI_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  TWI_CONFIG_LOG_ENABLED
+S// <o> TWI_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef TWI_CONFIG_LOG_LEVEL
+S#define TWI_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> TWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef TWI_CONFIG_INFO_COLOR
+S#define TWI_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> TWI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef TWI_CONFIG_DEBUG_COLOR
+S#define TWI_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //TWI_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //TWI_ENABLED
+N// </e>
+N
+N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
+N//==========================================================
+N#ifndef UART_ENABLED
+N#define UART_ENABLED 1
+N#endif
+N#if  UART_ENABLED
+X#if  1
+N// <o> UART_DEFAULT_CONFIG_HWFC  - Hardware Flow Control
+N 
+N// <0=> Disabled 
+N// <1=> Enabled 
+N
+N#ifndef UART_DEFAULT_CONFIG_HWFC
+N#define UART_DEFAULT_CONFIG_HWFC 0
+N#endif
+N
+N// <o> UART_DEFAULT_CONFIG_PARITY  - Parity
+N 
+N// <0=> Excluded 
+N// <14=> Included 
+N
+N#ifndef UART_DEFAULT_CONFIG_PARITY
+N#define UART_DEFAULT_CONFIG_PARITY 0
+N#endif
+N
+N// <o> UART_DEFAULT_CONFIG_BAUDRATE  - Default Baudrate
+N 
+N// <323584=> 1200 baud 
+N// <643072=> 2400 baud 
+N// <1290240=> 4800 baud 
+N// <2576384=> 9600 baud 
+N// <3862528=> 14400 baud 
+N// <5152768=> 19200 baud 
+N// <7716864=> 28800 baud 
+N// <10289152=> 38400 baud 
+N// <15400960=> 57600 baud 
+N// <20615168=> 76800 baud 
+N// <30924800=> 115200 baud 
+N// <61865984=> 230400 baud 
+N// <67108864=> 250000 baud 
+N// <121634816=> 460800 baud 
+N// <251658240=> 921600 baud 
+N// <268435456=> 57600 baud 
+N
+N#ifndef UART_DEFAULT_CONFIG_BAUDRATE
+N#define UART_DEFAULT_CONFIG_BAUDRATE 30924800
+N#endif
+N
+N// <o> UART_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+N 
+N
+N// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+N// <0=> 0 (highest) 
+N// <1=> 1 
+N// <2=> 2 
+N// <3=> 3 
+N
+N#ifndef UART_DEFAULT_CONFIG_IRQ_PRIORITY
+N#define UART_DEFAULT_CONFIG_IRQ_PRIORITY 3
+N#endif
+N
+N// <q> UART_EASY_DMA_SUPPORT  - Driver supporting EasyDMA
+N 
+N
+N#ifndef UART_EASY_DMA_SUPPORT
+N#define UART_EASY_DMA_SUPPORT 1
+N#endif
+N
+N// <q> UART_LEGACY_SUPPORT  - Driver supporting Legacy mode
+N 
+N
+N#ifndef UART_LEGACY_SUPPORT
+N#define UART_LEGACY_SUPPORT 1
+N#endif
+N
+N// <e> UART0_ENABLED - Enable UART0 instance
+N//==========================================================
+N#ifndef UART0_ENABLED
+N#define UART0_ENABLED 1
+N#endif
+N#if  UART0_ENABLED
+X#if  1
+N// <q> UART0_CONFIG_USE_EASY_DMA  - Default setting for using EasyDMA
+N 
+N
+N#ifndef UART0_CONFIG_USE_EASY_DMA
+N#define UART0_CONFIG_USE_EASY_DMA 1
+N#endif
+N
+N#endif //UART0_ENABLED
+N// </e>
+N
+N// <e> UART_CONFIG_LOG_ENABLED - Enables logging in the module.
+N//==========================================================
+N#ifndef UART_CONFIG_LOG_ENABLED
+N#define UART_CONFIG_LOG_ENABLED 0
+N#endif
+N#if  UART_CONFIG_LOG_ENABLED
+X#if  0
+S// <o> UART_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef UART_CONFIG_LOG_LEVEL
+S#define UART_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> UART_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef UART_CONFIG_INFO_COLOR
+S#define UART_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> UART_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef UART_CONFIG_DEBUG_COLOR
+S#define UART_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+N#endif //UART_CONFIG_LOG_ENABLED
+N// </e>
+N
+N#endif //UART_ENABLED
+N// </e>
+N
+N// <e> USBD_ENABLED - nrf_drv_usbd - USB driver
+N//==========================================================
+N#ifndef USBD_ENABLED
+N#define USBD_ENABLED 0
+N#endif
+N#if  USBD_ENABLED
+X#if  0
+S// <o> NRF_DRV_USBD_DMASCHEDULER_MODE  - USBD SMA scheduler working scheme
+S 
+S// <0=> Prioritized access 
+S// <1=> Round Robin 
+S
+S#ifndef NRF_DRV_USBD_DMASCHEDULER_MODE
+S#define NRF_DRV_USBD_DMASCHEDULER_MODE 0
+S#endif
+S
+S// <q> NRF_USBD_DRV_LOG_ENABLED  - Enable logging.
+S 
+S
+S#ifndef NRF_USBD_DRV_LOG_ENABLED
+S#define NRF_USBD_DRV_LOG_ENABLED 0
+S#endif
+S
+N#endif //USBD_ENABLED
+N// </e>
+N
+N// <e> WDT_ENABLED - nrf_drv_wdt - WDT peripheral driver
+N//==========================================================
+N#ifndef WDT_ENABLED
+N#define WDT_ENABLED 0
+N#endif
+N#if  WDT_ENABLED
+X#if  0
+S// <o> WDT_CONFIG_BEHAVIOUR  - WDT behavior in CPU SLEEP or HALT mode
+S 
+S// <1=> Run in SLEEP, Pause in HALT 
+S// <8=> Pause in SLEEP, Run in HALT 
+S// <9=> Run in SLEEP and HALT 
+S// <0=> Pause in SLEEP and HALT 
+S
+S#ifndef WDT_CONFIG_BEHAVIOUR
+S#define WDT_CONFIG_BEHAVIOUR 1
+S#endif
+S
+S// <o> WDT_CONFIG_RELOAD_VALUE - Reload value  <15-4294967295> 
+S
+S
+S#ifndef WDT_CONFIG_RELOAD_VALUE
+S#define WDT_CONFIG_RELOAD_VALUE 2000
+S#endif
+S
+S// <o> WDT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+S 
+S
+S// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+S// <0=> 0 (highest) 
+S// <1=> 1 
+S// <2=> 2 
+S// <3=> 3 
+S
+S#ifndef WDT_CONFIG_IRQ_PRIORITY
+S#define WDT_CONFIG_IRQ_PRIORITY 3
+S#endif
+S
+S// <e> WDT_CONFIG_LOG_ENABLED - Enables logging in the module.
+S//==========================================================
+S#ifndef WDT_CONFIG_LOG_ENABLED
+S#define WDT_CONFIG_LOG_ENABLED 0
+S#endif
+S#if  WDT_CONFIG_LOG_ENABLED
+S// <o> WDT_CONFIG_LOG_LEVEL  - Default Severity level
+S 
+S// <0=> Off 
+S// <1=> Error 
+S// <2=> Warning 
+S// <3=> Info 
+S// <4=> Debug 
+S
+S#ifndef WDT_CONFIG_LOG_LEVEL
+S#define WDT_CONFIG_LOG_LEVEL 3
+S#endif
+S
+S// <o> WDT_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef WDT_CONFIG_INFO_COLOR
+S#define WDT_CONFIG_INFO_COLOR 0
+S#endif
+S
+S// <o> WDT_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+S 
+S// <0=> Default 
+S// <1=> Black 
+S// <2=> Red 
+S// <3=> Green 
+S// <4=> Yellow 
+S// <5=> Blue 
+S// <6=> Magenta 
+S// <7=> Cyan 
+S// <8=> White 
+S
+S#ifndef WDT_CONFIG_DEBUG_COLOR
+S#define WDT_CONFIG_DEBUG_COLOR 0
+S#endif
+S
+S#endif //WDT_CONFIG_LOG_ENABLED
+S// </e>
+S
+N#endif //WDT_ENABLED
+N// </e>
+N
+N// </h> 
+N//==========================================================
+N
+N// <h> nRF_Libraries 
+N
+N//==========================================================
+N// <q> APP_GPIOTE_ENABLED  - app_gpiote - GPIOTE events dispatcher
+N 
+N
+N#ifndef APP_GPIOTE_ENABLED
+N#define APP_GPIOTE_ENABLED 0
+N#endif
+N
+N// <q> APP_PWM_ENABLED  - app_pwm - PWM functionality
+N 
+N
+N#ifndef APP_PWM_ENABLED
+N#define APP_PWM_ENABLED 0
+N#endif
+N
+N// <e> APP_SCHEDULER_ENABLED - app_scheduler - Events scheduler
+N//==========================================================
+N#ifndef APP_SCHEDULER_ENABLED
+N#define APP_SCHEDULER_ENABLED 0
+N#endif
+N#if  APP_SCHEDULER_ENABLED
+X#if  0
+S// <q> APP_SCHEDULER_WITH_PAUSE  - Enabling pause feature
+S 
+S
+S#ifndef APP_SCHEDULER_WITH_PAUSE
+S#define APP_SCHEDULER_WITH_PAUSE 0
+S#endif
+S
+S// <q> APP_SCHEDULER_WITH_PROFILER  - Enabling scheduler profiling
+S 
+S
+S#ifndef APP_SCHEDULER_WITH_PROFILER
+S#define APP_SCHEDULER_WITH_PROFILER 0
+S#endif
+S
+N#endif //APP_SCHEDULER_ENABLED
+N// </e>
+N
+N// <e> APP_TIMER_ENABLED - app_timer - Application timer functionality
+N//==========================================================
+N#ifndef APP_TIMER_ENABLED
+N#define APP_TIMER_ENABLED 1
+N#endif
+N#if  APP_TIMER_ENABLED
+X#if  1
+N// <q> APP_TIMER_WITH_PROFILER  - Enable app_timer profiling
+N 
+N
+N#ifndef APP_TIMER_WITH_PROFILER
+N#define APP_TIMER_WITH_PROFILER 0
+N#endif
+N
+N// <q> APP_TIMER_KEEPS_RTC_ACTIVE  - Enable RTC always on
+N 
+N
+N// <i> If option is enabled RTC is kept running even if there is no active timers.
+N// <i> This option can be used when app_timer is used for timestamping.
+N
+N#ifndef APP_TIMER_KEEPS_RTC_ACTIVE
+N#define APP_TIMER_KEEPS_RTC_ACTIVE 0
+N#endif
+N
+N#endif //APP_TIMER_ENABLED
+N// </e>
+N
+N// <q> APP_TWI_ENABLED  - app_twi - TWI transaction manager
+N 
+N
+N#ifndef APP_TWI_ENABLED
+N#define APP_TWI_ENABLED 0
+N#endif
+N
+N// <e> APP_UART_ENABLED - app_uart - UART driver
+N//==========================================================
+N#ifndef APP_UART_ENABLED
+N#define APP_UART_ENABLED 0
+N#endif
+N#if  APP_UART_ENABLED
+X#if  0
+S// <o> APP_UART_DRIVER_INSTANCE  - UART instance used
+S 
+S// <0=> 0 
+S
+S#ifndef APP_UART_DRIVER_INSTANCE
+S#define APP_UART_DRIVER_INSTANCE 0
+S#endif
+S
+N#endif //APP_UART_ENABLED
+N// </e>
+N
+N// <q> APP_USBD_CLASS_AUDIO_ENABLED  - app_usbd_audio - USB AUDIO class
+N 
+N
+N#ifndef APP_USBD_CLASS_AUDIO_ENABLED
+N#define APP_USBD_CLASS_AUDIO_ENABLED 0
+N#endif
+N
+N// <q> APP_USBD_CLASS_HID_ENABLED  - app_usbd_hid - USB HID class
+N 
+N
+N#ifndef APP_USBD_CLASS_HID_ENABLED
+N#define APP_USBD_CLASS_HID_ENABLED 0
+N#endif
+N
+N// <q> APP_USBD_HID_GENERIC_ENABLED  - app_usbd_hid_generic - USB HID generic
+N 
+N
+N#ifndef APP_USBD_HID_GENERIC_ENABLED
+N#define APP_USBD_HID_GENERIC_ENABLED 0
+N#endif
+N
+N// <q> APP_USBD_HID_KBD_ENABLED  - app_usbd_hid_kbd - USB HID keyboard
+N 
+N
+N#ifndef APP_USBD_HID_KBD_ENABLED
+N#define APP_USBD_HID_KBD_ENABLED 0
+N#endif
+N
+N// <q> APP_USBD_HID_MOUSE_ENABLED  - app_usbd_hid_mouse - USB HID mouse
+N 
+N
+N#ifndef APP_USBD_HID_MOUSE_ENABLED
+N#define APP_USBD_HID_MOUSE_ENABLED 0
+N#endif
+N
+N// <q> BUTTON_ENABLED  - app_button - buttons handling module
+N 
+N
+N#ifndef BUTTON_ENABLED
+N#define BUTTON_ENABLED 1
+N#endif
+N
+N// <q> CRC16_ENABLED  - crc16 - CRC16 calculation routines
+N 
+N
+N#ifndef CRC16_ENABLED
+N#define CRC16_ENABLED 1
+N#endif
+N
+N// <q> CRC32_ENABLED  - crc32 - CRC32 calculation routines
+N 
+N
+N#ifndef CRC32_ENABLED
+N#define CRC32_ENABLED 0
+N#endif
+N
+N// <q> ECC_ENABLED  - ecc - Elliptic Curve Cryptography Library
+N 
+N
+N#ifndef ECC_ENABLED
+N#define ECC_ENABLED 0
+N#endif
+N
+N// <e> FDS_ENABLED - fds - Flash data storage module
+N//==========================================================
+N#ifndef FDS_ENABLED
+N#define FDS_ENABLED 1
+N#endif
+N#if  FDS_ENABLED
+X#if  1
+N// <o> FDS_OP_QUEUE_SIZE - Size of the internal queue. 
+N#ifndef FDS_OP_QUEUE_SIZE
+N#define FDS_OP_QUEUE_SIZE 4
+N#endif
+N
+N// <o> FDS_CHUNK_QUEUE_SIZE - Determines how many @ref fds_record_chunk_t structures can be buffered at any time. 
+N#ifndef FDS_CHUNK_QUEUE_SIZE
+N#define FDS_CHUNK_QUEUE_SIZE 8
+N#endif
+N
+N// <o> FDS_MAX_USERS - Maximum number of callbacks that can be registered. 
+N#ifndef FDS_MAX_USERS
+N#define FDS_MAX_USERS 8
+N#endif
+N
+N// <o> FDS_VIRTUAL_PAGES - Number of virtual flash pages to use. 
+N// <i> One of the virtual pages is reserved by the system for garbage collection.
+N// <i> Therefore, the minimum is two virtual pages: one page to store data and
+N// <i> one page to be used by the system for garbage collection. The total amount
+N// <i> of flash memory that is used by FDS amounts to @ref FDS_VIRTUAL_PAGES
+N// <i> @ref FDS_VIRTUAL_PAGE_SIZE * 4 bytes.
+N
+N#ifndef FDS_VIRTUAL_PAGES
+N#define FDS_VIRTUAL_PAGES 3
+N#endif
+N
+N// <o> FDS_VIRTUAL_PAGE_SIZE  - The size of a virtual page of flash memory, expressed in number of 4-byte words.
+N 
+N
+N// <i> By default, a virtual page is the same size as a physical page.
+N// <i> The size of a virtual page must be a multiple of the size of a physical page.
+N// <256=> 256 
+N// <512=> 512 
+N// <1024=> 1024 
+N
+N#ifndef FDS_VIRTUAL_PAGE_SIZE
+N#define FDS_VIRTUAL_PAGE_SIZE 256
+N#endif
+N
+N#endif //FDS_ENABLED
+N// </e>
+N
+N// <e> FSTORAGE_ENABLED - fstorage - Flash storage module
+N//==========================================================
+N#ifndef FSTORAGE_ENABLED
+N#define FSTORAGE_ENABLED 1
+N#endif
+N#if  FSTORAGE_ENABLED
+X#if  1
+N// <o> FS_QUEUE_SIZE - Configures the size of the internal queue. 
+N// <i> Increase this if there are many users, or if it is likely that many
+N// <i> operation will be queued at once without waiting for the previous operations
+N// <i> to complete. In general, increase the queue size if you frequently receive
+N// <i> @ref FS_ERR_QUEUE_FULL errors when calling @ref fs_store or @ref fs_erase.
+N
+N#ifndef FS_QUEUE_SIZE
+N#define FS_QUEUE_SIZE 4
+N#endif
+N
+N// <o> FS_OP_MAX_RETRIES - Number attempts to execute an operation if the SoftDevice fails. 
+N// <i> Increase this value if events return the @ref FS_ERR_OPERATION_TIMEOUT
+N// <i> error often. The SoftDevice may fail to schedule flash access due to high BLE activity.
+N
+N#ifndef FS_OP_MAX_RETRIES
+N#define FS_OP_MAX_RETRIES 3
+N#endif
+N
+N// <o> FS_MAX_WRITE_SIZE_WORDS - Maximum number of words to be written to flash in a single operation. 
+N// <i> Tweaking this value can increase the chances of the SoftDevice being
+N// <i> able to fit flash operations in between radio activity. This value is bound by the
+N// <i> maximum number of words which the SoftDevice can write to flash in a single call to
+N// <i> @ref sd_flash_write, which is 256 words for nRF51 ICs and 1024 words for nRF52 ICs.
+N
+N#ifndef FS_MAX_WRITE_SIZE_WORDS
+N#define FS_MAX_WRITE_SIZE_WORDS 256
+N#endif
+N
+N#endif //FSTORAGE_ENABLED
+N// </e>
+N
+N// <q> HARDFAULT_HANDLER_ENABLED  - hardfault_default - HardFault default handler for debugging and release
+N 
+N
+N#ifndef HARDFAULT_HANDLER_ENABLED
+N#define HARDFAULT_HANDLER_ENABLED 0
+N#endif
+N
+N// <e> HCI_MEM_POOL_ENABLED - hci_mem_pool - memory pool implementation used by HCI
+N//==========================================================
+N#ifndef HCI_MEM_POOL_ENABLED
+N#define HCI_MEM_POOL_ENABLED 0
+N#endif
+N#if  HCI_MEM_POOL_ENABLED
+X#if  0
+S// <o> HCI_TX_BUF_SIZE - TX buffer size in bytes. 
+S#ifndef HCI_TX_BUF_SIZE
+S#define HCI_TX_BUF_SIZE 600
+S#endif
+S
+S// <o> HCI_RX_BUF_SIZE - RX buffer size in bytes. 
+S#ifndef HCI_RX_BUF_SIZE
+S#define HCI_RX_BUF_SIZE 600
+S#endif
+S
+S// <o> HCI_RX_BUF_QUEUE_SIZE - RX buffer queue size. 
+S#ifndef HCI_RX_BUF_QUEUE_SIZE
+S#define HCI_RX_BUF_QUEUE_SIZE 4
+S#endif
+S
+N#endif //HCI_MEM_POOL_ENABLED
+N// </e>
+N
+N// <e> HCI_SLIP_ENABLED - hci_slip - SLIP protocol implementation used by HCI
+N//==========================================================
+N#ifndef HCI_SLIP_ENABLED
+N#define HCI_SLIP_ENABLED 0
+N#endif
+N#if  HCI_SLIP_ENABLED
+X#if  0
+S// <o> HCI_UART_BAUDRATE  - Default Baudrate
+S 
+S// <323584=> 1200 baud 
+S// <643072=> 2400 baud 
+S// <1290240=> 4800 baud 
+S// <2576384=> 9600 baud 
+S// <3862528=> 14400 baud 
+S// <5152768=> 19200 baud 
+S// <7716864=> 28800 baud 
+S// <10289152=> 38400 baud 
+S// <15400960=> 57600 baud 
+S// <20615168=> 76800 baud 
+S// <30924800=> 115200 baud 
+S// <61865984=> 230400 baud 
+S// <67108864=> 250000 baud 
+S// <121634816=> 460800 baud 
+S// <251658240=> 921600 baud 
+S// <268435456=> 57600 baud 
+S
+S#ifndef HCI_UART_BAUDRATE
+S#define HCI_UART_BAUDRATE 30924800
+S#endif
+S
+S// <o> HCI_UART_FLOW_CONTROL  - Hardware Flow Control
+S 
+S// <0=> Disabled 
+S// <1=> Enabled 
+S
+S#ifndef HCI_UART_FLOW_CONTROL
+S#define HCI_UART_FLOW_CONTROL 0
+S#endif
+S
+S// <o> HCI_UART_RX_PIN - UART RX pin 
+S#ifndef HCI_UART_RX_PIN
+S#define HCI_UART_RX_PIN 11
+S#endif
+S
+S// <o> HCI_UART_TX_PIN - UART TX pin 
+S#ifndef HCI_UART_TX_PIN
+S#define HCI_UART_TX_PIN 9
+S#endif
+S
+S// <o> HCI_UART_RTS_PIN - UART RTS pin 
+S#ifndef HCI_UART_RTS_PIN
+S#define HCI_UART_RTS_PIN 8
+S#endif
+S
+S// <o> HCI_UART_CTS_PIN - UART CTS pin 
+S#ifndef HCI_UART_CTS_PIN
+S#define HCI_UART_CTS_PIN 10
+S#endif
+S
+N#endif //HCI_SLIP_ENABLED
+N// </e>
+N
+N// <e> HCI_TRANSPORT_ENABLED - hci_transport - HCI transport
+N//==========================================================
+N#ifndef HCI_TRANSPORT_ENABLED
+N#define HCI_TRANSPORT_ENABLED 0
+N#endif
+N#if  HCI_TRANSPORT_ENABLED
+X#if  0
+S// <o> HCI_MAX_PACKET_SIZE_IN_BITS - Maximum size of a single application packet in bits. 
+S#ifndef HCI_MAX_PACKET_SIZE_IN_BITS
+S#define HCI_MAX_PACKET_SIZE_IN_BITS 8000
+S#endif
+S
+N#endif //HCI_TRANSPORT_ENABLED
+N// </e>
+N
+N// <q> LED_SOFTBLINK_ENABLED  - led_softblink - led_softblink module
+N 
+N
+N#ifndef LED_SOFTBLINK_ENABLED
+N#define LED_SOFTBLINK_ENABLED 0
+N#endif
+N
+N// <q> LOW_POWER_PWM_ENABLED  - low_power_pwm - low_power_pwm module
+N 
+N
+N#ifndef LOW_POWER_PWM_ENABLED
+N#define LOW_POWER_PWM_ENABLED 0
+N#endif
+N
+N// <e> MEM_MANAGER_ENABLED - mem_manager - Dynamic memory allocator
+N//==========================================================
+N#ifndef MEM_MANAGER_ENABLED
+N#define MEM_MANAGER_ENABLED 0
+N#endif
+N#if  MEM_MANAGER_ENABLED
+X#if  0
+S// <o> MEMORY_MANAGER_SMALL_BLOCK_COUNT - Size of each memory blocks identified as 'small' block.  <0-255> 
+S
+S
+S#ifndef MEMORY_MANAGER_SMALL_BLOCK_COUNT
+S#define MEMORY_MANAGER_SMALL_BLOCK_COUNT 1
+S#endif
+S
+S// <o> MEMORY_MANAGER_SMALL_BLOCK_SIZE -  Size of each memory blocks identified as 'small' block. 
+S// <i>  Size of each memory blocks identified as 'small' block. Memory block are recommended to be word-sized.
+S
+S#ifndef MEMORY_MANAGER_SMALL_BLOCK_SIZE
+S#define MEMORY_MANAGER_SMALL_BLOCK_SIZE 32
+S#endif
+S
+S// <o> MEMORY_MANAGER_MEDIUM_BLOCK_COUNT - Size of each memory blocks identified as 'medium' block.  <0-255> 
+S
+S
+S#ifndef MEMORY_MANAGER_MEDIUM_BLOCK_COUNT
+S#define MEMORY_MANAGER_MEDIUM_BLOCK_COUNT 0
+S#endif
+S
+S// <o> MEMORY_MANAGER_MEDIUM_BLOCK_SIZE -  Size of each memory blocks identified as 'medium' block. 
+S// <i>  Size of each memory blocks identified as 'medium' block. Memory block are recommended to be word-sized.
+S
+S#ifndef MEMORY_MANAGER_MEDIUM_BLOCK_SIZE
+S#define MEMORY_MANAGER_MEDIUM_BLOCK_SIZE 256
+S#endif
+S
+S// <o> MEMORY_MANAGER_LARGE_BLOCK_COUNT - Size of each memory blocks identified as 'large' block.  <0-255> 
+S
+S
+S#ifndef MEMORY_MANAGER_LARGE_BLOCK_COUNT
+S#define MEMORY_MANAGER_LARGE_BLOCK_COUNT 0
+S#endif
+S
+S// <o> MEMORY_MANAGER_LARGE_BLOCK_SIZE -  Size of each memory blocks identified as 'large' block. 
+S// <i>  Size of each memory blocks identified as 'large' block. Memory block are recommended to be word-sized.
+S
+S#ifndef MEMORY_MANAGER_LARGE_BLOCK_SIZE
+S#define MEMORY_MANAGER_LARGE_BLOCK_SIZE 256
+S#endif
+S
+S// <q> MEM_MANAGER_ENABLE_LOGS  - Enable debug trace in the module.
+S 
+S
+S#ifndef MEM_MANAGER_ENABLE_LOGS
+S#define MEM_MANAGER_ENABLE_LOGS 0
+S#endif
+S
+S// <q> MEM_MANAGER_DISABLE_API_PARAM_CHECK  - Disable API parameter checks in the module.
+S 
+S
+S#ifndef MEM_MANAGER_DISABLE_API_PARAM_CHECK
+S#define MEM_MANAGER_DISABLE_API_PARAM_CHECK 0
+S#endif
+S
+N#endif //MEM_MANAGER_ENABLED
+N// </e>
+N
+N// <e> NRF_CSENSE_ENABLED - nrf_csense - nrf_csense module
+N//==========================================================
+N#ifndef NRF_CSENSE_ENABLED
+N#define NRF_CSENSE_ENABLED 0
+N#endif
+N#if  NRF_CSENSE_ENABLED
+X#if  0
+S// <o> NRF_CSENSE_PAD_HYSTERESIS - Minimal value of change to decide that pad was touched. 
+S#ifndef NRF_CSENSE_PAD_HYSTERESIS
+S#define NRF_CSENSE_PAD_HYSTERESIS 15
+S#endif
+S
+S// <o> NRF_CSENSE_PAD_DEVIATION - Minimal value measured on pad to take its value while calculating step. 
+S#ifndef NRF_CSENSE_PAD_DEVIATION
+S#define NRF_CSENSE_PAD_DEVIATION 70
+S#endif
+S
+S// <o> NRF_CSENSE_MIN_PAD_VALUE - Minimum normalized value on pad to take its value into account. 
+S#ifndef NRF_CSENSE_MIN_PAD_VALUE
+S#define NRF_CSENSE_MIN_PAD_VALUE 20
+S#endif
+S
+S// <o> NRF_CSENSE_MAX_PADS_NUMBER - Maximum number of pads used for one instance. 
+S#ifndef NRF_CSENSE_MAX_PADS_NUMBER
+S#define NRF_CSENSE_MAX_PADS_NUMBER 20
+S#endif
+S
+S// <o> NRF_CSENSE_MAX_VALUE - Maximum normalized value got from measurement. 
+S#ifndef NRF_CSENSE_MAX_VALUE
+S#define NRF_CSENSE_MAX_VALUE 1000
+S#endif
+S
+S// <o> NRF_CSENSE_OUTPUT_PIN - Output pin used by lower module. 
+S// <i> This is only used when running on NRF51.
+S
+S#ifndef NRF_CSENSE_OUTPUT_PIN
+S#define NRF_CSENSE_OUTPUT_PIN 30
+S#endif
+S
+N#endif //NRF_CSENSE_ENABLED
+N// </e>
+N
+N// <e> NRF_DRV_CSENSE_ENABLED - nrf_drv_csense - Capacitive sensor module
+N//==========================================================
+N#ifndef NRF_DRV_CSENSE_ENABLED
+N#define NRF_DRV_CSENSE_ENABLED 0
+N#endif
+N#if  NRF_DRV_CSENSE_ENABLED
+X#if  0
+S// <o> TIMER0_FOR_CSENSE - First TIMER instance used by the driver (except nRF51) 
+S#ifndef TIMER0_FOR_CSENSE
+S#define TIMER0_FOR_CSENSE 1
+S#endif
+S
+S// <o> TIMER1_FOR_CSENSE - Second TIMER instance used by the driver (except nRF51) 
+S#ifndef TIMER1_FOR_CSENSE
+S#define TIMER1_FOR_CSENSE 2
+S#endif
+S
+S// <o> MEASUREMENT_PERIOD - Single measurement period. 
+S// <i> Time of single measurement can be calculated as T = (1/2)*MEASUREMENT_PERIOD*(1/f_OSC) where f_OSC = I_SOURCE / (2C*(VUP-VDOWN) ). I_SOURCE, VUP and VDOWN are values used to initialize COMP and C is capacitance of used pad.
+S
+S#ifndef MEASUREMENT_PERIOD
+S#define MEASUREMENT_PERIOD 20
+S#endif
+S
+N#endif //NRF_DRV_CSENSE_ENABLED
+N// </e>
+N
+N// <q> NRF_QUEUE_ENABLED  - nrf_queue - Queue module
+N 
+N
+N#ifndef NRF_QUEUE_ENABLED
+N#define NRF_QUEUE_ENABLED 0
+N#endif
+N
+N// <q> SLIP_ENABLED  - slip - SLIP encoding decoding
+N 
+N
+N#ifndef SLIP_ENABLED
+N#define SLIP_ENABLED 0
+N#endif
+N
+N// <h> app_usbd_cdc_acm - USB CDC ACM class
+N
+N//==========================================================
+N// <q> APP_USBD_CLASS_CDC_ACM_ENABLED  - Enabling USBD CDC ACM Class library
+N 
+N
+N#ifndef APP_USBD_CLASS_CDC_ACM_ENABLED
+N#define APP_USBD_CLASS_CDC_ACM_ENABLED 0
+N#endif
+N
+N// <q> APP_USBD_CDC_ACM_LOG_ENABLED  - Enables logging in the module.
+N 
+N
+N#ifndef APP_USBD_CDC_ACM_LOG_ENABLED
+N#define APP_USBD_CDC_ACM_LOG_ENABLED 0
+N#endif
+N
+N// </h> 
+N//==========================================================
+N
+N// <h> app_usbd_msc - USB MSC class
+N
+N//==========================================================
+N// <q> APP_USBD_CLASS_MSC_ENABLED  - Enabling USBD MSC Class library
+N 
+N
+N#ifndef APP_USBD_CLASS_MSC_ENABLED
+N#define APP_USBD_CLASS_MSC_ENABLED 0
+N#endif
+N
+N// <q> APP_USBD_MSC_CLASS_LOG_ENABLED  - Enables logging in the module.
+N 
+N
+N#ifndef APP_USBD_MSC_CLASS_LOG_ENABLED
+N#define APP_USBD_MSC_CLASS_LOG_ENABLED 0
+N#endif
+N
+N// </h> 
+N//==========================================================
+N
+N// </h> 
+N//==========================================================
+N
+N// <h> nRF_Log 
+N
+N//==========================================================
+N// <e> NRF_LOG_ENABLED - nrf_log - Logging
+N//==========================================================
+N#ifndef NRF_LOG_ENABLED
+N#define NRF_LOG_ENABLED 1
+N#endif
+N#if  NRF_LOG_ENABLED
+X#if  1
+N// <e> NRF_LOG_USES_COLORS - If enabled then ANSI escape code for colors is prefixed to every string
+N//==========================================================
+N#ifndef NRF_LOG_USES_COLORS
+N#define NRF_LOG_USES_COLORS 1
+N#endif
+N#if  NRF_LOG_USES_COLORS
+X#if  1
+N// <o> NRF_LOG_COLOR_DEFAULT  - ANSI escape code prefix.
+N 
+N// <0=> Default 
+N// <1=> Black 
+N// <2=> Red 
+N// <3=> Green 
+N// <4=> Yellow 
+N// <5=> Blue 
+N// <6=> Magenta 
+N// <7=> Cyan 
+N// <8=> White 
+N
+N#ifndef NRF_LOG_COLOR_DEFAULT
+N#define NRF_LOG_COLOR_DEFAULT 3
+N#endif
+N
+N// <o> NRF_LOG_ERROR_COLOR  - ANSI escape code prefix.
+N 
+N// <0=> Default 
+N// <1=> Black 
+N// <2=> Red 
+N// <3=> Green 
+N// <4=> Yellow 
+N// <5=> Blue 
+N// <6=> Magenta 
+N// <7=> Cyan 
+N// <8=> White 
+N
+N#ifndef NRF_LOG_ERROR_COLOR
+N#define NRF_LOG_ERROR_COLOR 2
+N#endif
+N
+N// <o> NRF_LOG_WARNING_COLOR  - ANSI escape code prefix.
+N 
+N// <0=> Default 
+N// <1=> Black 
+N// <2=> Red 
+N// <3=> Green 
+N// <4=> Yellow 
+N// <5=> Blue 
+N// <6=> Magenta 
+N// <7=> Cyan 
+N// <8=> White 
+N
+N#ifndef NRF_LOG_WARNING_COLOR
+N#define NRF_LOG_WARNING_COLOR 4
+N#endif
+N
+N#endif //NRF_LOG_USES_COLORS
+N// </e>
+N
+N// <o> NRF_LOG_DEFAULT_LEVEL  - Default Severity level
+N 
+N// <0=> Off 
+N// <1=> Error 
+N// <2=> Warning 
+N// <3=> Info 
+N// <4=> Debug 
+N
+N#ifndef NRF_LOG_DEFAULT_LEVEL
+N#define NRF_LOG_DEFAULT_LEVEL 3
+N#endif
+N
+N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
+N
+N// <i> Log data is buffered and can be processed in idle.
+N//==========================================================
+N#ifndef NRF_LOG_DEFERRED
+N#define NRF_LOG_DEFERRED 1
+N#endif
+N#if  NRF_LOG_DEFERRED
+X#if  1
+N// <o> NRF_LOG_DEFERRED_BUFSIZE - Size of the buffer for logs in words. 
+N// <i> Must be power of 2
+N
+N#ifndef NRF_LOG_DEFERRED_BUFSIZE
+N#define NRF_LOG_DEFERRED_BUFSIZE 256
+N#endif
+N
+N#endif //NRF_LOG_DEFERRED
+N// </e>
+N
+N// <q> NRF_LOG_USES_TIMESTAMP  - Enable timestamping
+N 
+N
+N// <i> Function for getting the timestamp is provided by the user
+N
+N#ifndef NRF_LOG_USES_TIMESTAMP
+N#define NRF_LOG_USES_TIMESTAMP 0
+N#endif
+N
+N#endif //NRF_LOG_ENABLED
+N// </e>
+N
+N// <h> nrf_log_backend - Logging sink
+N
+N//==========================================================
+N// <o> NRF_LOG_BACKEND_MAX_STRING_LENGTH - Buffer for storing single output string 
+N// <i> Logger backend RAM usage is determined by this value.
+N
+N#ifndef NRF_LOG_BACKEND_MAX_STRING_LENGTH
+N#define NRF_LOG_BACKEND_MAX_STRING_LENGTH 256
+N#endif
+N
+N// <o> NRF_LOG_TIMESTAMP_DIGITS - Number of digits for timestamp 
+N// <i> If higher resolution timestamp source is used it might be needed to increase that
+N
+N#ifndef NRF_LOG_TIMESTAMP_DIGITS
+N#define NRF_LOG_TIMESTAMP_DIGITS 8
+N#endif
+N
+N// <e> NRF_LOG_BACKEND_SERIAL_USES_UART - If enabled data is printed over UART
+N//==========================================================
+N#ifndef NRF_LOG_BACKEND_SERIAL_USES_UART
+N#define NRF_LOG_BACKEND_SERIAL_USES_UART 1
+N#endif
+N#if  NRF_LOG_BACKEND_SERIAL_USES_UART
+X#if  1
+N// <o> NRF_LOG_BACKEND_SERIAL_UART_BAUDRATE  - Default Baudrate
+N 
+N// <323584=> 1200 baud 
+N// <643072=> 2400 baud 
+N// <1290240=> 4800 baud 
+N// <2576384=> 9600 baud 
+N// <3862528=> 14400 baud 
+N// <5152768=> 19200 baud 
+N// <7716864=> 28800 baud 
+N// <10289152=> 38400 baud 
+N// <15400960=> 57600 baud 
+N// <20615168=> 76800 baud 
+N// <30924800=> 115200 baud 
+N// <61865984=> 230400 baud 
+N// <67108864=> 250000 baud 
+N// <121634816=> 460800 baud 
+N// <251658240=> 921600 baud 
+N// <268435456=> 57600 baud 
+N
+N#ifndef NRF_LOG_BACKEND_SERIAL_UART_BAUDRATE
+N#define NRF_LOG_BACKEND_SERIAL_UART_BAUDRATE 30924800
+N#endif
+N
+N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
+N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#endif
+N
+N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 
+N#ifndef NRF_LOG_BACKEND_SERIAL_UART_RX_PIN
+N#define NRF_LOG_BACKEND_SERIAL_UART_RX_PIN 11
+N#endif
+N
+N// <o> NRF_LOG_BACKEND_SERIAL_UART_RTS_PIN - UART RTS pin 
+N#ifndef NRF_LOG_BACKEND_SERIAL_UART_RTS_PIN
+N#define NRF_LOG_BACKEND_SERIAL_UART_RTS_PIN 8
+N#endif
+N
+N// <o> NRF_LOG_BACKEND_SERIAL_UART_CTS_PIN - UART CTS pin 
+N#ifndef NRF_LOG_BACKEND_SERIAL_UART_CTS_PIN
+N#define NRF_LOG_BACKEND_SERIAL_UART_CTS_PIN 10
+N#endif
+N
+N// <o> NRF_LOG_BACKEND_SERIAL_UART_FLOW_CONTROL  - Hardware Flow Control
+N 
+N// <0=> Disabled 
+N// <1=> Enabled 
+N
+N#ifndef NRF_LOG_BACKEND_SERIAL_UART_FLOW_CONTROL
+N#define NRF_LOG_BACKEND_SERIAL_UART_FLOW_CONTROL 0
+N#endif
+N
+N// <o> NRF_LOG_BACKEND_UART_INSTANCE  - UART instance used
+N 
+N// <0=> 0 
+N
+N#ifndef NRF_LOG_BACKEND_UART_INSTANCE
+N#define NRF_LOG_BACKEND_UART_INSTANCE 0
+N#endif
+N
+N#endif //NRF_LOG_BACKEND_SERIAL_USES_UART
+N// </e>
+N
+N// <e> NRF_LOG_BACKEND_SERIAL_USES_RTT - If enabled data is printed using RTT
+N//==========================================================
+N#ifndef NRF_LOG_BACKEND_SERIAL_USES_RTT
+N#define NRF_LOG_BACKEND_SERIAL_USES_RTT 0
+N#endif
+N#if  NRF_LOG_BACKEND_SERIAL_USES_RTT
+X#if  0
+S// <o> NRF_LOG_BACKEND_RTT_OUTPUT_BUFFER_SIZE - RTT output buffer size. 
+S// <i> Should be equal or bigger than \ref NRF_LOG_BACKEND_MAX_STRING_LENGTH.
+S// <i> This value is used in Segger RTT configuration to set the buffer size
+S// <i> if it is bigger than default RTT buffer size.
+S
+S#ifndef NRF_LOG_BACKEND_RTT_OUTPUT_BUFFER_SIZE
+S#define NRF_LOG_BACKEND_RTT_OUTPUT_BUFFER_SIZE 512
+S#endif
+S
+N#endif //NRF_LOG_BACKEND_SERIAL_USES_RTT
+N// </e>
+N
+N// </h> 
+N//==========================================================
+N
+N// </h> 
+N//==========================================================
+N
+N// <h> nRF_Segger_RTT 
+N
+N//==========================================================
+N// <h> segger_rtt - SEGGER RTT
+N
+N//==========================================================
+N// <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_UP - Size of upstream buffer. 
+N#ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_UP
+N#define SEGGER_RTT_CONFIG_BUFFER_SIZE_UP 64
+N#endif
+N
+N// <o> SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS - Size of upstream buffer. 
+N#ifndef SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS
+N#define SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS 2
+N#endif
+N
+N// <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN - Size of upstream buffer. 
+N#ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN
+N#define SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN 16
+N#endif
+N
+N// <o> SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS - Size of upstream buffer. 
+N#ifndef SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS
+N#define SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS 2
+N#endif
+N
+N// </h> 
+N//==========================================================
+N
+N// </h> 
+N//==========================================================
+N
+N// <<< end of configuration section >>>
+N#endif //SDK_CONFIG_H
+N
+L 76 "..\..\..\..\..\..\components\libraries\util\sdk_errors.h" 2
+N
+N#ifdef __cplusplus
+Sextern "C" {
+N#endif
+N
+N/**
+N * @defgroup sdk_err_base Base defined for SDK Modules
+N * @{
+N */
+N#define NRF_ERROR_SDK_ERROR_BASE         (NRF_ERROR_BASE_NUM + 0x8000)   /**< Base value defined for SDK module identifiers. */
+N#define NRF_ERROR_SDK_COMMON_ERROR_BASE  (NRF_ERROR_BASE_NUM + 0x0080)   /**< Base error value to be used for SDK error values. */
+N/* @} */
+N
+N/**
+N * @defgroup sdk_module_codes Codes reserved as identification for module where the error occurred.
+N * @{
+N */
+N#define NRF_ERROR_MEMORY_MANAGER_ERR_BASE   (0x8100)
+N#define NRF_ERROR_PERIPH_DRIVERS_ERR_BASE   (0x8200)
+N#define NRF_ERROR_GAZELLE_ERR_BASE          (0x8300)
+N/* @} */
+N
+N
+N/**
+N * @defgroup sdk_iot_errors Codes reserved as identification for IoT errors.
+N * @{
+N */
+N#define NRF_ERROR_IOT_ERR_BASE_START        (0xA000)
+N#define NRF_ERROR_IOT_ERR_BASE_STOP         (0xAFFF)
+N/* @} */
+N
+N
+N/**
+N * @defgroup sdk_common_errors Codes reserved as identification for common errors.
+N * @{
+N */
+N#define NRF_ERROR_MODULE_NOT_INITIALZED      (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0000)
+N#define NRF_ERROR_MUTEX_INIT_FAILED          (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0001)
+N#define NRF_ERROR_MUTEX_LOCK_FAILED          (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0002)
+N#define NRF_ERROR_MUTEX_UNLOCK_FAILED        (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0003)
+N#define NRF_ERROR_MUTEX_COND_INIT_FAILED     (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0004)
+N#define NRF_ERROR_MODULE_ALREADY_INITIALIZED (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0005)
+N#define NRF_ERROR_STORAGE_FULL               (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0006)
+N#define NRF_ERROR_API_NOT_IMPLEMENTED        (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0010)
+N#define NRF_ERROR_FEATURE_NOT_ENABLED        (NRF_ERROR_SDK_COMMON_ERROR_BASE + 0x0011)
+N/* @} */
+N
+N
+N/**
+N * @defgroup drv_specific_errors Error / status codes specific to drivers.
+N * @{
+N */
+N#define NRF_ERROR_DRV_TWI_ERR_OVERRUN              (NRF_ERROR_PERIPH_DRIVERS_ERR_BASE + 0x0000)
+N#define NRF_ERROR_DRV_TWI_ERR_ANACK                (NRF_ERROR_PERIPH_DRIVERS_ERR_BASE + 0x0001)
+N#define NRF_ERROR_DRV_TWI_ERR_DNACK                (NRF_ERROR_PERIPH_DRIVERS_ERR_BASE + 0x0002)
+N/* @} */
+N
+N/**
+N * @brief API Result.
+N *
+N * @details Indicates success or failure of an API procedure. In case of failure, a comprehensive
+N *          error code indicating cause or reason for failure is provided.
+N *
+N *          Though called an API result, it could used in Asynchronous notifications callback along
+N *          with asynchronous callback as event result. This mechanism is employed when an event
+N *          marks the end of procedure initiated using API. API result, in this case, will only be
+N *          an indicative of whether the procedure has been requested successfully.
+N */
+Ntypedef uint32_t ret_code_t;
+N
+N#if defined(NRF_LOG_ENABLED) && NRF_LOG_ENABLED
+X#if 1L && 1
+N/**
+N * @defgroup err_sizes Sizes of error code arrays.
+N * @{
+N */
+N#define ERR_NAMES_SIZE          18
+N#define ERR_NAMES_COMMON_SIZE   9
+N#define ERR_NAMES_TWI_SIZE      3
+N/* @} */
+N
+Nextern const char * m_sdk_errors_name[ERR_NAMES_SIZE];
+Xextern const char * m_sdk_errors_name[18];
+Nextern const char * m_sdk_errors_name_common[ERR_NAMES_COMMON_SIZE];
+Xextern const char * m_sdk_errors_name_common[9];
+Nextern const char * m_sdk_errors_name_twi[ERR_NAMES_TWI_SIZE];
+Xextern const char * m_sdk_errors_name_twi[3];
+N
+N/**
+N * @defgroup err_to_string Macros for converting error codes to strings.
+N * @{
+N */
+N#define ERR_TO_STR(err_code)            m_sdk_errors_name[err_code]
+N#define ERR_TO_STR_COMMON(err_code)     m_sdk_errors_name_common[err_code - NRF_ERROR_SDK_COMMON_ERROR_BASE]
+N#define ERR_TO_STR_TWI(err_code)        m_sdk_errors_name_twi[err_code - NRF_ERROR_PERIPH_DRIVERS_ERR_BASE]
+N#else
+S#define ERR_TO_STR(err_code)            ""
+S#define ERR_TO_STR_COMMON(err_code)     ""
+S#define ERR_TO_STR_TWI(err_code)        ""
+N#endif // NRF_LOG_ENABLED
+N
+N/* @} */
+N/** @} */
+N/** @} */
+N
+N#ifdef __cplusplus
+S}
+N#endif
+N
+N#endif // SDK_ERRORS_H__
+N
+L 42 "..\..\..\..\..\..\components\libraries\util\sdk_errors.c" 2
+N#include "nordic_common.h"
+L 1 "..\..\..\..\..\..\components\libraries\util\nordic_common.h" 1
+N/**
+N * Copyright (c) 2008 - 2017, Nordic Semiconductor ASA
+N * 
+N * All rights reserved.
+N * 
+N * Redistribution and use in source and binary forms, with or without modification,
+N * are permitted provided that the following conditions are met:
+N * 
+N * 1. Redistributions of source code must retain the above copyright notice, this
+N *    list of conditions and the following disclaimer.
+N * 
+N * 2. Redistributions in binary form, except as embedded into a Nordic
+N *    Semiconductor ASA integrated circuit in a product or a software update for
+N *    such product, must reproduce the above copyright notice, this list of
+N *    conditions and the following disclaimer in the documentation and/or other
+N *    materials provided with the distribution.
+N * 
+N * 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+N *    contributors may be used to endorse or promote products derived from this
+N *    software without specific prior written permission.
+N * 
+N * 4. This software, with or without modification, must only be used with a
+N *    Nordic Semiconductor ASA integrated circuit.
+N * 
+N * 5. Any software provided in binary form under this license must not be reverse
+N *    engineered, decompiled, modified and/or disassembled.
+N * 
+N * THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+N * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+N * OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+N * DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+N * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+N * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+N * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+N * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+N * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+N * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+N * 
+N */
+N
+N/** @file
+N * @brief Common defines and macros for firmware developed by Nordic Semiconductor.
+N */
+N
+N#ifndef NORDIC_COMMON_H__
+N#define NORDIC_COMMON_H__
+N
+N#ifdef __cplusplus
+Sextern "C" {
+N#endif
+N
+N/**
+N * @brief Check if selected module is enabled
+N *
+N * This is save function for driver enable checking.
+N * Correct from Lint point of view (not using default of undefined value).
+N *
+N * Usage:
+N * @code
+N   #if NRF_MODULE_ENABLED(UART)
+N   ...
+N   #endif
+N * @endcode
+N *
+N * @param module The module name.
+N *
+N * @retval 1 The macro <module>_ENABLE is defined and is non-zero.
+N * @retval 0 The macro <module>_ENABLE is not defined or it equals zero.
+N *
+N * @note
+N * This macro intentionally does not implement second expansion level.
+N * The name of the module to be checked has to be given directly as a parameter.
+N * And given parameter would be connected with @c _ENABLED postfix directly
+N * without evaluating its value.
+N */
+N//lint -e491 // Suppers warning 491 "non-standard use of 'defined' preprocessor operator"
+N#define NRF_MODULE_ENABLED(module) \
+N    ((defined(module ## _ENABLED) && (module ## _ENABLED)) ? 1 : 0)
+X#define NRF_MODULE_ENABLED(module)     ((defined(module ## _ENABLED) && (module ## _ENABLED)) ? 1 : 0)
+N
+N/** The upper 8 bits of a 32 bit value */
+N//lint -emacro(572,MSB) // Suppress warning 572 "Excessive shift value"
+N#define MSB_32(a) (((a) & 0xFF000000) >> 24)
+N/** The lower 8 bits (of a 32 bit value) */
+N#define LSB_32(a) ((a) & 0x000000FF)
+N
+N/** The upper 8 bits of a 16 bit value */
+N//lint -emacro(572,MSB_16) // Suppress warning 572 "Excessive shift value"
+N#define MSB_16(a) (((a) & 0xFF00) >> 8)
+N/** The lower 8 bits (of a 16 bit value) */
+N#define LSB_16(a) ((a) & 0x00FF)
+N
+N/** Leaves the minimum of the two 32-bit arguments */
+N/*lint -emacro(506, MIN) */ /* Suppress "Constant value Boolean */
+N#define MIN(a, b) ((a) < (b) ? (a) : (b))
+N/** Leaves the maximum of the two 32-bit arguments */
+N/*lint -emacro(506, MAX) */ /* Suppress "Constant value Boolean */
+N#define MAX(a, b) ((a) < (b) ? (b) : (a))
+N
+N/**@brief Concatenates two parameters.
+N *
+N * It realizes two level expansion to make it sure that all the parameters
+N * are actually expanded before gluing them together.
+N *
+N * @param p1 First parameter to concatenating
+N * @param p2 Second parameter to concatenating
+N *
+N * @return Two parameters glued together.
+N *         They have to create correct C mnemonic in other case
+N *         preprocessor error would be generated.
+N *
+N * @sa CONCAT_3
+N */
+N#define CONCAT_2(p1, p2)      CONCAT_2_(p1, p2)
+N/** Auxiliary macro used by @ref CONCAT_2 */
+N#define CONCAT_2_(p1, p2)     p1##p2
+N
+N/**@brief Concatenates three parameters.
+N *
+N * It realizes two level expansion to make it sure that all the parameters
+N * are actually expanded before gluing them together.
+N *
+N * @param p1 First parameter to concatenating
+N * @param p2 Second parameter to concatenating
+N * @param p3 Third parameter to concatenating
+N *
+N * @return Three parameters glued together.
+N *         They have to create correct C mnemonic in other case
+N *         preprocessor error would be generated.
+N *
+N * @sa CONCAT_2
+N */
+N#define CONCAT_3(p1, p2, p3)  CONCAT_3_(p1, p2, p3)
+N/** Auxiliary macro used by @ref CONCAT_3 */
+N#define CONCAT_3_(p1, p2, p3) p1##p2##p3
+N
+N#define NUM_TO_STR_INTERNAL(val) #val
+N/** Converts numeric value to string.
+N */
+N#define NUM_TO_STR(val) NUM_TO_STR_INTERNAL(val)
+N
+N/** Counts number of elements inside the array
+N */
+N#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+N
+N/**@brief Set a bit in the uint32 word.
+N *
+N * @param[in] W  Word whose bit is being set.
+N * @param[in] B  Bit number in the word to be set.
+N */
+N#define SET_BIT(W,B)  ((W) |= (uint32_t)(1U << (B)))
+N
+N
+N/**@brief Clears a bit in the uint32 word.
+N *
+N * @param[in] W   Word whose bit is to be cleared.
+N * @param[in] B   Bit number in the word to be cleared.
+N */
+N#define CLR_BIT(W, B) ((W) &= (~((uint32_t)1 << (B))))
+N
+N
+N/**@brief Checks if a bit is set.
+N *
+N * @param[in] W   Word whose bit is to be checked.
+N * @param[in] B   Bit number in the word to be checked.
+N *
+N * @retval 1 if bit is set.
+N * @retval 0 if bit is not set.
+N */
+N#define IS_SET(W,B) (((W) >> (B)) & 1)
+N
+N#define BIT_0 0x01 /**< The value of bit 0 */
+N#define BIT_1 0x02 /**< The value of bit 1 */
+N#define BIT_2 0x04 /**< The value of bit 2 */
+N#define BIT_3 0x08 /**< The value of bit 3 */
+N#define BIT_4 0x10 /**< The value of bit 4 */
+N#define BIT_5 0x20 /**< The value of bit 5 */
+N#define BIT_6 0x40 /**< The value of bit 6 */
+N#define BIT_7 0x80 /**< The value of bit 7 */
+N#define BIT_8 0x0100 /**< The value of bit 8 */
+N#define BIT_9 0x0200 /**< The value of bit 9 */
+N#define BIT_10 0x0400 /**< The value of bit 10 */
+N#define BIT_11 0x0800 /**< The value of bit 11 */
+N#define BIT_12 0x1000 /**< The value of bit 12 */
+N#define BIT_13 0x2000 /**< The value of bit 13 */
+N#define BIT_14 0x4000 /**< The value of bit 14 */
+N#define BIT_15 0x8000 /**< The value of bit 15 */
+N#define BIT_16 0x00010000 /**< The value of bit 16 */
+N#define BIT_17 0x00020000 /**< The value of bit 17 */
+N#define BIT_18 0x00040000 /**< The value of bit 18 */
+N#define BIT_19 0x00080000 /**< The value of bit 19 */
+N#define BIT_20 0x00100000 /**< The value of bit 20 */
+N#define BIT_21 0x00200000 /**< The value of bit 21 */
+N#define BIT_22 0x00400000 /**< The value of bit 22 */
+N#define BIT_23 0x00800000 /**< The value of bit 23 */
+N#define BIT_24 0x01000000 /**< The value of bit 24 */
+N#define BIT_25 0x02000000 /**< The value of bit 25 */
+N#define BIT_26 0x04000000 /**< The value of bit 26 */
+N#define BIT_27 0x08000000 /**< The value of bit 27 */
+N#define BIT_28 0x10000000 /**< The value of bit 28 */
+N#define BIT_29 0x20000000 /**< The value of bit 29 */
+N#define BIT_30 0x40000000 /**< The value of bit 30 */
+N#define BIT_31 0x80000000 /**< The value of bit 31 */
+N
+N#define UNUSED_VARIABLE(X)  ((void)(X))
+N#define UNUSED_PARAMETER(X) UNUSED_VARIABLE(X)
+N#define UNUSED_RETURN_VALUE(X) UNUSED_VARIABLE(X)
+N
+N#ifdef __cplusplus
+S}
+N#endif
+N
+N#endif // NORDIC_COMMON_H__
+L 43 "..\..\..\..\..\..\components\libraries\util\sdk_errors.c" 2
+N
+N#if defined(NRF_LOG_ENABLED) && NRF_LOG_ENABLED
+X#if 1L && 1
+N/**
+N * @defgroup err_strings Arrays with error codes as strings.
+N * @{
+N */
+Nconst char * m_sdk_errors_name[ERR_NAMES_SIZE] = 
+Xconst char * m_sdk_errors_name[18] = 
+N{
+N    "NRF_SUCCESS",
+N    "NRF_ERROR_SVC_HANDLER_MISSING",
+N    "NRF_ERROR_SOFTDEVICE_NOT_ENABLED",
+N    "NRF_ERROR_INTERNAL",
+N    "NRF_ERROR_NO_MEM",
+N    "NRF_ERROR_NOT_FOUND",
+N    "NRF_ERROR_NOT_SUPPORTED",
+N    "NRF_ERROR_INVALID_PARAM",
+N    "NRF_ERROR_INVALID_STATE",
+N    "NRF_ERROR_INVALID_LENGTH",
+N    "NRF_ERROR_INVALID_FLAGS",
+N    "NRF_ERROR_INVALID_DATA",
+N    "NRF_ERROR_DATA_SIZE",
+N    "NRF_ERROR_TIMEOUT",
+N    "NRF_ERROR_NULL",
+N    "NRF_ERROR_FORBIDDEN",
+N    "NRF_ERROR_INVALID_ADDR",
+N    "NRF_ERROR_BUSY"
+N};
+N
+Nconst char * m_sdk_errors_name_common[ERR_NAMES_COMMON_SIZE] =
+Xconst char * m_sdk_errors_name_common[9] =
+N{
+N    "NRF_ERROR_MODULE_NOT_INITIALZED",
+N    "NRF_ERROR_MUTEX_INIT_FAILED",
+N    "NRF_ERROR_MUTEX_LOCK_FAILED",
+N    "NRF_ERROR_MUTEX_UNLOCK_FAILED",
+N    "NRF_ERROR_MUTEX_COND_INIT_FAILED",
+N    "NRF_ERROR_MODULE_ALREADY_INITIALIZED",
+N    "NRF_ERROR_STORAGE_FULL",
+N    "NRF_ERROR_API_NOT_IMPLEMENTED",
+N    "NRF_ERROR_FEATURE_NOT_ENABLED"
+N};
+N
+Nconst char * m_sdk_errors_name_twi[ERR_NAMES_TWI_SIZE] =
+Xconst char * m_sdk_errors_name_twi[3] =
+N{
+N    "NRF_ERROR_DRV_TWI_ERR_OVERRUN",
+N    "NRF_ERROR_DRV_TWI_ERR_ANACK",
+N    "NRF_ERROR_DRV_TWI_ERR_DNACK"
+N};
+N/* @} */
+N#endif // NRF_LOG_ENABLED

@@ -63,6 +63,8 @@
 #define BSP_INIT_NONE    0        /**< This define specifies the type of initialization without support for LEDs and buttons (@ref bsp_init).*/
 #define BSP_INIT_LED     (1 << 0) /**< This bit enables LEDs during initialization (@ref bsp_init).*/
 #define BSP_INIT_BUTTONS (1 << 1) /**< This bit enables buttons during initialization (@ref bsp_init).*/
+#define BSP_INIT_SWITCHS (1 << 2) /**< This bit enables buttons during initialization (@ref bsp_init).*/
+
 
 #if !defined(BSP_DEFINES_ONLY) && !defined(BSP_SIMPLE)
 #include "app_button.h"
@@ -174,6 +176,11 @@ typedef enum
     BSP_EVENT_KEY_6,                        /**< Default event of the push action of BSP_BUTTON_6 (only if this button is present). */
     BSP_EVENT_KEY_7,                        /**< Default event of the push action of BSP_BUTTON_7 (only if this button is present). */
     BSP_EVENT_KEY_LAST = BSP_EVENT_KEY_7,
+		BSP_EVENT_UV_LAMP_DOOR_OPEN ,  
+    BSP_EVENT_UV_LAMP_DOOR_CLOSE ,
+    BSP_EVENT_ELEC_LOCK_OPEN,
+    BSP_EVENT_ELEC_LOCK_CLOSE,
+    BSP_EVENT_COIN_BOX_GET_COIN,
 } bsp_event_t;
 
 

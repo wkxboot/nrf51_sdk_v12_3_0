@@ -1,0 +1,15 @@
+.\debug\sdk_mapped_flags.o: ..\..\..\..\..\..\components\libraries\util\sdk_mapped_flags.c
+.\debug\sdk_mapped_flags.o: ..\..\..\..\..\..\components\libraries\util\sdk_mapped_flags.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\debug\sdk_mapped_flags.o: ..\..\..\..\..\..\components\libraries\util\app_util.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.11.1\Device\Include\compiler_abstraction.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.11.1\Device\Include\nrf.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.11.1\Device\Include\nrf51.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include\core_cm0.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include\core_cmInstr.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include\core_cmFunc.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.11.1\Device\Include\system_nrf51.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.11.1\Device\Include\nrf51_bitfields.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\8.11.1\Device\Include\nrf51_deprecated.h
+.\debug\sdk_mapped_flags.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h

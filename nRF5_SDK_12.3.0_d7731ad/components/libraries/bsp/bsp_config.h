@@ -67,28 +67,32 @@ extern "C" {
 #if !defined(BSP_DEFINES_ONLY) && !defined(BSP_SIMPLE)
 #include "app_button.h"
 
-#define BSP_BUTTON_ACTION_PUSH      (APP_BUTTON_PUSH)    /**< Represents pushing a button. See @ref bsp_button_action_t. */
-#define BSP_BUTTON_ACTION_RELEASE   (APP_BUTTON_RELEASE) /**< Represents releasing a button. See @ref bsp_button_action_t. */
-#define BSP_BUTTON_ACTION_LONG_PUSH (2)                  /**< Represents pushing and holding a button for @ref BSP_LONG_PUSH_TIMEOUT_MS milliseconds. See also @ref bsp_button_action_t. */
+#define BSP_BUTTON_ACTION_PUSH           (APP_BUTTON_PUSH)    /**< Represents pushing a button. See @ref bsp_button_action_t. */
+#define BSP_BUTTON_ACTION_RELEASE        (APP_BUTTON_RELEASE) /**< Represents releasing a button. See @ref bsp_button_action_t. */
+#define BSP_BUTTON_ACTION_LONG_PUSH      (2)                  /**< Represents pushing and holding a button for @ref BSP_LONG_PUSH_TIMEOUT_MS milliseconds. See also @ref bsp_button_action_t. */
 #endif
 
 #define BSP_MS_TO_TICK(MS) (m_app_ticks_per_100ms * (MS / 100))
 
-#define BUTTON_ELEC_LOCK_STATUS           BSP_BUTTON_0_MASK  //?????????
-#define BUTTON_LOCKER_DOOR_STATUS         BSP_BUTTON_1_MASK  //??????????
-#define BUTTON_COIN_BOX_STATUS            BSP_BUTTON_2_MASK  //?????????
+#define BSP_BUTTON_ELEC_LOCK              BSP_BOARD_BUTTON_0  //µç´ÅËø×´Ì¬Î»
+#define BSP_BUTTON_UV_LAMP_DOOR           BSP_BOARD_BUTTON_1  //Ïû¶¾ÃÅ×´Ì¬Î»
+#define BSP_BUTTON_COIN_BOX               BSP_BOARD_BUTTON_2  //Í¶±ÒÆ÷×´Ì¬Î»
 	
-#define BUTTON_ERASE_BONDING BSP_BUTTON_0_MASK
-#define BUTTON_ERASE_ALL     BSP_BUTTON_1_MASK
-#define BUTTON_ADVERTISE     BSP_BUTTON_0_MASK
-#define BUTTON_CLEAR_EVT     BSP_BUTTON_1_MASK
-#define BUTTON_CAPSLOCK      BSP_BUTTON_2_MASK
-#define BSP_BUTTONS_ALL      0xFFFFFFFF
-#define BSP_BUTTONS_NONE     0
+#define BUTTON_ERASE_BONDING              BSP_BUTTON_0_MASK
+#define BUTTON_ERASE_ALL                  BSP_BUTTON_1_MASK
+#define BUTTON_ADVERTISE                  BSP_BUTTON_0_MASK
+#define BUTTON_CLEAR_EVT                  BSP_BUTTON_1_MASK
+#define BUTTON_CAPSLOCK                   BSP_BUTTON_2_MASK
+#define BSP_BUTTONS_ALL                   0xFFFFFFFF
+#define BSP_BUTTONS_NONE                  0
 
 #define BSP_LONG_PUSH_TIMEOUT_MS (1000) /**< The time to hold for a long push (in milliseconds). */
 /**@brief Types of BSP initialization.
  */
+ 
+#define BSP_SWITCH_UV_LAMP                 BSP_BOARD_SWITCH_1
+#define BSP_SWITCH_ELEC_LOCK               BSP_BOARD_SWITCH_2
+#define BSP_SWITCH_FAN_NEGATIVE_ION        BSP_BOARD_SWITCH_3
 
 #define ADVERTISING_LED_ON_INTERVAL            200
 #define ADVERTISING_LED_OFF_INTERVAL           1800
@@ -112,27 +116,29 @@ extern "C" {
 
 #define ALERT_INTERVAL                         200
 
-#define BSP_LED_INDICATE_SENT_OK               BSP_BOARD_LED_1
-#define BSP_LED_INDICATE_SEND_ERROR            BSP_BOARD_LED_1
-#define BSP_LED_INDICATE_RCV_OK                BSP_BOARD_LED_1
-#define BSP_LED_INDICATE_RCV_ERROR             BSP_BOARD_LED_1
-#define BSP_LED_INDICATE_CONNECTED             BSP_BOARD_LED_0
-#define BSP_LED_INDICATE_BONDING               BSP_BOARD_LED_0
-#define BSP_LED_INDICATE_ADVERTISING_DIRECTED  BSP_BOARD_LED_0
-#define BSP_LED_INDICATE_ADVERTISING_SLOW      BSP_BOARD_LED_0
-#define BSP_LED_INDICATE_ADVERTISING_WHITELIST BSP_BOARD_LED_0
-#define BSP_LED_INDICATE_INDICATE_ADVERTISING  BSP_BOARD_LED_0
+#define BSP_LED_INDICATE_SENT_OK               BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_SEND_ERROR            BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_RCV_OK                BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_RCV_ERROR             BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_CONNECTED             BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_BONDING               BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_ADVERTISING_DIRECTED  BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_ADVERTISING_SLOW      BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_ADVERTISING_WHITELIST BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_INDICATE_ADVERTISING  BSP_BOARD_LED_2
 
-#define BSP_LED_INDICATE_USER_LED1            BSP_BOARD_LED_0
-#define BSP_LED_INDICATE_USER_LED2            BSP_BOARD_LED_1
-#define BSP_LED_INDICATE_USER_LED3            BSP_BOARD_LED_2
-#define BSP_LED_INDICATE_USER_LED4            BSP_BOARD_LED_3
+#define BSP_LED_INDICATE_USER_LED1             BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_USER_LED2             BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_USER_LED3             BSP_BOARD_LED_2
+#define BSP_LED_INDICATE_USER_LED4             BSP_BOARD_LED_2
 
-#define BSP_LED_ALERT                         BSP_BOARD_LED_2
+#define BSP_LED_ALERT                          BSP_BOARD_LED_2
 
 #define BSP_LED_INDICATE_USER_SYS_RUN                BSP_BOARD_LED_2
 #define BSP_LED_INDICATE_USER_UV_LAMP_RUN            BSP_BOARD_LED_1
 #define BSP_LED_INDICATE_USER_FAN_NEGATIVE_ION_RUN   BSP_BOARD_LED_0
+
+
 
 
 
