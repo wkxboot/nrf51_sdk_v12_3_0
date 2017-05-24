@@ -18659,7 +18659,7 @@ ret_code_t nrf_drv_gpiote_init(void)
     if (m_cb.state != NRF_DRV_STATE_UNINITIALIZED)
     {
         err_code = ((0x0) + 8);
-        if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "GPIOTE" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+        if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "GPIOTE" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 
 
         return err_code;
@@ -18683,7 +18683,7 @@ ret_code_t nrf_drv_gpiote_init(void)
     m_cb.state = NRF_DRV_STATE_INITIALIZED;
 
     err_code = ((0x0) + 0);
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 
     return err_code;
 }
@@ -18716,7 +18716,7 @@ void nrf_drv_gpiote_uninit(void)
         }
     }
     m_cb.state = NRF_DRV_STATE_UNINITIALIZED;
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Uninitialized.\r\n"); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Uninitialized.\r\n"); };
 }
 
 
@@ -18768,7 +18768,7 @@ ret_code_t nrf_drv_gpiote_out_init(nrf_drv_gpiote_pin_t                pin,
         }
     }
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 
     return err_code;
 }
@@ -18923,7 +18923,7 @@ ret_code_t nrf_drv_gpiote_in_init(nrf_drv_gpiote_pin_t               pin,
         }
     }
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "GPIOTE" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 
     return err_code;
 }
@@ -19070,10 +19070,10 @@ void GPIOTE_IRQHandler(void)
             if (mask & status)
             {
                 nrf_drv_gpiote_pin_t pin = nrf_gpiote_event_pin_get(i);
-                if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "GPIOTE" ":" "DEBUG:" "Event in number: %d.\r\n", i); };
+                if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "GPIOTE" ":" "DEBUG:" "Event in number: %d.\r\n", i); };
                 nrf_gpiote_polarity_t        polarity = nrf_gpiote_event_polarity_get(i);
                 nrf_drv_gpiote_evt_handler_t handler  = channel_handler_get(i);
-                if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_2(4U, "\x1B[1;32m" "GPIOTE" ":" "DEBUG:" "Pin: %d, polarity: %d.\r\n", pin, polarity); };
+                if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_2(4U, "\x1B[1;32m" "GPIOTE" ":" "DEBUG:" "Pin: %d, polarity: %d.\r\n", pin, polarity); };
                 if (handler)
                 {
                     handler(pin, polarity);
@@ -19125,7 +19125,7 @@ void GPIOTE_IRQHandler(void)
                         if ((pin_state && (sense == NRF_GPIO_PIN_SENSE_HIGH)) ||
                             (!pin_state && (sense == NRF_GPIO_PIN_SENSE_LOW))  )
                         {
-                            if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_2(4U, "\x1B[1;32m" "GPIOTE" ":" "DEBUG:" "PORT event for pin: %d, polarity: %d.\r\n", pin, polarity); };
+                            if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_2(4U, "\x1B[1;32m" "GPIOTE" ":" "DEBUG:" "PORT event for pin: %d, polarity: %d.\r\n", pin, polarity); };
 
                             if (polarity == NRF_GPIOTE_POLARITY_TOGGLE)
                             {

@@ -15617,7 +15617,7 @@ _Bool nrf_log_frontend_dequeue(void);
  
 __weak void app_error_fault_handler(uint32_t id, uint32_t pc, uint32_t info)
 {
-    if ((3 >= 1U) && (1U <= 3)) { nrf_log_frontend_std_0(1U, "\x1B[1;31m" "APP_ERROR" ":" "ERROR:" "Fatal\r\n"); };
+    if ((4 >= 1U) && (1U <= 4)) { nrf_log_frontend_std_0(1U, "\x1B[1;31m" "APP_ERROR" ":" "ERROR:" "Fatal\r\n"); };
     do { (void)nrf_log_blocking_backend_set(); do { while (nrf_log_frontend_dequeue()); } while(0); ; } while(0);
     
 

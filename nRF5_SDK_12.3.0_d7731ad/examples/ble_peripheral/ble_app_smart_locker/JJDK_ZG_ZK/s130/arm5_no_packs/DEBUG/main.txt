@@ -5,56 +5,56 @@
                           AREA ||i.advertising_init||, CODE, READONLY, ALIGN=2
 
                   advertising_init PROC
-;;;760     */
-;;;761    static void advertising_init(void)
+;;;770     */
+;;;771    static void advertising_init(void)
 000000  b530              PUSH     {r4,r5,lr}
-;;;762    {
+;;;772    {
 000002  b099              SUB      sp,sp,#0x64
-;;;763        uint32_t               err_code;
-;;;764        ble_advdata_t          advdata;
-;;;765        ble_adv_modes_config_t options;
-;;;766    
-;;;767        // Build advertising data struct to pass into @ref ble_advertising_init.
-;;;768        memset(&advdata, 0, sizeof(advdata));
+;;;773        uint32_t               err_code;
+;;;774        ble_advdata_t          advdata;
+;;;775        ble_adv_modes_config_t options;
+;;;776    
+;;;777        // Build advertising data struct to pass into @ref ble_advertising_init.
+;;;778        memset(&advdata, 0, sizeof(advdata));
 000004  213c              MOVS     r1,#0x3c
 000006  a80a              ADD      r0,sp,#0x28
 000008  f7fffffe          BL       __aeabi_memclr4
-;;;769    
-;;;770        advdata.name_type               = BLE_ADVDATA_FULL_NAME;
+;;;779    
+;;;780        advdata.name_type               = BLE_ADVDATA_FULL_NAME;
 00000c  2102              MOVS     r1,#2
 00000e  a808              ADD      r0,sp,#0x20
 000010  7201              STRB     r1,[r0,#8]
-;;;771        advdata.include_appearance      = true;
+;;;781        advdata.include_appearance      = true;
 000012  2101              MOVS     r1,#1
 000014  7281              STRB     r1,[r0,#0xa]
-;;;772        advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
+;;;782        advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
 000016  2106              MOVS     r1,#6
 000018  72c1              STRB     r1,[r0,#0xb]
-;;;773        advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
+;;;783        advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
 00001a  2101              MOVS     r1,#1
 00001c  4668              MOV      r0,sp
 00001e  8701              STRH     r1,[r0,#0x38]
-;;;774        advdata.uuids_complete.p_uuids  = m_adv_uuids;
+;;;784        advdata.uuids_complete.p_uuids  = m_adv_uuids;
 000020  4911              LDR      r1,|L1.104|
 000022  910f              STR      r1,[sp,#0x3c]
-;;;775    
-;;;776        memset(&options, 0, sizeof(options));
+;;;785    
+;;;786        memset(&options, 0, sizeof(options));
 000024  2120              MOVS     r1,#0x20
 000026  a802              ADD      r0,sp,#8
 000028  f7fffffe          BL       __aeabi_memclr4
-;;;777        options.ble_adv_fast_enabled  = true;
+;;;787        options.ble_adv_fast_enabled  = true;
 00002c  2101              MOVS     r1,#1
 00002e  4668              MOV      r0,sp
 000030  72c1              STRB     r1,[r0,#0xb]
-;;;778        options.ble_adv_fast_interval = APP_ADV_INTERVAL;
+;;;788        options.ble_adv_fast_interval = APP_ADV_INTERVAL;
 000032  20ff              MOVS     r0,#0xff
 000034  302d              ADDS     r0,r0,#0x2d
 000036  9006              STR      r0,[sp,#0x18]
-;;;779        options.ble_adv_fast_timeout  = APP_ADV_TIMEOUT_IN_SECONDS;
+;;;789        options.ble_adv_fast_timeout  = APP_ADV_TIMEOUT_IN_SECONDS;
 000038  20b4              MOVS     r0,#0xb4
 00003a  9007              STR      r0,[sp,#0x1c]
-;;;780    
-;;;781        err_code = ble_advertising_init(&advdata, NULL, &options, on_adv_evt, NULL);
+;;;790    
+;;;791        err_code = ble_advertising_init(&advdata, NULL, &options, on_adv_evt, NULL);
 00003c  2000              MOVS     r0,#0
 00003e  4b0b              LDR      r3,|L1.108|
 000040  aa02              ADD      r2,sp,#8
@@ -63,7 +63,7 @@
 000046  a80a              ADD      r0,sp,#0x28
 000048  f7fffffe          BL       ble_advertising_init
 00004c  4604              MOV      r4,r0
-;;;782        APP_ERROR_CHECK(err_code);
+;;;792        APP_ERROR_CHECK(err_code);
 00004e  bf00              NOP      
 000050  4625              MOV      r5,r4
 000052  2d00              CMP      r5,#0
@@ -74,10 +74,10 @@
 00005e  bf00              NOP      
                   |L1.96|
 000060  bf00              NOP      
-;;;783    }
+;;;793    }
 000062  b019              ADD      sp,sp,#0x64
 000064  bd30              POP      {r4,r5,pc}
-;;;784    
+;;;794    
                           ENDP
 
 000066  0000              DCW      0x0000
@@ -89,16 +89,16 @@
                           AREA ||i.advertising_start||, CODE, READONLY, ALIGN=1
 
                   advertising_start PROC
-;;;820     */
-;;;821    static void advertising_start(void)
+;;;830     */
+;;;831    static void advertising_start(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;822    {
-;;;823        uint32_t err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
+;;;832    {
+;;;833        uint32_t err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
 000002  2003              MOVS     r0,#3
 000004  f7fffffe          BL       ble_advertising_start
 000008  4604              MOV      r4,r0
-;;;824    
-;;;825        APP_ERROR_CHECK(err_code);
+;;;834    
+;;;835        APP_ERROR_CHECK(err_code);
 00000a  bf00              NOP      
 00000c  4625              MOV      r5,r4
 00000e  2d00              CMP      r5,#0
@@ -109,47 +109,47 @@
 00001a  bf00              NOP      
                   |L2.28|
 00001c  bf00              NOP      
-;;;826    }
+;;;836    }
 00001e  bd70              POP      {r4-r6,pc}
-;;;827    
+;;;837    
                           ENDP
 
 
                           AREA ||i.application_timers_start||, CODE, READONLY, ALIGN=1
 
                   application_timers_start PROC
-;;;437     */
-;;;438    static void application_timers_start(void)
+;;;452     */
+;;;453    static void application_timers_start(void)
 000000  4770              BX       lr
-;;;439    {
-;;;440        /* YOUR_JOB: Start your timers. below is an example of how to start a timer.
-;;;441           uint32_t err_code;
-;;;442           err_code = app_timer_start(m_app_timer_id, TIMER_INTERVAL, NULL);
-;;;443           APP_ERROR_CHECK(err_code); */
-;;;444    	
-;;;445    
-;;;446    }
-;;;447    
+;;;454    {
+;;;455        /* YOUR_JOB: Start your timers. below is an example of how to start a timer.
+;;;456           uint32_t err_code;
+;;;457           err_code = app_timer_start(m_app_timer_id, TIMER_INTERVAL, NULL);
+;;;458           APP_ERROR_CHECK(err_code); */
+;;;459    	
+;;;460    
+;;;461    }
+;;;462    
                           ENDP
 
 
                           AREA ||i.assert_nrf_callback||, CODE, READONLY, ALIGN=2
 
                   assert_nrf_callback PROC
-;;;154     */
-;;;155    void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
+;;;155     */
+;;;156    void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
 000000  b570              PUSH     {r4-r6,lr}
-;;;156    {
+;;;157    {
 000002  4604              MOV      r4,r0
 000004  460d              MOV      r5,r1
-;;;157        app_error_handler(DEAD_BEEF, line_num, p_file_name);
+;;;158        app_error_handler(DEAD_BEEF, line_num, p_file_name);
 000006  462a              MOV      r2,r5
 000008  4621              MOV      r1,r4
 00000a  4802              LDR      r0,|L4.20|
 00000c  f7fffffe          BL       app_error_handler
-;;;158    }
+;;;159    }
 000010  bd70              POP      {r4-r6,pc}
-;;;159    
+;;;160    
                           ENDP
 
 000012  0000              DCW      0x0000
@@ -159,42 +159,41 @@
                           AREA ||i.ble_evt_dispatch||, CODE, READONLY, ALIGN=2
 
                   ble_evt_dispatch PROC
-;;;595     */
-;;;596    static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
+;;;606     */
+;;;607    static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 000000  b510              PUSH     {r4,lr}
-;;;597    {
+;;;608    {
 000002  4604              MOV      r4,r0
-;;;598        /** The Connection state module has to be fed BLE events in order to function correctly
-;;;599         * Remember to call ble_conn_state_on_ble_evt before calling any ble_conns_state_* functions. */
-;;;600        ble_conn_state_on_ble_evt(p_ble_evt);
+;;;609        /** The Connection state module has to be fed BLE events in order to function correctly
+;;;610         * Remember to call ble_conn_state_on_ble_evt before calling any ble_conns_state_* functions. */
+;;;611        ble_conn_state_on_ble_evt(p_ble_evt);
 000004  4620              MOV      r0,r4
 000006  f7fffffe          BL       ble_conn_state_on_ble_evt
-;;;601        pm_on_ble_evt(p_ble_evt);
+;;;612        pm_on_ble_evt(p_ble_evt);
 00000a  4620              MOV      r0,r4
 00000c  f7fffffe          BL       pm_on_ble_evt
-;;;602        ble_conn_params_on_ble_evt(p_ble_evt);
+;;;613        ble_conn_params_on_ble_evt(p_ble_evt);
 000010  4620              MOV      r0,r4
 000012  f7fffffe          BL       ble_conn_params_on_ble_evt
-;;;603        //bsp_btn_ble_on_ble_evt(p_ble_evt);
-;;;604        on_ble_evt(p_ble_evt);
+;;;614        //bsp_btn_ble_on_ble_evt(p_ble_evt);
+;;;615        ble_advertising_on_ble_evt(p_ble_evt);
 000016  4620              MOV      r0,r4
-000018  f7fffffe          BL       on_ble_evt
-;;;605        ble_advertising_on_ble_evt(p_ble_evt);
+000018  f7fffffe          BL       ble_advertising_on_ble_evt
+;;;616    	  on_ble_evt(p_ble_evt);
 00001c  4620              MOV      r0,r4
-00001e  f7fffffe          BL       ble_advertising_on_ble_evt
-;;;606    	
-;;;607    	  ble_sls_on_ble_evt(&m_sls,p_ble_evt);
+00001e  f7fffffe          BL       on_ble_evt
+;;;617    	  ble_sls_on_ble_evt(&m_sls,p_ble_evt);
 000022  4621              MOV      r1,r4
 000024  4801              LDR      r0,|L5.44|
 000026  f7fffffe          BL       ble_sls_on_ble_evt
-;;;608    	
-;;;609        /*YOUR_JOB add calls to _on_ble_evt functions from each service your application is using
-;;;610           ble_xxs_on_ble_evt(&m_xxs, p_ble_evt);
-;;;611           ble_yys_on_ble_evt(&m_yys, p_ble_evt);
-;;;612         */
-;;;613    }
+;;;618    	
+;;;619        /*YOUR_JOB add calls to _on_ble_evt functions from each service your application is using
+;;;620           ble_xxs_on_ble_evt(&m_xxs, p_ble_evt);
+;;;621           ble_yys_on_ble_evt(&m_yys, p_ble_evt);
+;;;622         */
+;;;623    }
 00002a  bd10              POP      {r4,pc}
-;;;614    
+;;;624    
                           ENDP
 
                   |L5.44|
@@ -203,20 +202,20 @@
                           AREA ||i.ble_stack_init||, CODE, READONLY, ALIGN=2
 
                   ble_stack_init PROC
-;;;639     */
-;;;640    static void ble_stack_init(void)
+;;;649     */
+;;;650    static void ble_stack_init(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;641    {
+;;;651    {
 000002  b086              SUB      sp,sp,#0x18
-;;;642        uint32_t err_code;
-;;;643    
-;;;644        nrf_clock_lf_cfg_t clock_lf_cfg = NRF_CLOCK_LFCLKSRC;
+;;;652        uint32_t err_code;
+;;;653    
+;;;654        nrf_clock_lf_cfg_t clock_lf_cfg = NRF_CLOCK_LFCLKSRC;
 000004  4828              LDR      r0,|L6.168|
 000006  6800              LDR      r0,[r0,#0]  ; <Data4>
 000008  9005              STR      r0,[sp,#0x14]
-;;;645    
-;;;646        // Initialize the SoftDevice handler module.
-;;;647        SOFTDEVICE_HANDLER_INIT(&clock_lf_cfg, NULL);
+;;;655    
+;;;656        // Initialize the SoftDevice handler module.
+;;;657        SOFTDEVICE_HANDLER_INIT(&clock_lf_cfg, NULL);
 00000a  bf00              NOP      
 00000c  2300              MOVS     r3,#0
 00000e  2248              MOVS     r2,#0x48
@@ -235,17 +234,17 @@
                   |L6.44|
 00002c  bf00              NOP      
 00002e  bf00              NOP      
-;;;648    
-;;;649        ble_enable_params_t ble_enable_params;
-;;;650        err_code = softdevice_enable_get_default_config(CENTRAL_LINK_COUNT,
+;;;658    
+;;;659        ble_enable_params_t ble_enable_params;
+;;;660        err_code = softdevice_enable_get_default_config(CENTRAL_LINK_COUNT,
 000030  466a              MOV      r2,sp
 000032  2101              MOVS     r1,#1
 000034  2000              MOVS     r0,#0
 000036  f7fffffe          BL       softdevice_enable_get_default_config
 00003a  4604              MOV      r4,r0
-;;;651                                                        PERIPHERAL_LINK_COUNT,
-;;;652                                                        &ble_enable_params);
-;;;653        APP_ERROR_CHECK(err_code);
+;;;661                                                        PERIPHERAL_LINK_COUNT,
+;;;662                                                        &ble_enable_params);
+;;;663        APP_ERROR_CHECK(err_code);
 00003c  bf00              NOP      
 00003e  4625              MOV      r5,r4
 000040  2d00              CMP      r5,#0
@@ -256,19 +255,19 @@
 00004c  bf00              NOP      
                   |L6.78|
 00004e  bf00              NOP      
-;;;654    
-;;;655        // Check the ram settings against the used number of links
-;;;656        CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
-;;;657    
-;;;658        // Enable BLE stack.
-;;;659    #if (NRF_SD_BLE_API_VERSION == 3)
-;;;660        ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
-;;;661    #endif
-;;;662        err_code = softdevice_enable(&ble_enable_params);
+;;;664    
+;;;665        // Check the ram settings against the used number of links
+;;;666        CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
+;;;667    
+;;;668        // Enable BLE stack.
+;;;669    #if (NRF_SD_BLE_API_VERSION == 3)
+;;;670        ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
+;;;671    #endif
+;;;672        err_code = softdevice_enable(&ble_enable_params);
 000050  4668              MOV      r0,sp
 000052  f7fffffe          BL       softdevice_enable
 000056  4604              MOV      r4,r0
-;;;663        APP_ERROR_CHECK(err_code);
+;;;673        APP_ERROR_CHECK(err_code);
 000058  bf00              NOP      
 00005a  4625              MOV      r5,r4
 00005c  2d00              CMP      r5,#0
@@ -279,13 +278,13 @@
 000068  bf00              NOP      
                   |L6.106|
 00006a  bf00              NOP      
-;;;664    
-;;;665        // Register with the SoftDevice handler module for BLE events.
-;;;666        err_code = softdevice_ble_evt_handler_set(ble_evt_dispatch);
+;;;674    
+;;;675        // Register with the SoftDevice handler module for BLE events.
+;;;676        err_code = softdevice_ble_evt_handler_set(ble_evt_dispatch);
 00006c  4810              LDR      r0,|L6.176|
 00006e  f7fffffe          BL       softdevice_ble_evt_handler_set
 000072  4604              MOV      r4,r0
-;;;667        APP_ERROR_CHECK(err_code);
+;;;677        APP_ERROR_CHECK(err_code);
 000074  bf00              NOP      
 000076  4625              MOV      r5,r4
 000078  2d00              CMP      r5,#0
@@ -296,13 +295,13 @@
 000084  bf00              NOP      
                   |L6.134|
 000086  bf00              NOP      
-;;;668    
-;;;669        // Register with the SoftDevice handler module for BLE events.
-;;;670        err_code = softdevice_sys_evt_handler_set(sys_evt_dispatch);
+;;;678    
+;;;679        // Register with the SoftDevice handler module for BLE events.
+;;;680        err_code = softdevice_sys_evt_handler_set(sys_evt_dispatch);
 000088  480a              LDR      r0,|L6.180|
 00008a  f7fffffe          BL       softdevice_sys_evt_handler_set
 00008e  4604              MOV      r4,r0
-;;;671        APP_ERROR_CHECK(err_code);
+;;;681        APP_ERROR_CHECK(err_code);
 000090  bf00              NOP      
 000092  4625              MOV      r5,r4
 000094  2d00              CMP      r5,#0
@@ -313,10 +312,10 @@
 0000a0  bf00              NOP      
                   |L6.162|
 0000a2  bf00              NOP      
-;;;672    }
+;;;682    }
 0000a4  b006              ADD      sp,sp,#0x18
 0000a6  bd70              POP      {r4-r6,pc}
-;;;673    
+;;;683    
                           ENDP
 
                   |L6.168|
@@ -331,41 +330,41 @@
                           AREA ||i.bsp_event_handler||, CODE, READONLY, ALIGN=2
 
                   bsp_event_handler PROC
-;;;721     */
-;;;722    static void bsp_event_handler(bsp_event_t event)
+;;;731     */
+;;;732    static void bsp_event_handler(bsp_event_t event)
 000000  b570              PUSH     {r4-r6,lr}
-;;;723    {
+;;;733    {
 000002  4605              MOV      r5,r0
-;;;724        uint32_t err_code;
-;;;725    
-;;;726        switch (event)
+;;;734        uint32_t err_code;
+;;;735    
+;;;736        switch (event)
 000004  2d04              CMP      r5,#4
 000006  d006              BEQ      |L7.22|
 000008  2d07              CMP      r5,#7
 00000a  d016              BEQ      |L7.58|
 00000c  2d0a              CMP      r5,#0xa
 00000e  d129              BNE      |L7.100|
-;;;727        {
-;;;728            case BSP_EVENT_SLEEP:
-;;;729                sleep_mode_enter();
+;;;737        {
+;;;738            case BSP_EVENT_SLEEP:
+;;;739                sleep_mode_enter();
 000010  f7fffffe          BL       sleep_mode_enter
-;;;730                break; // BSP_EVENT_SLEEP
+;;;740                break; // BSP_EVENT_SLEEP
 000014  e02a              B        |L7.108|
                   |L7.22|
-;;;731    
-;;;732            case BSP_EVENT_DISCONNECT:
-;;;733                err_code = sd_ble_gap_disconnect(m_conn_handle,
+;;;741    
+;;;742            case BSP_EVENT_DISCONNECT:
+;;;743                err_code = sd_ble_gap_disconnect(m_conn_handle,
 000016  2113              MOVS     r1,#0x13
 000018  4815              LDR      r0,|L7.112|
 00001a  8800              LDRH     r0,[r0,#0]  ; m_conn_handle
 00001c  df76              SVC      #0x76
 00001e  4604              MOV      r4,r0
-;;;734                                                 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-;;;735                if (err_code != NRF_ERROR_INVALID_STATE)
+;;;744                                                 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+;;;745                if (err_code != NRF_ERROR_INVALID_STATE)
 000020  2c08              CMP      r4,#8
 000022  d009              BEQ      |L7.56|
-;;;736                {
-;;;737                    APP_ERROR_CHECK(err_code);
+;;;746                {
+;;;747                    APP_ERROR_CHECK(err_code);
 000024  bf00              NOP      
 000026  4626              MOV      r6,r4
 000028  2e00              CMP      r6,#0
@@ -377,27 +376,27 @@
                   |L7.54|
 000036  bf00              NOP      
                   |L7.56|
-;;;738                }
-;;;739                break; // BSP_EVENT_DISCONNECT
+;;;748                }
+;;;749                break; // BSP_EVENT_DISCONNECT
 000038  e018              B        |L7.108|
                   |L7.58|
-;;;740    
-;;;741            case BSP_EVENT_WHITELIST_OFF:
-;;;742                if (m_conn_handle == BLE_CONN_HANDLE_INVALID)
+;;;750    
+;;;751            case BSP_EVENT_WHITELIST_OFF:
+;;;752                if (m_conn_handle == BLE_CONN_HANDLE_INVALID)
 00003a  480d              LDR      r0,|L7.112|
 00003c  8800              LDRH     r0,[r0,#0]  ; m_conn_handle
 00003e  490d              LDR      r1,|L7.116|
 000040  4288              CMP      r0,r1
 000042  d10e              BNE      |L7.98|
-;;;743                {
-;;;744                    err_code = ble_advertising_restart_without_whitelist();
+;;;753                {
+;;;754                    err_code = ble_advertising_restart_without_whitelist();
 000044  f7fffffe          BL       ble_advertising_restart_without_whitelist
 000048  4604              MOV      r4,r0
-;;;745                    if (err_code != NRF_ERROR_INVALID_STATE)
+;;;755                    if (err_code != NRF_ERROR_INVALID_STATE)
 00004a  2c08              CMP      r4,#8
 00004c  d009              BEQ      |L7.98|
-;;;746                    {
-;;;747                        APP_ERROR_CHECK(err_code);
+;;;756                    {
+;;;757                        APP_ERROR_CHECK(err_code);
 00004e  bf00              NOP      
 000050  4626              MOV      r6,r4
 000052  2e00              CMP      r6,#0
@@ -409,24 +408,24 @@
                   |L7.96|
 000060  bf00              NOP      
                   |L7.98|
-;;;748                    }
-;;;749                }
-;;;750                break; // BSP_EVENT_KEY_0
+;;;758                    }
+;;;759                }
+;;;760                break; // BSP_EVENT_KEY_0
 000062  e003              B        |L7.108|
                   |L7.100|
-;;;751    
-;;;752            default:
-;;;753    					bsp_btn_switch_event_handler(event);
+;;;761    
+;;;762            default:
+;;;763    					bsp_btn_switch_event_handler(event);
 000064  4628              MOV      r0,r5
 000066  f7fffffe          BL       bsp_btn_switch_event_handler
-;;;754                break;
+;;;764                break;
 00006a  bf00              NOP      
                   |L7.108|
-00006c  bf00              NOP                            ;730
-;;;755        }
-;;;756    }
+00006c  bf00              NOP                            ;740
+;;;765        }
+;;;766    }
 00006e  bd70              POP      {r4-r6,pc}
-;;;757    
+;;;767    
                           ENDP
 
                   |L7.112|
@@ -437,23 +436,23 @@
                           AREA ||i.buttons_switchs_leds_init||, CODE, READONLY, ALIGN=2
 
                   buttons_switchs_leds_init PROC
-;;;789     */
-;;;790    static void buttons_switchs_leds_init(bool * p_erase_bonds)
+;;;799     */
+;;;800    static void buttons_switchs_leds_init(bool * p_erase_bonds)
 000000  b570              PUSH     {r4-r6,lr}
-;;;791    {
+;;;801    {
 000002  4606              MOV      r6,r0
-;;;792       // bsp_event_t startup_event;
-;;;793    
-;;;794        uint32_t err_code = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS,
+;;;802       // bsp_event_t startup_event;
+;;;803    
+;;;804        uint32_t err_code = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS,
 000004  4a0f              LDR      r2,|L8.68|
 000006  4910              LDR      r1,|L8.72|
 000008  2003              MOVS     r0,#3
 00000a  f7fffffe          BL       bsp_init
 00000e  4604              MOV      r4,r0
-;;;795                                     APP_TIMER_TICKS(100, APP_TIMER_PRESCALER),
-;;;796                                     bsp_event_handler);
-;;;797    
-;;;798        APP_ERROR_CHECK(err_code);
+;;;805                                     APP_TIMER_TICKS(100, APP_TIMER_PRESCALER),
+;;;806                                     bsp_event_handler);
+;;;807    
+;;;808        APP_ERROR_CHECK(err_code);
 000010  bf00              NOP      
 000012  4625              MOV      r5,r4
 000014  2d00              CMP      r5,#0
@@ -464,12 +463,12 @@
 000020  bf00              NOP      
                   |L8.34|
 000022  bf00              NOP      
-;;;799    
-;;;800    	  err_code=bsp_btn_switch_init(APP_TIMER_PRESCALER);
+;;;809    
+;;;810    	  err_code=bsp_btn_switch_init(APP_TIMER_PRESCALER);
 000024  2000              MOVS     r0,#0
 000026  f7fffffe          BL       bsp_btn_switch_init
 00002a  4604              MOV      r4,r0
-;;;801    	  APP_ERROR_CHECK(err_code);
+;;;811    	  APP_ERROR_CHECK(err_code);
 00002c  bf00              NOP      
 00002e  4625              MOV      r5,r4
 000030  2d00              CMP      r5,#0
@@ -480,13 +479,13 @@
 00003c  bf00              NOP      
                   |L8.62|
 00003e  bf00              NOP      
-;;;802       // err_code = bsp_btn_ble_init(NULL, &startup_event);
-;;;803       // APP_ERROR_CHECK(err_code);
-;;;804    
-;;;805       // *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
-;;;806    }
+;;;812       // err_code = bsp_btn_ble_init(NULL, &startup_event);
+;;;813       // APP_ERROR_CHECK(err_code);
+;;;814    
+;;;815       // *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
+;;;816    }
 000040  bd70              POP      {r4-r6,pc}
-;;;807    
+;;;817    
                           ENDP
 
 000042  0000              DCW      0x0000
@@ -498,70 +497,70 @@
                           AREA ||i.conn_params_error_handler||, CODE, READONLY, ALIGN=1
 
                   conn_params_error_handler PROC
-;;;406     */
-;;;407    static void conn_params_error_handler(uint32_t nrf_error)
+;;;421     */
+;;;422    static void conn_params_error_handler(uint32_t nrf_error)
 000000  b510              PUSH     {r4,lr}
-;;;408    {
+;;;423    {
 000002  4604              MOV      r4,r0
-;;;409        APP_ERROR_HANDLER(nrf_error);
+;;;424        APP_ERROR_HANDLER(nrf_error);
 000004  bf00              NOP      
 000006  4620              MOV      r0,r4
 000008  f7fffffe          BL       app_error_handler_bare
 00000c  bf00              NOP      
-;;;410    }
+;;;425    }
 00000e  bd10              POP      {r4,pc}
-;;;411    
+;;;426    
                           ENDP
 
 
                           AREA ||i.conn_params_init||, CODE, READONLY, ALIGN=2
 
                   conn_params_init PROC
-;;;414     */
-;;;415    static void conn_params_init(void)
+;;;429     */
+;;;430    static void conn_params_init(void)
 000000  b530              PUSH     {r4,r5,lr}
-;;;416    {
+;;;431    {
 000002  b087              SUB      sp,sp,#0x1c
-;;;417        uint32_t               err_code;
-;;;418        ble_conn_params_init_t cp_init;
-;;;419    
-;;;420        memset(&cp_init, 0, sizeof(cp_init));
+;;;432        uint32_t               err_code;
+;;;433        ble_conn_params_init_t cp_init;
+;;;434    
+;;;435        memset(&cp_init, 0, sizeof(cp_init));
 000004  211c              MOVS     r1,#0x1c
 000006  4668              MOV      r0,sp
 000008  f7fffffe          BL       __aeabi_memclr4
-;;;421    
-;;;422        cp_init.p_conn_params                  = NULL;
+;;;436    
+;;;437        cp_init.p_conn_params                  = NULL;
 00000c  2000              MOVS     r0,#0
 00000e  9000              STR      r0,[sp,#0]
-;;;423        cp_init.first_conn_params_update_delay = FIRST_CONN_PARAMS_UPDATE_DELAY;
+;;;438        cp_init.first_conn_params_update_delay = FIRST_CONN_PARAMS_UPDATE_DELAY;
 000010  2005              MOVS     r0,#5
 000012  03c0              LSLS     r0,r0,#15
 000014  9001              STR      r0,[sp,#4]
-;;;424        cp_init.next_conn_params_update_delay  = NEXT_CONN_PARAMS_UPDATE_DELAY;
+;;;439        cp_init.next_conn_params_update_delay  = NEXT_CONN_PARAMS_UPDATE_DELAY;
 000016  200f              MOVS     r0,#0xf
 000018  0400              LSLS     r0,r0,#16
 00001a  9002              STR      r0,[sp,#8]
-;;;425        cp_init.max_conn_params_update_count   = MAX_CONN_PARAMS_UPDATE_COUNT;
+;;;440        cp_init.max_conn_params_update_count   = MAX_CONN_PARAMS_UPDATE_COUNT;
 00001c  2103              MOVS     r1,#3
 00001e  4668              MOV      r0,sp
 000020  7301              STRB     r1,[r0,#0xc]
-;;;426        cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
+;;;441        cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
 000022  2100              MOVS     r1,#0
 000024  81c1              STRH     r1,[r0,#0xe]
-;;;427        cp_init.disconnect_on_fail             = false;
+;;;442        cp_init.disconnect_on_fail             = false;
 000026  7401              STRB     r1,[r0,#0x10]
-;;;428        cp_init.evt_handler                    = on_conn_params_evt;
+;;;443        cp_init.evt_handler                    = on_conn_params_evt;
 000028  4809              LDR      r0,|L10.80|
 00002a  9005              STR      r0,[sp,#0x14]
-;;;429        cp_init.error_handler                  = conn_params_error_handler;
+;;;444        cp_init.error_handler                  = conn_params_error_handler;
 00002c  4809              LDR      r0,|L10.84|
 00002e  9006              STR      r0,[sp,#0x18]
-;;;430    
-;;;431        err_code = ble_conn_params_init(&cp_init);
+;;;445    
+;;;446        err_code = ble_conn_params_init(&cp_init);
 000030  4668              MOV      r0,sp
 000032  f7fffffe          BL       ble_conn_params_init
 000036  4604              MOV      r4,r0
-;;;432        APP_ERROR_CHECK(err_code);
+;;;447        APP_ERROR_CHECK(err_code);
 000038  bf00              NOP      
 00003a  4625              MOV      r5,r4
 00003c  2d00              CMP      r5,#0
@@ -572,10 +571,10 @@
 000048  bf00              NOP      
                   |L10.74|
 00004a  bf00              NOP      
-;;;433    }
+;;;448    }
 00004c  b007              ADD      sp,sp,#0x1c
 00004e  bd30              POP      {r4,r5,pc}
-;;;434    
+;;;449    
                           ENDP
 
                   |L10.80|
@@ -586,15 +585,15 @@
                           AREA ||i.gap_params_init||, CODE, READONLY, ALIGN=2
 
                   gap_params_init PROC
-;;;288     */
-;;;289    static void gap_params_init(void)
+;;;289     */
+;;;290    static void gap_params_init(void)
 000000  b53e              PUSH     {r1-r5,lr}
-;;;290    {
-;;;291        uint32_t                err_code;
-;;;292        ble_gap_conn_params_t   gap_conn_params;
-;;;293        ble_gap_conn_sec_mode_t sec_mode;
-;;;294    
-;;;295        BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
+;;;291    {
+;;;292        uint32_t                err_code;
+;;;293        ble_gap_conn_params_t   gap_conn_params;
+;;;294        ble_gap_conn_sec_mode_t sec_mode;
+;;;295    
+;;;296        BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 000002  bf00              NOP      
 000004  4668              MOV      r0,sp
 000006  7800              LDRB     r0,[r0,#0]
@@ -609,16 +608,16 @@
 000018  3010              ADDS     r0,r0,#0x10
 00001a  9000              STR      r0,[sp,#0]
 00001c  bf00              NOP      
-;;;296    
-;;;297        err_code = sd_ble_gap_device_name_set(&sec_mode,
+;;;297    
+;;;298        err_code = sd_ble_gap_device_name_set(&sec_mode,
 00001e  220c              MOVS     r2,#0xc
 000020  a114              ADR      r1,|L11.116|
 000022  4668              MOV      r0,sp
 000024  df7c              SVC      #0x7c
 000026  4604              MOV      r4,r0
-;;;298                                              (const uint8_t *)DEVICE_NAME,
-;;;299                                              strlen(DEVICE_NAME));
-;;;300        APP_ERROR_CHECK(err_code);
+;;;299                                              (const uint8_t *)DEVICE_NAME,
+;;;300                                              strlen(DEVICE_NAME));
+;;;301        APP_ERROR_CHECK(err_code);
 000028  bf00              NOP      
 00002a  4625              MOV      r5,r4
 00002c  2d00              CMP      r5,#0
@@ -629,36 +628,36 @@
 000038  bf00              NOP      
                   |L11.58|
 00003a  bf00              NOP      
-;;;301    
-;;;302        /* YOUR_JOB: Use an appearance value matching the application's use case.
-;;;303           err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_);
-;;;304           APP_ERROR_CHECK(err_code); */
-;;;305    
-;;;306        memset(&gap_conn_params, 0, sizeof(gap_conn_params));
+;;;302    
+;;;303        /* YOUR_JOB: Use an appearance value matching the application's use case.
+;;;304           err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_);
+;;;305           APP_ERROR_CHECK(err_code); */
+;;;306    
+;;;307        memset(&gap_conn_params, 0, sizeof(gap_conn_params));
 00003c  2000              MOVS     r0,#0
 00003e  9001              STR      r0,[sp,#4]
 000040  9002              STR      r0,[sp,#8]
-;;;307    
-;;;308        gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
+;;;308    
+;;;309        gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
 000042  2150              MOVS     r1,#0x50
 000044  4668              MOV      r0,sp
 000046  8081              STRH     r1,[r0,#4]
-;;;309        gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
+;;;310        gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
 000048  21a0              MOVS     r1,#0xa0
 00004a  80c1              STRH     r1,[r0,#6]
-;;;310        gap_conn_params.slave_latency     = SLAVE_LATENCY;
+;;;311        gap_conn_params.slave_latency     = SLAVE_LATENCY;
 00004c  2100              MOVS     r1,#0
 00004e  8101              STRH     r1,[r0,#8]
-;;;311        gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
+;;;312        gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
 000050  21ff              MOVS     r1,#0xff
 000052  3191              ADDS     r1,r1,#0x91
 000054  8141              STRH     r1,[r0,#0xa]
-;;;312    
-;;;313        err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
+;;;313    
+;;;314        err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
 000056  a801              ADD      r0,sp,#4
 000058  df7a              SVC      #0x7a
 00005a  4604              MOV      r4,r0
-;;;314        APP_ERROR_CHECK(err_code);
+;;;315        APP_ERROR_CHECK(err_code);
 00005c  bf00              NOP      
 00005e  4625              MOV      r5,r4
 000060  2d00              CMP      r5,#0
@@ -669,9 +668,9 @@
 00006c  bf00              NOP      
                   |L11.110|
 00006e  bf00              NOP      
-;;;315    }
+;;;316    }
 000070  bd3e              POP      {r1-r5,pc}
-;;;316    
+;;;317    
                           ENDP
 
 000072  0000              DCW      0x0000
@@ -687,19 +686,19 @@
                           AREA ||i.main||, CODE, READONLY, ALIGN=2
 
                   main PROC
-;;;830     */
-;;;831    int main(void)
+;;;840     */
+;;;841    int main(void)
 000000  b508              PUSH     {r3,lr}
-;;;832    {
-;;;833        uint32_t err_code;
-;;;834        bool     erase_bonds;
-;;;835    
-;;;836        // Initialize.
-;;;837        err_code = NRF_LOG_INIT(NULL);
+;;;842    {
+;;;843        uint32_t err_code;
+;;;844        bool     erase_bonds;
+;;;845    
+;;;846        // Initialize.
+;;;847        err_code = NRF_LOG_INIT(NULL);
 000002  2000              MOVS     r0,#0
 000004  f7fffffe          BL       nrf_log_init
 000008  4604              MOV      r4,r0
-;;;838        APP_ERROR_CHECK(err_code);
+;;;848        APP_ERROR_CHECK(err_code);
 00000a  bf00              NOP      
 00000c  4625              MOV      r5,r4
 00000e  2d00              CMP      r5,#0
@@ -710,51 +709,51 @@
 00001a  bf00              NOP      
                   |L12.28|
 00001c  bf00              NOP      
-;;;839    
-;;;840        timers_init();
+;;;849    
+;;;850        timers_init();
 00001e  f7fffffe          BL       timers_init
-;;;841        buttons_switchs_leds_init(&erase_bonds);
+;;;851        buttons_switchs_leds_init(&erase_bonds);
 000022  4668              MOV      r0,sp
 000024  f7fffffe          BL       buttons_switchs_leds_init
-;;;842        ble_stack_init();
+;;;852        ble_stack_init();
 000028  f7fffffe          BL       ble_stack_init
-;;;843        peer_manager_init(erase_bonds);
+;;;853        peer_manager_init(erase_bonds);
 00002c  4668              MOV      r0,sp
 00002e  7800              LDRB     r0,[r0,#0]
 000030  f7fffffe          BL       peer_manager_init
-;;;844        if (erase_bonds == true)
+;;;854        if (erase_bonds == true)
 000034  4668              MOV      r0,sp
 000036  7800              LDRB     r0,[r0,#0]
 000038  2801              CMP      r0,#1
 00003a  d103              BNE      |L12.68|
-;;;845        {
-;;;846            NRF_LOG_INFO("Bonds erased!\r\n");
+;;;855        {
+;;;856            NRF_LOG_INFO("Bonds erased!\r\n");
 00003c  a113              ADR      r1,|L12.140|
 00003e  2003              MOVS     r0,#3
 000040  f7fffffe          BL       nrf_log_frontend_std_0
                   |L12.68|
-;;;847        }
-;;;848        gap_params_init();
+;;;857        }
+;;;858        gap_params_init();
 000044  f7fffffe          BL       gap_params_init
-;;;849        advertising_init();
+;;;859        advertising_init();
 000048  f7fffffe          BL       advertising_init
-;;;850        services_init();
+;;;860        services_init();
 00004c  f7fffffe          BL       services_init
-;;;851        conn_params_init();
+;;;861        conn_params_init();
 000050  f7fffffe          BL       conn_params_init
-;;;852    
-;;;853        // Start execution.
-;;;854        NRF_LOG_INFO("smart locker started!\r\n");
+;;;862    
+;;;863        // Start execution.
+;;;864        NRF_LOG_INFO("smart locker started!\r\n");
 000054  a116              ADR      r1,|L12.176|
 000056  2003              MOVS     r0,#3
 000058  f7fffffe          BL       nrf_log_frontend_std_0
-;;;855        application_timers_start();
+;;;865        application_timers_start();
 00005c  f7fffffe          BL       application_timers_start
-;;;856        err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
+;;;866        err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
 000060  2003              MOVS     r0,#3
 000062  f7fffffe          BL       ble_advertising_start
 000066  4604              MOV      r4,r0
-;;;857        APP_ERROR_CHECK(err_code);
+;;;867        APP_ERROR_CHECK(err_code);
 000068  bf00              NOP      
 00006a  4625              MOV      r5,r4
 00006c  2d00              CMP      r5,#0
@@ -765,24 +764,24 @@
 000078  bf00              NOP      
                   |L12.122|
 00007a  bf00              NOP      
-;;;858    
-;;;859        // Enter main loop.
-;;;860        for (;;)
+;;;868    
+;;;869        // Enter main loop.
+;;;870        for (;;)
 00007c  bf00              NOP      
                   |L12.126|
-;;;861        {
-;;;862            if (NRF_LOG_PROCESS() == false)
+;;;871        {
+;;;872            if (NRF_LOG_PROCESS() == false)
 00007e  f7fffffe          BL       nrf_log_frontend_dequeue
 000082  2800              CMP      r0,#0
 000084  d1fb              BNE      |L12.126|
-;;;863            {
-;;;864                power_manage();
+;;;873            {
+;;;874                power_manage();
 000086  f7fffffe          BL       power_manage
 00008a  e7f8              B        |L12.126|
-;;;865            }
-;;;866        }
-;;;867    }
-;;;868    
+;;;875            }
+;;;876        }
+;;;877    }
+;;;878    
                           ENDP
 
                   |L12.140|
@@ -813,28 +812,28 @@
                           AREA ||i.on_adv_evt||, CODE, READONLY, ALIGN=2
 
                   on_adv_evt PROC
-;;;474     */
-;;;475    static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
+;;;489     */
+;;;490    static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 000000  b570              PUSH     {r4-r6,lr}
-;;;476    {
+;;;491    {
 000002  4605              MOV      r5,r0
-;;;477        uint32_t err_code;
-;;;478    
-;;;479        switch (ble_adv_evt)
+;;;492        uint32_t err_code;
+;;;493    
+;;;494        switch (ble_adv_evt)
 000004  2d00              CMP      r5,#0
 000006  d013              BEQ      |L13.48|
 000008  2d03              CMP      r5,#3
 00000a  d112              BNE      |L13.50|
-;;;480        {
-;;;481            case BLE_ADV_EVT_FAST:
-;;;482                NRF_LOG_INFO("Fast advertising\r\n");
+;;;495        {
+;;;496            case BLE_ADV_EVT_FAST:
+;;;497                NRF_LOG_INFO("Fast advertising\r\n");
 00000c  a10a              ADR      r1,|L13.56|
 00000e  f7fffffe          BL       nrf_log_frontend_std_0
-;;;483                err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
+;;;498                err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
 000012  2002              MOVS     r0,#2
 000014  f7fffffe          BL       bsp_indication_set
 000018  4604              MOV      r4,r0
-;;;484                APP_ERROR_CHECK(err_code);
+;;;499                APP_ERROR_CHECK(err_code);
 00001a  bf00              NOP      
 00001c  4626              MOV      r6,r4
 00001e  2e00              CMP      r6,#0
@@ -845,25 +844,25 @@
 00002a  bf00              NOP      
                   |L13.44|
 00002c  bf00              NOP      
-;;;485                break;
+;;;500                break;
 00002e  e001              B        |L13.52|
                   |L13.48|
-;;;486    
-;;;487            case BLE_ADV_EVT_IDLE:
-;;;488                //sleep_mode_enter();
-;;;489                break;
+;;;501    
+;;;502            case BLE_ADV_EVT_IDLE:
+;;;503                //sleep_mode_enter();
+;;;504                break;
 000030  e000              B        |L13.52|
                   |L13.50|
-;;;490    
-;;;491            default:
-;;;492                break;
+;;;505    
+;;;506            default:
+;;;507                break;
 000032  bf00              NOP      
                   |L13.52|
-000034  bf00              NOP                            ;485
-;;;493        }
-;;;494    }
+000034  bf00              NOP                            ;500
+;;;508        }
+;;;509    }
 000036  bd70              POP      {r4-r6,pc}
-;;;495    
+;;;510    
                           ENDP
 
                   |L13.56|
@@ -883,46 +882,46 @@
                           AREA ||i.on_ble_evt||, CODE, READONLY, ALIGN=2
 
                   on_ble_evt PROC
-;;;500     */
-;;;501    static void on_ble_evt(ble_evt_t * p_ble_evt)
+;;;515     */
+;;;516    static void on_ble_evt(ble_evt_t * p_ble_evt)
 000000  b570              PUSH     {r4-r6,lr}
-;;;502    {
+;;;517    {
 000002  b088              SUB      sp,sp,#0x20
 000004  4605              MOV      r5,r0
-;;;503        uint32_t err_code = NRF_SUCCESS;
+;;;518        uint32_t err_code = NRF_SUCCESS;
 000006  2400              MOVS     r4,#0
-;;;504    
-;;;505        switch (p_ble_evt->header.evt_id)
+;;;519    
+;;;520        switch (p_ble_evt->header.evt_id)
 000008  8828              LDRH     r0,[r5,#0]
 00000a  283a              CMP      r0,#0x3a
-00000c  d047              BEQ      |L14.158|
+00000c  d035              BEQ      |L14.122|
 00000e  dc06              BGT      |L14.30|
 000010  2802              CMP      r0,#2
-000012  d062              BEQ      |L14.218|
+000012  d058              BEQ      |L14.198|
 000014  2810              CMP      r0,#0x10
-000016  d02c              BEQ      |L14.114|
+000016  d01a              BEQ      |L14.78|
 000018  2811              CMP      r0,#0x11
                   |L14.26|
 00001a  d17d              BNE      |L14.280|
 00001c  e004              B        |L14.40|
                   |L14.30|
 00001e  2851              CMP      r0,#0x51
-000020  d06a              BEQ      |L14.248|
+000020  d060              BEQ      |L14.228|
 000022  2855              CMP      r0,#0x55
 000024  d1f9              BNE      |L14.26|
-000026  e049              B        |L14.188|
+000026  e03b              B        |L14.160|
                   |L14.40|
-;;;506        {
-;;;507            case BLE_GAP_EVT_DISCONNECTED:
-;;;508                NRF_LOG_INFO("Disconnected.\r\n");
-000028  a14f              ADR      r1,|L14.360|
+;;;521        {
+;;;522            case BLE_GAP_EVT_DISCONNECTED:
+;;;523                NRF_LOG_INFO("Disconnected.\r\n");
+000028  a14a              ADR      r1,|L14.340|
 00002a  2003              MOVS     r0,#3
 00002c  f7fffffe          BL       nrf_log_frontend_std_0
-;;;509                err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+;;;524                err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 000030  2000              MOVS     r0,#0
 000032  f7fffffe          BL       bsp_indication_set
 000036  4604              MOV      r4,r0
-;;;510                APP_ERROR_CHECK(err_code);
+;;;525                APP_ERROR_CHECK(err_code);
 000038  bf00              NOP      
 00003a  4626              MOV      r6,r4
 00003c  2e00              CMP      r6,#0
@@ -933,294 +932,292 @@
 000048  bf00              NOP      
                   |L14.74|
 00004a  bf00              NOP      
-;;;511    				
-;;;512    				   err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
-00004c  2003              MOVS     r0,#3
-00004e  f7fffffe          BL       ble_advertising_start
-000052  4604              MOV      r4,r0
-;;;513    				   APP_ERROR_CHECK(err_code);
-000054  bf00              NOP      
-000056  4626              MOV      r6,r4
-000058  2e00              CMP      r6,#0
-00005a  d004              BEQ      |L14.102|
-00005c  bf00              NOP      
-00005e  4630              MOV      r0,r6
-000060  f7fffffe          BL       app_error_handler_bare
-000064  bf00              NOP      
-                  |L14.102|
+;;;526                break; // BLE_GAP_EVT_DISCONNECTED
+00004c  e07e              B        |L14.332|
+                  |L14.78|
+;;;527    
+;;;528            case BLE_GAP_EVT_CONNECTED:
+;;;529                NRF_LOG_INFO("Connected.\r\n");
+00004e  a14a              ADR      r1,|L14.376|
+000050  2003              MOVS     r0,#3
+000052  f7fffffe          BL       nrf_log_frontend_std_0
+;;;530                err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
+000056  2007              MOVS     r0,#7
+000058  f7fffffe          BL       bsp_indication_set
+00005c  4604              MOV      r4,r0
+;;;531                APP_ERROR_CHECK(err_code);
+00005e  bf00              NOP      
+000060  4626              MOV      r6,r4
+000062  2e00              CMP      r6,#0
+000064  d004              BEQ      |L14.112|
 000066  bf00              NOP      
-;;;514    				   NRF_LOG_INFO("restart adverting...\r\n");
-000068  a148              ADR      r1,|L14.396|
-00006a  2003              MOVS     r0,#3
-00006c  f7fffffe          BL       nrf_log_frontend_std_0
-;;;515                break; // BLE_GAP_EVT_DISCONNECTED
-000070  e076              B        |L14.352|
-                  |L14.114|
-;;;516    
-;;;517            case BLE_GAP_EVT_CONNECTED:
-;;;518                NRF_LOG_INFO("Connected.\r\n");
-000072  a151              ADR      r1,|L14.440|
-000074  2003              MOVS     r0,#3
-000076  f7fffffe          BL       nrf_log_frontend_std_0
-;;;519                err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
-00007a  2007              MOVS     r0,#7
-00007c  f7fffffe          BL       bsp_indication_set
-000080  4604              MOV      r4,r0
-;;;520                APP_ERROR_CHECK(err_code);
-000082  bf00              NOP      
-000084  4626              MOV      r6,r4
-000086  2e00              CMP      r6,#0
-000088  d004              BEQ      |L14.148|
+000068  4630              MOV      r0,r6
+00006a  f7fffffe          BL       app_error_handler_bare
+00006e  bf00              NOP      
+                  |L14.112|
+000070  bf00              NOP      
+;;;532                m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+000072  88a8              LDRH     r0,[r5,#4]
+000074  4948              LDR      r1,|L14.408|
+000076  8008              STRH     r0,[r1,#0]
+;;;533                break; // BLE_GAP_EVT_CONNECTED
+000078  e068              B        |L14.332|
+                  |L14.122|
+;;;534    
+;;;535            case BLE_GATTC_EVT_TIMEOUT:
+;;;536                // Disconnect on GATT Client timeout event.
+;;;537                NRF_LOG_DEBUG("GATT Client Timeout.\r\n");
+00007a  a148              ADR      r1,|L14.412|
+00007c  2004              MOVS     r0,#4
+00007e  f7fffffe          BL       nrf_log_frontend_std_0
+;;;538                err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
+000082  88a8              LDRH     r0,[r5,#4]
+000084  2113              MOVS     r1,#0x13
+000086  df76              SVC      #0x76
+000088  4604              MOV      r4,r0
+;;;539                                                 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+;;;540                APP_ERROR_CHECK(err_code);
 00008a  bf00              NOP      
-00008c  4630              MOV      r0,r6
-00008e  f7fffffe          BL       app_error_handler_bare
+00008c  4626              MOV      r6,r4
+00008e  2e00              CMP      r6,#0
+000090  d004              BEQ      |L14.156|
 000092  bf00              NOP      
-                  |L14.148|
-000094  bf00              NOP      
-;;;521                m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-000096  88a8              LDRH     r0,[r5,#4]
-000098  494f              LDR      r1,|L14.472|
-00009a  8008              STRH     r0,[r1,#0]
-;;;522                break; // BLE_GAP_EVT_CONNECTED
-00009c  e060              B        |L14.352|
-                  |L14.158|
-;;;523    
-;;;524            case BLE_GATTC_EVT_TIMEOUT:
-;;;525                // Disconnect on GATT Client timeout event.
-;;;526                NRF_LOG_DEBUG("GATT Client Timeout.\r\n");
-;;;527                err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
-00009e  88a8              LDRH     r0,[r5,#4]
-0000a0  2113              MOVS     r1,#0x13
-0000a2  df76              SVC      #0x76
-0000a4  4604              MOV      r4,r0
-;;;528                                                 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-;;;529                APP_ERROR_CHECK(err_code);
-0000a6  bf00              NOP      
-0000a8  4626              MOV      r6,r4
-0000aa  2e00              CMP      r6,#0
-0000ac  d004              BEQ      |L14.184|
-0000ae  bf00              NOP      
-0000b0  4630              MOV      r0,r6
-0000b2  f7fffffe          BL       app_error_handler_bare
-0000b6  bf00              NOP      
-                  |L14.184|
+000094  4630              MOV      r0,r6
+000096  f7fffffe          BL       app_error_handler_bare
+00009a  bf00              NOP      
+                  |L14.156|
+00009c  bf00              NOP      
+;;;541                break; // BLE_GATTC_EVT_TIMEOUT
+00009e  e055              B        |L14.332|
+                  |L14.160|
+;;;542    
+;;;543            case BLE_GATTS_EVT_TIMEOUT:
+;;;544                // Disconnect on GATT Server timeout event.
+;;;545                NRF_LOG_DEBUG("GATT Server Timeout.\r\n");
+0000a0  a149              ADR      r1,|L14.456|
+0000a2  2004              MOVS     r0,#4
+0000a4  f7fffffe          BL       nrf_log_frontend_std_0
+;;;546                err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
+0000a8  88a8              LDRH     r0,[r5,#4]
+0000aa  2113              MOVS     r1,#0x13
+0000ac  df76              SVC      #0x76
+0000ae  4604              MOV      r4,r0
+;;;547                                                 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+;;;548                APP_ERROR_CHECK(err_code);
+0000b0  bf00              NOP      
+0000b2  4626              MOV      r6,r4
+0000b4  2e00              CMP      r6,#0
+0000b6  d004              BEQ      |L14.194|
 0000b8  bf00              NOP      
-;;;530                break; // BLE_GATTC_EVT_TIMEOUT
-0000ba  e051              B        |L14.352|
-                  |L14.188|
-;;;531    
-;;;532            case BLE_GATTS_EVT_TIMEOUT:
-;;;533                // Disconnect on GATT Server timeout event.
-;;;534                NRF_LOG_DEBUG("GATT Server Timeout.\r\n");
-;;;535                err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
-0000bc  88a8              LDRH     r0,[r5,#4]
-0000be  2113              MOVS     r1,#0x13
-0000c0  df76              SVC      #0x76
-0000c2  4604              MOV      r4,r0
-;;;536                                                 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-;;;537                APP_ERROR_CHECK(err_code);
-0000c4  bf00              NOP      
-0000c6  4626              MOV      r6,r4
-0000c8  2e00              CMP      r6,#0
-0000ca  d004              BEQ      |L14.214|
-0000cc  bf00              NOP      
-0000ce  4630              MOV      r0,r6
-0000d0  f7fffffe          BL       app_error_handler_bare
-0000d4  bf00              NOP      
-                  |L14.214|
+0000ba  4630              MOV      r0,r6
+0000bc  f7fffffe          BL       app_error_handler_bare
+0000c0  bf00              NOP      
+                  |L14.194|
+0000c2  bf00              NOP      
+;;;549                break; // BLE_GATTS_EVT_TIMEOUT
+0000c4  e042              B        |L14.332|
+                  |L14.198|
+;;;550    
+;;;551            case BLE_EVT_USER_MEM_REQUEST:
+;;;552                err_code = sd_ble_user_mem_reply(p_ble_evt->evt.gattc_evt.conn_handle, NULL);
+0000c6  88a8              LDRH     r0,[r5,#4]
+0000c8  2100              MOVS     r1,#0
+0000ca  df67              SVC      #0x67
+0000cc  4604              MOV      r4,r0
+;;;553                APP_ERROR_CHECK(err_code);
+0000ce  bf00              NOP      
+0000d0  4626              MOV      r6,r4
+0000d2  2e00              CMP      r6,#0
+0000d4  d004              BEQ      |L14.224|
 0000d6  bf00              NOP      
-;;;538                break; // BLE_GATTS_EVT_TIMEOUT
-0000d8  e042              B        |L14.352|
-                  |L14.218|
-;;;539    
-;;;540            case BLE_EVT_USER_MEM_REQUEST:
-;;;541                err_code = sd_ble_user_mem_reply(p_ble_evt->evt.gattc_evt.conn_handle, NULL);
-0000da  88a8              LDRH     r0,[r5,#4]
-0000dc  2100              MOVS     r1,#0
-0000de  df67              SVC      #0x67
-0000e0  4604              MOV      r4,r0
-;;;542                APP_ERROR_CHECK(err_code);
-0000e2  bf00              NOP      
-0000e4  4626              MOV      r6,r4
-0000e6  2e00              CMP      r6,#0
-0000e8  d004              BEQ      |L14.244|
-0000ea  bf00              NOP      
-0000ec  4630              MOV      r0,r6
-0000ee  f7fffffe          BL       app_error_handler_bare
-0000f2  bf00              NOP      
-                  |L14.244|
-0000f4  bf00              NOP      
-;;;543                break; // BLE_EVT_USER_MEM_REQUEST
-0000f6  e033              B        |L14.352|
-                  |L14.248|
-;;;544    
-;;;545            case BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST:
-;;;546            {
-;;;547                ble_gatts_evt_rw_authorize_request_t  req;
-;;;548                ble_gatts_rw_authorize_reply_params_t auth_reply;
-;;;549    
-;;;550                req = p_ble_evt->evt.gatts_evt.params.authorize_request;
-0000f8  2210              MOVS     r2,#0x10
-0000fa  1da9              ADDS     r1,r5,#6
-0000fc  a804              ADD      r0,sp,#0x10
-0000fe  f7fffffe          BL       __aeabi_memcpy
-;;;551    
-;;;552                if (req.type != BLE_GATTS_AUTHORIZE_TYPE_INVALID)
-000102  4668              MOV      r0,sp
-000104  7c00              LDRB     r0,[r0,#0x10]
-000106  2800              CMP      r0,#0
-000108  d028              BEQ      |L14.348|
-;;;553                {
-;;;554                    if ((req.request.write.op == BLE_GATTS_OP_PREP_WRITE_REQ)     ||
-00010a  a804              ADD      r0,sp,#0x10
-00010c  7a00              LDRB     r0,[r0,#8]
-00010e  2804              CMP      r0,#4
-000110  d009              BEQ      |L14.294|
-;;;555                        (req.request.write.op == BLE_GATTS_OP_EXEC_WRITE_REQ_NOW) ||
-000112  a804              ADD      r0,sp,#0x10
-000114  7a00              LDRB     r0,[r0,#8]
+0000d8  4630              MOV      r0,r6
+0000da  f7fffffe          BL       app_error_handler_bare
+0000de  bf00              NOP      
+                  |L14.224|
+0000e0  bf00              NOP      
+;;;554                break; // BLE_EVT_USER_MEM_REQUEST
+0000e2  e033              B        |L14.332|
+                  |L14.228|
+;;;555    
+;;;556            case BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST:
+;;;557            {
+;;;558                ble_gatts_evt_rw_authorize_request_t  req;
+;;;559                ble_gatts_rw_authorize_reply_params_t auth_reply;
+;;;560    
+;;;561                req = p_ble_evt->evt.gatts_evt.params.authorize_request;
+0000e4  2210              MOVS     r2,#0x10
+0000e6  1da9              ADDS     r1,r5,#6
+0000e8  a804              ADD      r0,sp,#0x10
+0000ea  f7fffffe          BL       __aeabi_memcpy
+;;;562    
+;;;563                if (req.type != BLE_GATTS_AUTHORIZE_TYPE_INVALID)
+0000ee  4668              MOV      r0,sp
+0000f0  7c00              LDRB     r0,[r0,#0x10]
+0000f2  2800              CMP      r0,#0
+0000f4  d028              BEQ      |L14.328|
+;;;564                {
+;;;565                    if ((req.request.write.op == BLE_GATTS_OP_PREP_WRITE_REQ)     ||
+0000f6  a804              ADD      r0,sp,#0x10
+0000f8  7a00              LDRB     r0,[r0,#8]
+0000fa  2804              CMP      r0,#4
+0000fc  d007              BEQ      |L14.270|
+;;;566                        (req.request.write.op == BLE_GATTS_OP_EXEC_WRITE_REQ_NOW) ||
+0000fe  a804              ADD      r0,sp,#0x10
+000100  7a00              LDRB     r0,[r0,#8]
+000102  2806              CMP      r0,#6
+000104  d003              BEQ      |L14.270|
+;;;567                        (req.request.write.op == BLE_GATTS_OP_EXEC_WRITE_REQ_CANCEL))
+000106  a804              ADD      r0,sp,#0x10
+000108  7a00              LDRB     r0,[r0,#8]
+00010a  2805              CMP      r0,#5
+00010c  d11c              BNE      |L14.328|
+                  |L14.270|
+;;;568                    {
+;;;569                        if (req.type == BLE_GATTS_AUTHORIZE_TYPE_WRITE)
+00010e  4668              MOV      r0,sp
+000110  7c00              LDRB     r0,[r0,#0x10]
+000112  2802              CMP      r0,#2
+000114  d104              BNE      |L14.288|
+;;;570                        {
+;;;571                            auth_reply.type = BLE_GATTS_AUTHORIZE_TYPE_WRITE;
 000116  e000              B        |L14.282|
                   |L14.280|
-000118  e021              B        |L14.350|
+000118  e017              B        |L14.330|
                   |L14.282|
-00011a  2806              CMP      r0,#6
-00011c  d003              BEQ      |L14.294|
-;;;556                        (req.request.write.op == BLE_GATTS_OP_EXEC_WRITE_REQ_CANCEL))
-00011e  a804              ADD      r0,sp,#0x10
-000120  7a00              LDRB     r0,[r0,#8]
-000122  2805              CMP      r0,#5
-000124  d11a              BNE      |L14.348|
+00011a  4669              MOV      r1,sp
+00011c  7008              STRB     r0,[r1,#0]
+00011e  e002              B        |L14.294|
+                  |L14.288|
+;;;572                        }
+;;;573                        else
+;;;574                        {
+;;;575                            auth_reply.type = BLE_GATTS_AUTHORIZE_TYPE_READ;
+000120  2001              MOVS     r0,#1
+000122  4669              MOV      r1,sp
+000124  7008              STRB     r0,[r1,#0]
                   |L14.294|
-;;;557                    {
-;;;558                        if (req.type == BLE_GATTS_AUTHORIZE_TYPE_WRITE)
-000126  4668              MOV      r0,sp
-000128  7c00              LDRB     r0,[r0,#0x10]
-00012a  2802              CMP      r0,#2
-00012c  d102              BNE      |L14.308|
-;;;559                        {
-;;;560                            auth_reply.type = BLE_GATTS_AUTHORIZE_TYPE_WRITE;
-00012e  4669              MOV      r1,sp
-000130  7008              STRB     r0,[r1,#0]
-000132  e002              B        |L14.314|
-                  |L14.308|
-;;;561                        }
-;;;562                        else
-;;;563                        {
-;;;564                            auth_reply.type = BLE_GATTS_AUTHORIZE_TYPE_READ;
-000134  2001              MOVS     r0,#1
-000136  4669              MOV      r1,sp
-000138  7008              STRB     r0,[r1,#0]
-                  |L14.314|
-;;;565                        }
-;;;566                        auth_reply.params.write.gatt_status = APP_FEATURE_NOT_SUPPORTED;
-00013a  20ff              MOVS     r0,#0xff
-00013c  3083              ADDS     r0,r0,#0x83
-00013e  4669              MOV      r1,sp
-000140  8088              STRH     r0,[r1,#4]
-;;;567                        err_code = sd_ble_gatts_rw_authorize_reply(p_ble_evt->evt.gatts_evt.conn_handle,
-000142  88a8              LDRH     r0,[r5,#4]
-000144  dfa8              SVC      #0xa8
-000146  4604              MOV      r4,r0
-;;;568                                                                   &auth_reply);
-;;;569                        APP_ERROR_CHECK(err_code);
-000148  bf00              NOP      
-00014a  4626              MOV      r6,r4
-00014c  2e00              CMP      r6,#0
-00014e  d004              BEQ      |L14.346|
-000150  bf00              NOP      
-000152  4630              MOV      r0,r6
-000154  f7fffffe          BL       app_error_handler_bare
-000158  bf00              NOP      
-                  |L14.346|
-00015a  bf00              NOP      
-                  |L14.348|
-;;;570                    }
-;;;571                }
-;;;572            } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
-00015c  e000              B        |L14.352|
-                  |L14.350|
-;;;573    
-;;;574    #if (NRF_SD_BLE_API_VERSION == 3)
-;;;575            case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
-;;;576                err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
-;;;577                                                           NRF_BLE_MAX_MTU_SIZE);
-;;;578                APP_ERROR_CHECK(err_code);
-;;;579                break; // BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST
-;;;580    #endif
-;;;581    
-;;;582            default:
-;;;583                // No implementation needed.
-;;;584                break;
-00015e  bf00              NOP      
-                  |L14.352|
-000160  bf00              NOP                            ;515
-;;;585        }
-;;;586    }
-000162  b008              ADD      sp,sp,#0x20
-000164  bd70              POP      {r4-r6,pc}
-;;;587    
+;;;576                        }
+;;;577                        auth_reply.params.write.gatt_status = APP_FEATURE_NOT_SUPPORTED;
+000126  20ff              MOVS     r0,#0xff
+000128  3083              ADDS     r0,r0,#0x83
+00012a  4669              MOV      r1,sp
+00012c  8088              STRH     r0,[r1,#4]
+;;;578                        err_code = sd_ble_gatts_rw_authorize_reply(p_ble_evt->evt.gatts_evt.conn_handle,
+00012e  88a8              LDRH     r0,[r5,#4]
+000130  dfa8              SVC      #0xa8
+000132  4604              MOV      r4,r0
+;;;579                                                                   &auth_reply);
+;;;580                        APP_ERROR_CHECK(err_code);
+000134  bf00              NOP      
+000136  4626              MOV      r6,r4
+000138  2e00              CMP      r6,#0
+00013a  d004              BEQ      |L14.326|
+00013c  bf00              NOP      
+00013e  4630              MOV      r0,r6
+000140  f7fffffe          BL       app_error_handler_bare
+000144  bf00              NOP      
+                  |L14.326|
+000146  bf00              NOP      
+                  |L14.328|
+;;;581                    }
+;;;582                }
+;;;583            } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
+000148  e000              B        |L14.332|
+                  |L14.330|
+;;;584    
+;;;585    #if (NRF_SD_BLE_API_VERSION == 3)
+;;;586            case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
+;;;587                err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
+;;;588                                                           NRF_BLE_MAX_MTU_SIZE);
+;;;589                APP_ERROR_CHECK(err_code);
+;;;590                break; // BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST
+;;;591    #endif
+;;;592    
+;;;593            default:
+;;;594                // No implementation needed.
+;;;595                break;
+00014a  bf00              NOP      
+                  |L14.332|
+00014c  bf00              NOP                            ;526
+;;;596        }
+;;;597    }
+00014e  b008              ADD      sp,sp,#0x20
+000150  bd70              POP      {r4-r6,pc}
+;;;598    
                           ENDP
 
-000166  0000              DCW      0x0000
-                  |L14.360|
-000168  1b5b313b          DCB      27,"[1;32mMAIN.c:INFO:Disconnected.\r\n",0
-00016c  33326d4d
-000170  41494e2e
-000174  633a494e
-000178  464f3a44
-00017c  6973636f
-000180  6e6e6563
-000184  7465642e
-000188  0d0a00  
-00018b  00                DCB      0
-                  |L14.396|
-00018c  1b5b313b          DCB      27,"[1;32mMAIN.c:INFO:restart adverting...\r\n",0
-000190  33326d4d
-000194  41494e2e
-000198  633a494e
-00019c  464f3a72
-0001a0  65737461
-0001a4  72742061
-0001a8  64766572
-0001ac  74696e67
-0001b0  2e2e2e0d
-0001b4  0a00    
-0001b6  00                DCB      0
-0001b7  00                DCB      0
-                  |L14.440|
-0001b8  1b5b313b          DCB      27,"[1;32mMAIN.c:INFO:Connected.\r\n",0
-0001bc  33326d4d
-0001c0  41494e2e
-0001c4  633a494e
-0001c8  464f3a43
-0001cc  6f6e6e65
-0001d0  63746564
-0001d4  2e0d0a00
-                  |L14.472|
+000152  0000              DCW      0x0000
+                  |L14.340|
+000154  1b5b313b          DCB      27,"[1;32mMAIN.c:INFO:Disconnected.\r\n",0
+000158  33326d4d
+00015c  41494e2e
+000160  633a494e
+000164  464f3a44
+000168  6973636f
+00016c  6e6e6563
+000170  7465642e
+000174  0d0a00  
+000177  00                DCB      0
+                  |L14.376|
+000178  1b5b313b          DCB      27,"[1;32mMAIN.c:INFO:Connected.\r\n",0
+00017c  33326d4d
+000180  41494e2e
+000184  633a494e
+000188  464f3a43
+00018c  6f6e6e65
+000190  63746564
+000194  2e0d0a00
+                  |L14.408|
                           DCD      m_conn_handle
+                  |L14.412|
+00019c  1b5b313b          DCB      27,"[1;32mMAIN.c:DEBUG:GATT Client Timeout.\r\n",0
+0001a0  33326d4d
+0001a4  41494e2e
+0001a8  633a4445
+0001ac  4255473a
+0001b0  47415454
+0001b4  20436c69
+0001b8  656e7420
+0001bc  54696d65
+0001c0  6f75742e
+0001c4  0d0a00  
+0001c7  00                DCB      0
+                  |L14.456|
+0001c8  1b5b313b          DCB      27,"[1;32mMAIN.c:DEBUG:GATT Server Timeout.\r\n",0
+0001cc  33326d4d
+0001d0  41494e2e
+0001d4  633a4445
+0001d8  4255473a
+0001dc  47415454
+0001e0  20536572
+0001e4  76657220
+0001e8  54696d65
+0001ec  6f75742e
+0001f0  0d0a00  
+0001f3  00                DCB      0
 
                           AREA ||i.on_conn_params_evt||, CODE, READONLY, ALIGN=2
 
                   on_conn_params_evt PROC
-;;;390     */
-;;;391    static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
+;;;405     */
+;;;406    static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
 000000  b570              PUSH     {r4-r6,lr}
-;;;392    {
+;;;407    {
 000002  4605              MOV      r5,r0
-;;;393        uint32_t err_code;
-;;;394    
-;;;395        if (p_evt->evt_type == BLE_CONN_PARAMS_EVT_FAILED)
+;;;408        uint32_t err_code;
+;;;409    
+;;;410        if (p_evt->evt_type == BLE_CONN_PARAMS_EVT_FAILED)
 000004  7828              LDRB     r0,[r5,#0]
 000006  2800              CMP      r0,#0
 000008  d10e              BNE      |L15.40|
-;;;396        {
-;;;397            err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
+;;;411        {
+;;;412            err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
 00000a  213b              MOVS     r1,#0x3b
 00000c  4807              LDR      r0,|L15.44|
 00000e  8800              LDRH     r0,[r0,#0]  ; m_conn_handle
 000010  df76              SVC      #0x76
 000012  4604              MOV      r4,r0
-;;;398            APP_ERROR_CHECK(err_code);
+;;;413            APP_ERROR_CHECK(err_code);
 000014  bf00              NOP      
 000016  4626              MOV      r6,r4
 000018  2e00              CMP      r6,#0
@@ -1232,10 +1229,10 @@
                   |L15.38|
 000026  bf00              NOP      
                   |L15.40|
-;;;399        }
-;;;400    }
+;;;414        }
+;;;415    }
 000028  bd70              POP      {r4-r6,pc}
-;;;401    
+;;;416    
                           ENDP
 
 00002a  0000              DCW      0x0000
@@ -1245,18 +1242,18 @@
                           AREA ||i.peer_manager_init||, CODE, READONLY, ALIGN=2
 
                   peer_manager_init PROC
-;;;679     */
-;;;680    static void peer_manager_init(bool erase_bonds)
+;;;689     */
+;;;690    static void peer_manager_init(bool erase_bonds)
 000000  b57c              PUSH     {r2-r6,lr}
-;;;681    {
+;;;691    {
 000002  4605              MOV      r5,r0
-;;;682        ble_gap_sec_params_t sec_param;
-;;;683        ret_code_t           err_code;
-;;;684    
-;;;685        err_code = pm_init();
+;;;692        ble_gap_sec_params_t sec_param;
+;;;693        ret_code_t           err_code;
+;;;694    
+;;;695        err_code = pm_init();
 000004  f7fffffe          BL       pm_init
 000008  4604              MOV      r4,r0
-;;;686        APP_ERROR_CHECK(err_code);
+;;;696        APP_ERROR_CHECK(err_code);
 00000a  bf00              NOP      
 00000c  4626              MOV      r6,r4
 00000e  2e00              CMP      r6,#0
@@ -1267,15 +1264,15 @@
 00001a  bf00              NOP      
                   |L16.28|
 00001c  bf00              NOP      
-;;;687    
-;;;688        if (erase_bonds)
+;;;697    
+;;;698        if (erase_bonds)
 00001e  2d00              CMP      r5,#0
 000020  d00c              BEQ      |L16.60|
-;;;689        {
-;;;690            err_code = pm_peers_delete();
+;;;699        {
+;;;700            err_code = pm_peers_delete();
 000022  f7fffffe          BL       pm_peers_delete
 000026  4604              MOV      r4,r0
-;;;691            APP_ERROR_CHECK(err_code);
+;;;701            APP_ERROR_CHECK(err_code);
 000028  bf00              NOP      
 00002a  4626              MOV      r6,r4
 00002c  2e00              CMP      r6,#0
@@ -1287,15 +1284,15 @@
                   |L16.58|
 00003a  bf00              NOP      
                   |L16.60|
-;;;692        }
-;;;693    
-;;;694        memset(&sec_param, 0, sizeof(ble_gap_sec_params_t));
+;;;702        }
+;;;703    
+;;;704        memset(&sec_param, 0, sizeof(ble_gap_sec_params_t));
 00003c  2000              MOVS     r0,#0
 00003e  9000              STR      r0,[sp,#0]
 000040  9001              STR      r0,[sp,#4]
-;;;695    
-;;;696        // Security parameters to be used for all security procedures.
-;;;697        sec_param.bond           = SEC_PARAM_BOND;
+;;;705    
+;;;706        // Security parameters to be used for all security procedures.
+;;;707        sec_param.bond           = SEC_PARAM_BOND;
 000042  4668              MOV      r0,sp
 000044  7800              LDRB     r0,[r0,#0]
 000046  0841              LSRS     r1,r0,#1
@@ -1303,28 +1300,28 @@
 00004a  1c49              ADDS     r1,r1,#1
 00004c  4668              MOV      r0,sp
 00004e  7001              STRB     r1,[r0,#0]
-;;;698        sec_param.mitm           = SEC_PARAM_MITM;
+;;;708        sec_param.mitm           = SEC_PARAM_MITM;
 000050  7800              LDRB     r0,[r0,#0]
 000052  2102              MOVS     r1,#2
 000054  4388              BICS     r0,r0,r1
 000056  4601              MOV      r1,r0
 000058  4668              MOV      r0,sp
 00005a  7001              STRB     r1,[r0,#0]
-;;;699        sec_param.lesc           = SEC_PARAM_LESC;
+;;;709        sec_param.lesc           = SEC_PARAM_LESC;
 00005c  7800              LDRB     r0,[r0,#0]
 00005e  2104              MOVS     r1,#4
 000060  4388              BICS     r0,r0,r1
 000062  4601              MOV      r1,r0
 000064  4668              MOV      r0,sp
 000066  7001              STRB     r1,[r0,#0]
-;;;700        sec_param.keypress       = SEC_PARAM_KEYPRESS;
+;;;710        sec_param.keypress       = SEC_PARAM_KEYPRESS;
 000068  7800              LDRB     r0,[r0,#0]
 00006a  2108              MOVS     r1,#8
 00006c  4388              BICS     r0,r0,r1
 00006e  4601              MOV      r1,r0
 000070  4668              MOV      r0,sp
 000072  7001              STRB     r1,[r0,#0]
-;;;701        sec_param.io_caps        = SEC_PARAM_IO_CAPABILITIES;
+;;;711        sec_param.io_caps        = SEC_PARAM_IO_CAPABILITIES;
 000074  7800              LDRB     r0,[r0,#0]
 000076  2170              MOVS     r1,#0x70
 000078  4388              BICS     r0,r0,r1
@@ -1332,53 +1329,53 @@
 00007c  3130              ADDS     r1,r1,#0x30
 00007e  4668              MOV      r0,sp
 000080  7001              STRB     r1,[r0,#0]
-;;;702        sec_param.oob            = SEC_PARAM_OOB;
+;;;712        sec_param.oob            = SEC_PARAM_OOB;
 000082  7800              LDRB     r0,[r0,#0]
 000084  2180              MOVS     r1,#0x80
 000086  4388              BICS     r0,r0,r1
 000088  4601              MOV      r1,r0
 00008a  4668              MOV      r0,sp
 00008c  7001              STRB     r1,[r0,#0]
-;;;703        sec_param.min_key_size   = SEC_PARAM_MIN_KEY_SIZE;
+;;;713        sec_param.min_key_size   = SEC_PARAM_MIN_KEY_SIZE;
 00008e  2107              MOVS     r1,#7
 000090  7041              STRB     r1,[r0,#1]
-;;;704        sec_param.max_key_size   = SEC_PARAM_MAX_KEY_SIZE;
+;;;714        sec_param.max_key_size   = SEC_PARAM_MAX_KEY_SIZE;
 000092  2110              MOVS     r1,#0x10
 000094  7081              STRB     r1,[r0,#2]
-;;;705        sec_param.kdist_own.enc  = 1;
+;;;715        sec_param.kdist_own.enc  = 1;
 000096  78c0              LDRB     r0,[r0,#3]
 000098  0841              LSRS     r1,r0,#1
 00009a  0049              LSLS     r1,r1,#1
 00009c  1c49              ADDS     r1,r1,#1
 00009e  4668              MOV      r0,sp
 0000a0  70c1              STRB     r1,[r0,#3]
-;;;706        sec_param.kdist_own.id   = 1;
+;;;716        sec_param.kdist_own.id   = 1;
 0000a2  78c0              LDRB     r0,[r0,#3]
 0000a4  2102              MOVS     r1,#2
 0000a6  4388              BICS     r0,r0,r1
 0000a8  1c81              ADDS     r1,r0,#2
 0000aa  4668              MOV      r0,sp
 0000ac  70c1              STRB     r1,[r0,#3]
-;;;707        sec_param.kdist_peer.enc = 1;
+;;;717        sec_param.kdist_peer.enc = 1;
 0000ae  7900              LDRB     r0,[r0,#4]
 0000b0  0841              LSRS     r1,r0,#1
 0000b2  0049              LSLS     r1,r1,#1
 0000b4  1c49              ADDS     r1,r1,#1
 0000b6  4668              MOV      r0,sp
 0000b8  7101              STRB     r1,[r0,#4]
-;;;708        sec_param.kdist_peer.id  = 1;
+;;;718        sec_param.kdist_peer.id  = 1;
 0000ba  7900              LDRB     r0,[r0,#4]
 0000bc  2102              MOVS     r1,#2
 0000be  4388              BICS     r0,r0,r1
 0000c0  1c80              ADDS     r0,r0,#2
 0000c2  4669              MOV      r1,sp
 0000c4  7108              STRB     r0,[r1,#4]
-;;;709    
-;;;710        err_code = pm_sec_params_set(&sec_param);
+;;;719    
+;;;720        err_code = pm_sec_params_set(&sec_param);
 0000c6  4668              MOV      r0,sp
 0000c8  f7fffffe          BL       pm_sec_params_set
 0000cc  4604              MOV      r4,r0
-;;;711        APP_ERROR_CHECK(err_code);
+;;;721        APP_ERROR_CHECK(err_code);
 0000ce  bf00              NOP      
 0000d0  4626              MOV      r6,r4
 0000d2  2e00              CMP      r6,#0
@@ -1389,12 +1386,12 @@
 0000de  bf00              NOP      
                   |L16.224|
 0000e0  bf00              NOP      
-;;;712    
-;;;713        err_code = pm_register(pm_evt_handler);
+;;;722    
+;;;723        err_code = pm_register(pm_evt_handler);
 0000e2  4807              LDR      r0,|L16.256|
 0000e4  f7fffffe          BL       pm_register
 0000e8  4604              MOV      r4,r0
-;;;714        APP_ERROR_CHECK(err_code);
+;;;724        APP_ERROR_CHECK(err_code);
 0000ea  bf00              NOP      
 0000ec  4626              MOV      r6,r4
 0000ee  2e00              CMP      r6,#0
@@ -1405,9 +1402,9 @@
 0000fa  bf00              NOP      
                   |L16.252|
 0000fc  bf00              NOP      
-;;;715    }
+;;;725    }
 0000fe  bd7c              POP      {r2-r6,pc}
-;;;716    
+;;;726    
                           ENDP
 
                   |L16.256|
@@ -1416,14 +1413,14 @@
                           AREA ||i.pm_evt_handler||, CODE, READONLY, ALIGN=2
 
                   pm_evt_handler PROC
-;;;164     */
-;;;165    static void pm_evt_handler(pm_evt_t const * p_evt)
+;;;165     */
+;;;166    static void pm_evt_handler(pm_evt_t const * p_evt)
 000000  b5f8              PUSH     {r3-r7,lr}
-;;;166    {
+;;;167    {
 000002  4604              MOV      r4,r0
-;;;167        ret_code_t err_code;
-;;;168    
-;;;169        switch (p_evt->evt_id)
+;;;168        ret_code_t err_code;
+;;;169    
+;;;170        switch (p_evt->evt_id)
 000004  7820              LDRB     r0,[r4,#0]
 000006  0003              MOVS     r3,r0
 000008  f7fffffe          BL       __ARM_common_switch8
@@ -1432,19 +1429,19 @@
 000014  6a3c6b47          DCB      0x6a,0x3c,0x6b,0x47
 000018  36526c39          DCB      0x36,0x52,0x6c,0x39
 00001c  6d6e6800          DCB      0x6d,0x6e,0x68,0x00
-;;;170        {
-;;;171            case PM_EVT_BONDED_PEER_CONNECTED:
-;;;172            {
-;;;173                NRF_LOG_INFO("Connected to a previously bonded device.\r\n");
+;;;171        {
+;;;172            case PM_EVT_BONDED_PEER_CONNECTED:
+;;;173            {
+;;;174                NRF_LOG_INFO("Connected to a previously bonded device.\r\n");
 000020  a133              ADR      r1,|L17.240|
 000022  2003              MOVS     r0,#3
 000024  f7fffffe          BL       nrf_log_frontend_std_0
-;;;174            } break;
+;;;175            } break;
 000028  e05f              B        |L17.234|
-;;;175    
-;;;176            case PM_EVT_CONN_SEC_SUCCEEDED:
-;;;177            {
-;;;178                NRF_LOG_INFO("Connection secured. Role: %d. conn_handle: %d, Procedure: %d\r\n",
+;;;176    
+;;;177            case PM_EVT_CONN_SEC_SUCCEEDED:
+;;;178            {
+;;;179                NRF_LOG_INFO("Connection secured. Role: %d. conn_handle: %d, Procedure: %d\r\n",
 00002a  8860              LDRH     r0,[r4,#2]
 00002c  f7fffffe          BL       ble_conn_state_role
 000030  4606              MOV      r6,r0
@@ -1455,53 +1452,53 @@
 00003a  493d              LDR      r1,|L17.304|
 00003c  2003              MOVS     r0,#3
 00003e  f7fffffe          BL       nrf_log_frontend_std_3
-;;;179                             ble_conn_state_role(p_evt->conn_handle),
-;;;180                             p_evt->conn_handle,
-;;;181                             p_evt->params.conn_sec_succeeded.procedure);
-;;;182            } break;
+;;;180                             ble_conn_state_role(p_evt->conn_handle),
+;;;181                             p_evt->conn_handle,
+;;;182                             p_evt->params.conn_sec_succeeded.procedure);
+;;;183            } break;
 000042  e052              B        |L17.234|
-;;;183    
-;;;184            case PM_EVT_CONN_SEC_FAILED:
-;;;185            {
-;;;186                /* Often, when securing fails, it shouldn't be restarted, for security reasons.
-;;;187                 * Other times, it can be restarted directly.
-;;;188                 * Sometimes it can be restarted, but only after changing some Security Parameters.
-;;;189                 * Sometimes, it cannot be restarted until the link is disconnected and reconnected.
-;;;190                 * Sometimes it is impossible, to secure the link, or the peer device does not support it.
-;;;191                 * How to handle this error is highly application dependent. */
-;;;192            } break;
+;;;184    
+;;;185            case PM_EVT_CONN_SEC_FAILED:
+;;;186            {
+;;;187                /* Often, when securing fails, it shouldn't be restarted, for security reasons.
+;;;188                 * Other times, it can be restarted directly.
+;;;189                 * Sometimes it can be restarted, but only after changing some Security Parameters.
+;;;190                 * Sometimes, it cannot be restarted until the link is disconnected and reconnected.
+;;;191                 * Sometimes it is impossible, to secure the link, or the peer device does not support it.
+;;;192                 * How to handle this error is highly application dependent. */
+;;;193            } break;
 000044  e051              B        |L17.234|
-;;;193    
-;;;194            case PM_EVT_CONN_SEC_CONFIG_REQ:
-;;;195            {
-;;;196                // Reject pairing request from an already bonded peer.
-;;;197                pm_conn_sec_config_t conn_sec_config = {.allow_repairing = false};
+;;;194    
+;;;195            case PM_EVT_CONN_SEC_CONFIG_REQ:
+;;;196            {
+;;;197                // Reject pairing request from an already bonded peer.
+;;;198                pm_conn_sec_config_t conn_sec_config = {.allow_repairing = false};
 000046  2000              MOVS     r0,#0
 000048  9000              STR      r0,[sp,#0]
-;;;198                pm_conn_sec_config_reply(p_evt->conn_handle, &conn_sec_config);
+;;;199                pm_conn_sec_config_reply(p_evt->conn_handle, &conn_sec_config);
 00004a  8860              LDRH     r0,[r4,#2]
 00004c  4669              MOV      r1,sp
 00004e  f7fffffe          BL       pm_conn_sec_config_reply
-;;;199            } break;
+;;;200            } break;
 000052  e04a              B        |L17.234|
-;;;200    
-;;;201            case PM_EVT_STORAGE_FULL:
-;;;202            {
-;;;203                // Run garbage collection on the flash.
-;;;204                err_code = fds_gc();
+;;;201    
+;;;202            case PM_EVT_STORAGE_FULL:
+;;;203            {
+;;;204                // Run garbage collection on the flash.
+;;;205                err_code = fds_gc();
 000054  f7fffffe          BL       fds_gc
 000058  4605              MOV      r5,r0
-;;;205                if (err_code == FDS_ERR_BUSY || err_code == FDS_ERR_NO_SPACE_IN_QUEUES)
+;;;206                if (err_code == FDS_ERR_BUSY || err_code == FDS_ERR_NO_SPACE_IN_QUEUES)
 00005a  2d0e              CMP      r5,#0xe
 00005c  d00b              BEQ      |L17.118|
 00005e  2d08              CMP      r5,#8
 000060  d009              BEQ      |L17.118|
-;;;206                {
-;;;207                    // Retry.
-;;;208                }
-;;;209                else
-;;;210                {
-;;;211                    APP_ERROR_CHECK(err_code);
+;;;207                {
+;;;208                    // Retry.
+;;;209                }
+;;;210                else
+;;;211                {
+;;;212                    APP_ERROR_CHECK(err_code);
 000062  bf00              NOP      
 000064  462e              MOV      r6,r5
 000066  2e00              CMP      r6,#0
@@ -1513,29 +1510,29 @@
                   |L17.116|
 000074  bf00              NOP      
                   |L17.118|
-;;;212                }
-;;;213            } break;
+;;;213                }
+;;;214            } break;
 000076  e038              B        |L17.234|
-;;;214    
-;;;215            case PM_EVT_PEERS_DELETE_SUCCEEDED:
-;;;216            {
-;;;217                advertising_start();
+;;;215    
+;;;216            case PM_EVT_PEERS_DELETE_SUCCEEDED:
+;;;217            {
+;;;218                advertising_start();
 000078  f7fffffe          BL       advertising_start
-;;;218            } break;
+;;;219            } break;
 00007c  e035              B        |L17.234|
-;;;219    
-;;;220            case PM_EVT_LOCAL_DB_CACHE_APPLY_FAILED:
-;;;221            {
-;;;222                // The local database has likely changed, send service changed indications.
-;;;223                pm_local_database_has_changed();
+;;;220    
+;;;221            case PM_EVT_LOCAL_DB_CACHE_APPLY_FAILED:
+;;;222            {
+;;;223                // The local database has likely changed, send service changed indications.
+;;;224                pm_local_database_has_changed();
 00007e  f7fffffe          BL       pm_local_database_has_changed
-;;;224            } break;
+;;;225            } break;
 000082  e032              B        |L17.234|
-;;;225    
-;;;226            case PM_EVT_PEER_DATA_UPDATE_FAILED:
-;;;227            {
-;;;228                // Assert.
-;;;229                APP_ERROR_CHECK(p_evt->params.peer_data_update_failed.error);
+;;;226    
+;;;227            case PM_EVT_PEER_DATA_UPDATE_FAILED:
+;;;228            {
+;;;229                // Assert.
+;;;230                APP_ERROR_CHECK(p_evt->params.peer_data_update_failed.error);
 000084  bf00              NOP      
 000086  6926              LDR      r6,[r4,#0x10]
 000088  2e00              CMP      r6,#0
@@ -1546,13 +1543,13 @@
 000094  bf00              NOP      
                   |L17.150|
 000096  bf00              NOP      
-;;;230            } break;
+;;;231            } break;
 000098  e027              B        |L17.234|
-;;;231    
-;;;232            case PM_EVT_PEER_DELETE_FAILED:
-;;;233            {
-;;;234                // Assert.
-;;;235                APP_ERROR_CHECK(p_evt->params.peer_delete_failed.error);
+;;;232    
+;;;233            case PM_EVT_PEER_DELETE_FAILED:
+;;;234            {
+;;;235                // Assert.
+;;;236                APP_ERROR_CHECK(p_evt->params.peer_delete_failed.error);
 00009a  bf00              NOP      
 00009c  68a6              LDR      r6,[r4,#8]
 00009e  2e00              CMP      r6,#0
@@ -1563,13 +1560,13 @@
 0000aa  bf00              NOP      
                   |L17.172|
 0000ac  bf00              NOP      
-;;;236            } break;
+;;;237            } break;
 0000ae  e01c              B        |L17.234|
-;;;237    
-;;;238            case PM_EVT_PEERS_DELETE_FAILED:
-;;;239            {
-;;;240                // Assert.
-;;;241                APP_ERROR_CHECK(p_evt->params.peers_delete_failed_evt.error);
+;;;238    
+;;;239            case PM_EVT_PEERS_DELETE_FAILED:
+;;;240            {
+;;;241                // Assert.
+;;;242                APP_ERROR_CHECK(p_evt->params.peers_delete_failed_evt.error);
 0000b0  bf00              NOP      
 0000b2  68a6              LDR      r6,[r4,#8]
 0000b4  2e00              CMP      r6,#0
@@ -1580,13 +1577,13 @@
 0000c0  bf00              NOP      
                   |L17.194|
 0000c2  bf00              NOP      
-;;;242            } break;
+;;;243            } break;
 0000c4  e011              B        |L17.234|
-;;;243    
-;;;244            case PM_EVT_ERROR_UNEXPECTED:
-;;;245            {
-;;;246                // Assert.
-;;;247                APP_ERROR_CHECK(p_evt->params.error_unexpected.error);
+;;;244    
+;;;245            case PM_EVT_ERROR_UNEXPECTED:
+;;;246            {
+;;;247                // Assert.
+;;;248                APP_ERROR_CHECK(p_evt->params.error_unexpected.error);
 0000c6  bf00              NOP      
 0000c8  68a6              LDR      r6,[r4,#8]
 0000ca  2e00              CMP      r6,#0
@@ -1597,30 +1594,30 @@
 0000d6  bf00              NOP      
                   |L17.216|
 0000d8  bf00              NOP      
-;;;248            } break;
+;;;249            } break;
 0000da  e006              B        |L17.234|
-;;;249    
-;;;250            case PM_EVT_CONN_SEC_START:
+;;;250    
+;;;251            case PM_EVT_CONN_SEC_START:
 0000dc  bf00              NOP      
-;;;251            case PM_EVT_PEER_DATA_UPDATE_SUCCEEDED:
+;;;252            case PM_EVT_PEER_DATA_UPDATE_SUCCEEDED:
 0000de  bf00              NOP      
-;;;252            case PM_EVT_PEER_DELETE_SUCCEEDED:
+;;;253            case PM_EVT_PEER_DELETE_SUCCEEDED:
 0000e0  bf00              NOP      
-;;;253            case PM_EVT_LOCAL_DB_CACHE_APPLIED:
+;;;254            case PM_EVT_LOCAL_DB_CACHE_APPLIED:
 0000e2  bf00              NOP      
-;;;254            case PM_EVT_SERVICE_CHANGED_IND_SENT:
+;;;255            case PM_EVT_SERVICE_CHANGED_IND_SENT:
 0000e4  bf00              NOP      
-;;;255            case PM_EVT_SERVICE_CHANGED_IND_CONFIRMED:
+;;;256            case PM_EVT_SERVICE_CHANGED_IND_CONFIRMED:
 0000e6  bf00              NOP      
-;;;256            default:
-;;;257                break;
+;;;257            default:
+;;;258                break;
 0000e8  bf00              NOP      
                   |L17.234|
-0000ea  bf00              NOP                            ;174
-;;;258        }
-;;;259    }
+0000ea  bf00              NOP                            ;175
+;;;259        }
+;;;260    }
 0000ec  bdf8              POP      {r3-r7,pc}
-;;;260    
+;;;261    
                           ENDP
 
 0000ee  0000              DCW      0x0000
@@ -1650,15 +1647,15 @@
                           AREA ||i.power_manage||, CODE, READONLY, ALIGN=1
 
                   power_manage PROC
-;;;810     */
-;;;811    static void power_manage(void)
+;;;820     */
+;;;821    static void power_manage(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;812    {
-;;;813        uint32_t err_code = sd_app_evt_wait();
+;;;822    {
+;;;823        uint32_t err_code = sd_app_evt_wait();
 000002  df48              SVC      #0x48
 000004  4604              MOV      r4,r0
-;;;814    
-;;;815        APP_ERROR_CHECK(err_code);
+;;;824    
+;;;825        APP_ERROR_CHECK(err_code);
 000006  bf00              NOP      
 000008  4625              MOV      r5,r4
 00000a  2d00              CMP      r5,#0
@@ -1669,27 +1666,29 @@
 000016  bf00              NOP      
                   |L18.24|
 000018  bf00              NOP      
-;;;816    }
+;;;826    }
 00001a  bd70              POP      {r4-r6,pc}
-;;;817    
+;;;827    
                           ENDP
 
 
                           AREA ||i.services_init||, CODE, READONLY, ALIGN=2
 
                   services_init PROC
-;;;344     */
-;;;345    static void services_init(void)
+;;;345     */
+;;;346    static void services_init(void)
 000000  b57f              PUSH     {r0-r6,lr}
-;;;346    {
-;;;347    	uint32_t err_code;
-;;;348    	ble_sls_init_t sls_init;
-;;;349    	err_code= ble_sls_init( &m_sls ,&sls_init);
+;;;347    {
+;;;348    	uint32_t err_code;
+;;;349    	ble_sls_init_t sls_init;
+;;;350    	//ble_dis_init_t dis_init;
+;;;351    	
+;;;352    	err_code= ble_sls_init( &m_sls ,&sls_init);
 000002  4669              MOV      r1,sp
 000004  4807              LDR      r0,|L19.36|
 000006  f7fffffe          BL       ble_sls_init
 00000a  4604              MOV      r4,r0
-;;;350    	APP_ERROR_CHECK(err_code);
+;;;353    	APP_ERROR_CHECK(err_code);
 00000c  bf00              NOP      
 00000e  4625              MOV      r5,r4
 000010  2d00              CMP      r5,#0
@@ -1700,36 +1699,48 @@
 00001c  bf00              NOP      
                   |L19.30|
 00001e  bf00              NOP      
-;;;351    	
-;;;352        /* YOUR_JOB: Add code to initialize the services used by the application.
-;;;353           uint32_t                           err_code;
-;;;354           ble_xxs_init_t                     xxs_init;
-;;;355           ble_yys_init_t                     yys_init;
-;;;356    
-;;;357           // Initialize XXX Service.
-;;;358           memset(&xxs_init, 0, sizeof(xxs_init));
-;;;359    
-;;;360           xxs_init.evt_handler                = NULL;
-;;;361           xxs_init.is_xxx_notify_supported    = true;
-;;;362           xxs_init.ble_xx_initial_value.level = 100;
-;;;363    
-;;;364           err_code = ble_bas_init(&m_xxs, &xxs_init);
-;;;365           APP_ERROR_CHECK(err_code);
-;;;366    
-;;;367           // Initialize YYY Service.
-;;;368           memset(&yys_init, 0, sizeof(yys_init));
-;;;369           yys_init.evt_handler                  = on_yys_evt;
-;;;370           yys_init.ble_yy_initial_value.counter = 0;
+;;;354    
+;;;355    //	memset(&dis_init,0,sizeof(dis_init));
+;;;356    //	
+;;;357    //	dis_init.fw_rev_str.p_str="0.0.1";
+;;;358    //	dis_init.fw_rev_str.length=sizeof("0.0.1");
+;;;359    //	
+;;;360    //	dis_init.hw_rev_str.p_str="0.0.2";
+;;;361    //	dis_init.hw_rev_str.length=sizeof("0.0.2");
+;;;362    //	
+;;;363    //	dis_init.manufact_name_str.p_str=MANUFACTURER_NAME;
+;;;364    //	dis_init.manufact_name_str.length=sizeof(MANUFACTURER_NAME);
+;;;365    //	err_code=ble_dis_init(&dis_init);
+;;;366    //	APP_ERROR_CHECK(err_code);
+;;;367        /* YOUR_JOB: Add code to initialize the services used by the application.
+;;;368           uint32_t                           err_code;
+;;;369           ble_xxs_init_t                     xxs_init;
+;;;370           ble_yys_init_t                     yys_init;
 ;;;371    
-;;;372           err_code = ble_yy_service_init(&yys_init, &yy_init);
-;;;373           APP_ERROR_CHECK(err_code);
-;;;374         */
-;;;375    		 
-;;;376    		 
-;;;377    		 
-;;;378    }
+;;;372           // Initialize XXX Service.
+;;;373           memset(&xxs_init, 0, sizeof(xxs_init));
+;;;374    
+;;;375           xxs_init.evt_handler                = NULL;
+;;;376           xxs_init.is_xxx_notify_supported    = true;
+;;;377           xxs_init.ble_xx_initial_value.level = 100;
+;;;378    
+;;;379           err_code = ble_bas_init(&m_xxs, &xxs_init);
+;;;380           APP_ERROR_CHECK(err_code);
+;;;381    
+;;;382           // Initialize YYY Service.
+;;;383           memset(&yys_init, 0, sizeof(yys_init));
+;;;384           yys_init.evt_handler                  = on_yys_evt;
+;;;385           yys_init.ble_yy_initial_value.counter = 0;
+;;;386    
+;;;387           err_code = ble_yy_service_init(&yys_init, &yy_init);
+;;;388           APP_ERROR_CHECK(err_code);
+;;;389         */
+;;;390    		 
+;;;391    		 
+;;;392    		 
+;;;393    }
 000020  bd7f              POP      {r0-r6,pc}
-;;;379    
+;;;394    
                           ENDP
 
 000022  0000              DCW      0x0000
@@ -1739,62 +1750,62 @@
                           AREA ||i.sleep_mode_enter||, CODE, READONLY, ALIGN=1
 
                   sleep_mode_enter PROC
-;;;452     */
-;;;453    static void sleep_mode_enter(void)
+;;;467     */
+;;;468    static void sleep_mode_enter(void)
 000000  4770              BX       lr
-;;;454    {
-;;;455    //    uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
-;;;456    
-;;;457    //    APP_ERROR_CHECK(err_code);
-;;;458    
-;;;459    //    // Prepare wakeup buttons.
-;;;460    //    err_code = bsp_btn_ble_sleep_mode_prepare();
-;;;461    //    APP_ERROR_CHECK(err_code);
-;;;462    
-;;;463    //    // Go to system-off mode (this function will not return; wakeup will cause a reset).
-;;;464    //    err_code = sd_power_system_off();
-;;;465    //    APP_ERROR_CHECK(err_code);
-;;;466    }
-;;;467    
+;;;469    {
+;;;470    //    uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+;;;471    
+;;;472    //    APP_ERROR_CHECK(err_code);
+;;;473    
+;;;474    //    // Prepare wakeup buttons.
+;;;475    //    err_code = bsp_btn_ble_sleep_mode_prepare();
+;;;476    //    APP_ERROR_CHECK(err_code);
+;;;477    
+;;;478    //    // Go to system-off mode (this function will not return; wakeup will cause a reset).
+;;;479    //    err_code = sd_power_system_off();
+;;;480    //    APP_ERROR_CHECK(err_code);
+;;;481    }
+;;;482    
                           ENDP
 
 
                           AREA ||i.sys_evt_dispatch||, CODE, READONLY, ALIGN=1
 
                   sys_evt_dispatch PROC
-;;;622     */
-;;;623    static void sys_evt_dispatch(uint32_t sys_evt)
+;;;632     */
+;;;633    static void sys_evt_dispatch(uint32_t sys_evt)
 000000  b510              PUSH     {r4,lr}
-;;;624    {
+;;;634    {
 000002  4604              MOV      r4,r0
-;;;625        // Dispatch the system event to the fstorage module, where it will be
-;;;626        // dispatched to the Flash Data Storage (FDS) module.
-;;;627        fs_sys_event_handler(sys_evt);
+;;;635        // Dispatch the system event to the fstorage module, where it will be
+;;;636        // dispatched to the Flash Data Storage (FDS) module.
+;;;637        fs_sys_event_handler(sys_evt);
 000004  4620              MOV      r0,r4
 000006  f7fffffe          BL       fs_sys_event_handler
-;;;628    
-;;;629        // Dispatch to the Advertising module last, since it will check if there are any
-;;;630        // pending flash operations in fstorage. Let fstorage process system events first,
-;;;631        // so that it can report correctly to the Advertising module.
-;;;632        ble_advertising_on_sys_evt(sys_evt);
+;;;638    
+;;;639        // Dispatch to the Advertising module last, since it will check if there are any
+;;;640        // pending flash operations in fstorage. Let fstorage process system events first,
+;;;641        // so that it can report correctly to the Advertising module.
+;;;642        ble_advertising_on_sys_evt(sys_evt);
 00000a  4620              MOV      r0,r4
 00000c  f7fffffe          BL       ble_advertising_on_sys_evt
-;;;633    }
+;;;643    }
 000010  bd10              POP      {r4,pc}
-;;;634    
+;;;644    
                           ENDP
 
 
                           AREA ||i.timers_init||, CODE, READONLY, ALIGN=2
 
                   timers_init PROC
-;;;265     */
-;;;266    static void timers_init(void)
+;;;266     */
+;;;267    static void timers_init(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;267    {
-;;;268    
-;;;269        // Initialize timer module.
-;;;270        APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
+;;;268    {
+;;;269    
+;;;270        // Initialize timer module.
+;;;271        APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
 000002  bf00              NOP      
 000004  2300              MOVS     r3,#0
 000006  4a09              LDR      r2,|L22.44|
@@ -1813,19 +1824,19 @@
                   |L22.36|
 000024  bf00              NOP      
 000026  bf00              NOP      
-;;;271    
-;;;272        // Create timers.
-;;;273    
-;;;274        /* YOUR_JOB: Create any timers to be used by the application.
-;;;275                     Below is an example of how to create a timer.
-;;;276                     For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
-;;;277                     one.
-;;;278           uint32_t err_code;
-;;;279           err_code = app_timer_create(&m_app_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
-;;;280           APP_ERROR_CHECK(err_code); */
-;;;281    }
+;;;272    
+;;;273        // Create timers.
+;;;274    
+;;;275        /* YOUR_JOB: Create any timers to be used by the application.
+;;;276                     Below is an example of how to create a timer.
+;;;277                     For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
+;;;278                     one.
+;;;279           uint32_t err_code;
+;;;280           err_code = app_timer_create(&m_app_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
+;;;281           APP_ERROR_CHECK(err_code); */
+;;;282    }
 000028  bd70              POP      {r4-r6,pc}
-;;;282    
+;;;283    
                           ENDP
 
 00002a  0000              DCW      0x0000
@@ -1843,7 +1854,7 @@
 
                           AREA ||.constdata||, DATA, READONLY, ALIGN=2
 
-000000  00020007          DCB      0x00,0x02,0x00,0x07
+000000  01000007          DCB      0x01,0x00,0x00,0x07
 
                           AREA ||.conststring||, DATA, READONLY, MERGE=1, STRINGS, ALIGN=2
 

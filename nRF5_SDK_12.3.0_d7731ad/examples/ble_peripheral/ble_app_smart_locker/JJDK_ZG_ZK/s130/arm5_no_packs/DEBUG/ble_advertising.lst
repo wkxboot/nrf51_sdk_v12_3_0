@@ -3693,7 +3693,7 @@ N
 N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 N//==========================================================
 N#ifndef UART_ENABLED
-N#define UART_ENABLED 1
+N#define UART_ENABLED            1
 N#endif
 N#if  UART_ENABLED
 X#if  1
@@ -3768,7 +3768,7 @@ N
 N// <e> UART0_ENABLED - Enable UART0 instance
 N//==========================================================
 N#ifndef UART0_ENABLED
-N#define UART0_ENABLED 1
+N#define UART0_ENABLED   1
 N#endif
 N#if  UART0_ENABLED
 X#if  1
@@ -4597,7 +4597,7 @@ N// <3=> Info
 N// <4=> Debug 
 N
 N#ifndef NRF_LOG_DEFAULT_LEVEL
-N#define NRF_LOG_DEFAULT_LEVEL 3
+N#define NRF_LOG_DEFAULT_LEVEL 4
 N#endif
 N
 N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -4680,7 +4680,7 @@ N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 30//24 //30 DDB 24 JJYJS
 N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 
@@ -25151,7 +25151,8 @@ X    m_whitelist_temporarily_disabled = 0;
 N
 N    if (p_ble_evt->evt.gap_evt.conn_handle == m_current_slave_link_conn_handle)
 N    {
-N       ret = ble_advertising_start(BLE_ADV_MODE_DIRECTED);
+N       //ret = ble_advertising_start(BLE_ADV_MODE_DIRECTED);
+N		  	ret = ble_advertising_start(m_adv_mode_current);
 N       if ((ret != NRF_SUCCESS) && (m_error_handler != NULL))
 X       if ((ret != ((0x0) + 0)) && (m_error_handler != 0))
 N       {
@@ -25177,8 +25178,8 @@ N        return;
 N    }
 N
 N    // Start advertising in the next mode.
-N    ret = ble_advertising_start(adv_mode_next_get(m_adv_mode_current));
-N
+N    //ret = ble_advertising_start(adv_mode_next_get(m_adv_mode_current));
+N    ret = ble_advertising_start(m_adv_mode_current);
 N    if ((ret != NRF_SUCCESS) && (m_error_handler != NULL))
 X    if ((ret != ((0x0) + 0)) && (m_error_handler != 0))
 N    {

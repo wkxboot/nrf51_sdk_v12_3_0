@@ -22713,7 +22713,7 @@ ret_code_t nrf_drv_clock_init(void)
         m_clock_cb.module_initialized = 1;
     }
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 
     return err_code;
 }
@@ -22727,7 +22727,7 @@ void nrf_drv_clock_uninit(void)
     lfclk_stop();
     hfclk_stop();
     m_clock_cb.module_initialized = 0;
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Uninitialized.\r\n"); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Uninitialized.\r\n"); };
 }
 
 static void item_enqueue(nrf_drv_clock_handler_item_t ** p_head,
@@ -22888,7 +22888,7 @@ ret_code_t nrf_drv_clock_calibration_start(uint8_t interval, nrf_drv_clock_event
     ret_code_t err_code = ((0x0) + 0);
 #line 431 "..\\..\\..\\..\\..\\..\\components\\drivers_nrf\\clock\\nrf_drv_clock.c"
     err_code = ((0x0) + 15);
-    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
     return err_code;
 
 }
@@ -22898,7 +22898,7 @@ ret_code_t nrf_drv_clock_calibration_abort(void)
     ret_code_t err_code = ((0x0) + 0);
 #line 466 "..\\..\\..\\..\\..\\..\\components\\drivers_nrf\\clock\\nrf_drv_clock.c"
     err_code = ((0x0) + 15);
-    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
     return err_code;
 
 }
@@ -22908,7 +22908,7 @@ ret_code_t nrf_drv_clock_is_calibrating(_Bool * p_is_calibrating)
     ret_code_t err_code = ((0x0) + 0);
 #line 481 "..\\..\\..\\..\\..\\..\\components\\drivers_nrf\\clock\\nrf_drv_clock.c"
     err_code = ((0x0) + 15);
-    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
     return err_code;
 
 }
@@ -22946,7 +22946,7 @@ void POWER_CLOCK_IRQHandler(void)
     if (nrf_clock_event_check(NRF_CLOCK_EVENT_HFCLKSTARTED))
     {
         nrf_clock_event_clear(NRF_CLOCK_EVENT_HFCLKSTARTED);
-        if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
+        if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
         nrf_clock_int_disable(NRF_CLOCK_INT_HF_STARTED_MASK);
         m_clock_cb.hfclk_on = 1;
         clock_clk_started_notify(NRF_DRV_CLOCK_EVT_HFCLK_STARTED);
@@ -22954,7 +22954,7 @@ void POWER_CLOCK_IRQHandler(void)
     if (nrf_clock_event_check(NRF_CLOCK_EVENT_LFCLKSTARTED))
     {
         nrf_clock_event_clear(NRF_CLOCK_EVENT_LFCLKSTARTED);
-        if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
+        if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
         nrf_clock_int_disable(NRF_CLOCK_INT_LF_STARTED_MASK);
         m_clock_cb.lfclk_on = 1;
         clock_clk_started_notify(NRF_DRV_CLOCK_EVT_LFCLK_STARTED);

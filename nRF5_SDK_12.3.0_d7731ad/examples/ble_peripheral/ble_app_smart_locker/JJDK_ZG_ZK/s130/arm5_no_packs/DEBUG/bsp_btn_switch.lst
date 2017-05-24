@@ -20552,7 +20552,7 @@ N
 N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 N//==========================================================
 N#ifndef UART_ENABLED
-N#define UART_ENABLED 1
+N#define UART_ENABLED            1
 N#endif
 N#if  UART_ENABLED
 X#if  1
@@ -20627,7 +20627,7 @@ N
 N// <e> UART0_ENABLED - Enable UART0 instance
 N//==========================================================
 N#ifndef UART0_ENABLED
-N#define UART0_ENABLED 1
+N#define UART0_ENABLED   1
 N#endif
 N#if  UART0_ENABLED
 X#if  1
@@ -21456,7 +21456,7 @@ N// <3=> Info
 N// <4=> Debug 
 N
 N#ifndef NRF_LOG_DEFAULT_LEVEL
-N#define NRF_LOG_DEFAULT_LEVEL 3
+N#define NRF_LOG_DEFAULT_LEVEL 4
 N#endif
 N
 N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -21539,7 +21539,7 @@ N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 30//24 //30 DDB 24 JJYJS
 N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 
@@ -24379,11 +24379,11 @@ N
 N#define SER_CONN_ASSERT_LED_PIN     LED_0
 N
 N// Low frequency clock source to be used by the SoftDevice
-N#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_RC,            \
-N                                 .rc_ctiv       = 2,                                \
+N#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_XTAL,            \
+N                                 .rc_ctiv       = 0,                                \
 N                                 .rc_temp_ctiv  = 0,                                \
 N                                 .xtal_accuracy = NRF_CLOCK_LF_XTAL_ACCURACY_20_PPM}
-X#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_RC,                                             .rc_ctiv       = 2,                                                                 .rc_temp_ctiv  = 0,                                                                 .xtal_accuracy = NRF_CLOCK_LF_XTAL_ACCURACY_20_PPM}
+X#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_XTAL,                                             .rc_ctiv       = 0,                                                                 .rc_temp_ctiv  = 0,                                                                 .xtal_accuracy = NRF_CLOCK_LF_XTAL_ACCURACY_20_PPM}
 N
 N#ifdef __cplusplus
 S}
@@ -30944,7 +30944,7 @@ X   bsp_board_led_on(1);
 N   uv_lamp_status=DEVICE_STATUS_OPENED;
 X   uv_lamp_status=1;
 N	 NRF_LOG_INFO("open uv lamp and indicator led!\r\n");
-X	 if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open uv lamp and indicator led!\r\n"); };
+X	 if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open uv lamp and indicator led!\r\n"); };
 N}
 N//关闭消毒灯和指示灯
 Nstatic void bsp_close_uv_lamp_and_indicator_led(void)
@@ -30956,7 +30956,7 @@ X   bsp_board_led_off(1);
 N   uv_lamp_status=DEVICE_STATUS_CLOSED;
 X   uv_lamp_status=2;
 N   NRF_LOG_INFO("close uv lamp and indicator led!\r\n");
-X   if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close uv lamp and indicator led!\r\n"); };
+X   if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close uv lamp and indicator led!\r\n"); };
 N}
 N
 N//开启风扇和负氧离子
@@ -30969,7 +30969,7 @@ X   bsp_board_led_on(0);
 N   fan_negative_ion_status=DEVICE_STATUS_OPENED;
 X   fan_negative_ion_status=1;
 N	 NRF_LOG_INFO("open fan negative ion and indicator led!\r\n");
-X	 if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open fan negative ion and indicator led!\r\n"); };
+X	 if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open fan negative ion and indicator led!\r\n"); };
 N}
 N//关闭风扇和负氧离子
 Nstatic void bsp_close_fan_negative_ion_and_indicator_led(void)
@@ -30981,7 +30981,7 @@ X   bsp_board_led_off(0);
 N   fan_negative_ion_status=DEVICE_STATUS_CLOSED;
 X   fan_negative_ion_status=2;
 N   NRF_LOG_INFO("close fan negative ion and indicator led!\r\n");
-X   if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close fan negative ion and indicator led!\r\n"); };
+X   if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close fan negative ion and indicator led!\r\n"); };
 N}
 N
 N//开锁
@@ -30990,7 +30990,7 @@ N{
 N	static uint8_t open_try_times=DEFAULT_OPEN_LOCK_TRY_TIMES;
 X	static uint8_t open_try_times=3;
 N	NRF_LOG_INFO("cur open time_remain:%d",open_try_times);
-X	if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "cur open time_remain:%d", open_try_times); };
+X	if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "cur open time_remain:%d", open_try_times); };
 N  if(elec_lock_status==DEVICE_STATUS_CLOSED && open_try_times>0)
 X  if(elec_lock_status==2 && open_try_times>0)
 N  {	
@@ -31000,7 +31000,7 @@ X   bsp_board_switch_on(2);
 N   app_timer_start(open_lock_wait_timer_id,APP_TIMER_TICKS(OPEN_LOCK_WAIT_TIMEOUT_MS,bsp_btn_switch_local_prescaler),NULL);
 X   app_timer_start(open_lock_wait_timer_id,((uint32_t)((((200) * (uint64_t)32768) + ((((bsp_btn_switch_local_prescaler) + 1) * 1000) / 2)) / (((bsp_btn_switch_local_prescaler) + 1) * 1000))),0);
 N	 NRF_LOG_INFO("open elec_lock try again!\r\n");
-X	 if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock try again!\r\n"); };
+X	 if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock try again!\r\n"); };
 N	}
 N	else
 N	{
@@ -31010,12 +31010,12 @@ N		if(elec_lock_status==DEVICE_STATUS_OPENED)
 X		if(elec_lock_status==1)
 N		{
 N			NRF_LOG_INFO("open elec_lock successed!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock successed!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock successed!\r\n"); };
 N		}
 N	  else
 N		{
 N			NRF_LOG_INFO("open elec_lock failed!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock failed!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock failed!\r\n"); };
 N		}
 N	}
 N}
@@ -31045,14 +31045,14 @@ N	NRF_LOG_INFO("write uv_lamp cmd->len:%d cmd:%d current uv_lamp_cmd:%d\r\n",
 N	              p_evt_write->len,
 N	              *p_evt_write->data,
 N	              uv_lamp_cmd);
-X	if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "write uv_lamp cmd->len:%d cmd:%d current uv_lamp_cmd:%d\r\n", p_evt_write ->len, *p_evt_write ->data, uv_lamp_cmd); };
+X	if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "write uv_lamp cmd->len:%d cmd:%d current uv_lamp_cmd:%d\r\n", p_evt_write ->len, *p_evt_write ->data, uv_lamp_cmd); };
 N
 N	if(uv_lamp_cmd==CONTROL_CMD_OPEN)
 X	if(uv_lamp_cmd==1)
 N	{		
 N	bsp_open_uv_lamp_and_indicator_led();	
 N  NRF_LOG_INFO("open uv_lamp!\r\n");
-X  if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open uv_lamp!\r\n"); };
+X  if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open uv_lamp!\r\n"); };
 N		
 N	}
 N	else if(uv_lamp_cmd==CONTROL_CMD_CLOSE)
@@ -31060,12 +31060,12 @@ X	else if(uv_lamp_cmd==2)
 N	{
 N		bsp_close_uv_lamp_and_indicator_led();
 N    NRF_LOG_INFO("close uv_lamp!\r\n");		
-X    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close uv_lamp!\r\n"); };		
+X    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close uv_lamp!\r\n"); };		
 N	}
 N	else
 N	{
 N		NRF_LOG_INFO("uv_lamp cmd err!\r\n");
-X		if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "uv_lamp cmd err!\r\n"); };
+X		if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "uv_lamp cmd err!\r\n"); };
 N	}
 N}
 N
@@ -31077,7 +31077,7 @@ N	NRF_LOG_INFO("write fan_negative_ion cmd->len:%d cmd:%d current fan_negative_i
 N	              p_evt_write->len,
 N	              *p_evt_write->data,
 N	              fan_negative_ion_cmd);
-X	if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "write fan_negative_ion cmd->len:%d cmd:%d current fan_negative_ion_cmd:%d\r\n", p_evt_write ->len, *p_evt_write ->data, fan_negative_ion_cmd); };
+X	if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "write fan_negative_ion cmd->len:%d cmd:%d current fan_negative_ion_cmd:%d\r\n", p_evt_write ->len, *p_evt_write ->data, fan_negative_ion_cmd); };
 N	
 N		if(fan_negative_ion_cmd==CONTROL_CMD_OPEN)
 X		if(fan_negative_ion_cmd==1)
@@ -31085,7 +31085,7 @@ N	{
 N		
 N	bsp_open_fan_negative_ion_and_indicator_led();	
 N  NRF_LOG_INFO("open fan_ngt_ion!\r\n");
-X  if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open fan_ngt_ion!\r\n"); };
+X  if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open fan_ngt_ion!\r\n"); };
 N		
 N	}
 N	else if(fan_negative_ion_cmd==CONTROL_CMD_CLOSE)
@@ -31093,12 +31093,12 @@ X	else if(fan_negative_ion_cmd==2)
 N	{
 N	  bsp_close_fan_negative_ion_and_indicator_led();
 N    NRF_LOG_INFO("close fan_ngt_ion!\r\n");		
-X    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close fan_ngt_ion!\r\n"); };		
+X    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "close fan_ngt_ion!\r\n"); };		
 N	}
 N	else
 N	{
 N		NRF_LOG_INFO("fan_ngt_ion cmd err!\r\n");
-X		if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "fan_ngt_ion cmd err!\r\n"); };
+X		if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "fan_ngt_ion cmd err!\r\n"); };
 N	}
 N}
 N//ble smart locker service 写elec_lock_cmd回调
@@ -31108,19 +31108,19 @@ N	NRF_LOG_INFO("write elec_lock cmd->len:%d cmd:%d current elec_lock_cmd:%d\r\n"
 N	              p_evt_write->len,
 N	              *p_evt_write->data,
 N	              elec_lock_cmd);
-X	if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "write elec_lock cmd->len:%d cmd:%d current elec_lock_cmd:%d\r\n", p_evt_write ->len, *p_evt_write ->data, elec_lock_cmd); };
+X	if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "write elec_lock cmd->len:%d cmd:%d current elec_lock_cmd:%d\r\n", p_evt_write ->len, *p_evt_write ->data, elec_lock_cmd); };
 N	
 N	if(elec_lock_cmd==CONTROL_CMD_OPEN)
 X	if(elec_lock_cmd==1)
 N	{	
 N	 bsp_open_elec_lock();	
 N   NRF_LOG_INFO("open elec_lock!\r\n");	
-X   if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock!\r\n"); };	
+X   if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "open elec_lock!\r\n"); };	
 N	}
 N	else
 N	{
 N		NRF_LOG_INFO("elec_lock cmd err!\r\n");
-X		if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "elec_lock cmd err!\r\n"); };
+X		if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "elec_lock cmd err!\r\n"); };
 N	}	  
 N}
 N
@@ -31158,7 +31158,7 @@ X  fan_negative_ion_status = 2;
 N	
 N	NRF_LOG_INFO("onstart uv_lamp_door_status:%d elec_lock_status:%d\r\n",
 N	             uv_lamp_door_status,elec_lock_status);
-X	if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "onstart uv_lamp_door_status:%d elec_lock_status:%d\r\n", uv_lamp_door_status, elec_lock_status); };
+X	if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "onstart uv_lamp_door_status:%d elec_lock_status:%d\r\n", uv_lamp_door_status, elec_lock_status); };
 N
 N	return NRF_SUCCESS;
 X	return ((0x0) + 0);
@@ -31177,7 +31177,7 @@ N			{
 N			bsp_close_uv_lamp_and_indicator_led();	
 N			}
 N			NRF_LOG_INFO("BSP_EVENT_UV_LAMP_DOOR_OPEN!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_UV_LAMP_DOOR_OPEN!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_UV_LAMP_DOOR_OPEN!\r\n"); };
 N		  break;		
 N		case BSP_EVENT_UV_LAMP_DOOR_CLOSE:
 N			 uv_lamp_door_status=DEVICE_STATUS_CLOSED;
@@ -31188,27 +31188,27 @@ N			{
 N			bsp_open_uv_lamp_and_indicator_led();	
 N			}
 N			NRF_LOG_INFO("BSP_EVENT_UV_LAMP_DOOR_CLOSE!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_UV_LAMP_DOOR_CLOSE!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_UV_LAMP_DOOR_CLOSE!\r\n"); };
 N		  break;
 N    case BSP_EVENT_ELEC_LOCK_OPEN:
 N			elec_lock_status=DEVICE_STATUS_OPENED;
 X			elec_lock_status=1;
 N			NRF_LOG_INFO("BSP_EVENT_ELEC_LOCK_OPEN!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_ELEC_LOCK_OPEN!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_ELEC_LOCK_OPEN!\r\n"); };
 N			break;
 N    case BSP_EVENT_ELEC_LOCK_CLOSE:
 N	  	elec_lock_status=DEVICE_STATUS_CLOSED;
 X	  	elec_lock_status=2;
 N			NRF_LOG_INFO("BSP_EVENT_ELEC_LOCK_CLOSE!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_ELEC_LOCK_CLOSE!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_ELEC_LOCK_CLOSE!\r\n"); };
 N			break;
 N		case BSP_EVENT_COIN_BOX_GET_COIN:
 N			NRF_LOG_INFO("BSP_EVENT_COIN_BOX_GET_COIN!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_COIN_BOX_GET_COIN!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" "BSP_EVENT_COIN_BOX_GET_COIN!\r\n"); };
 N			break;
 N		default:
 N			NRF_LOG_INFO(" ERROR EVENT!\r\n");
-X			if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" " ERROR EVENT!\r\n"); };
+X			if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BSP_BTN_SWITCH.c" ":" "INFO:" " ERROR EVENT!\r\n"); };
 N			break;		
 N	}
 N	

@@ -28570,6 +28570,143 @@ void ble_sls_device_notify_dev_info_timer_handler(void *p_context);
 
  
 #line 89 "..\\..\\..\\main.c"
+#line 1 "..\\..\\..\\..\\..\\..\\components\\ble\\ble_services\\ble_dis\\ble_dis.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+#line 61 "..\\..\\..\\..\\..\\..\\components\\ble\\ble_services\\ble_dis\\ble_dis.h"
+#line 62 "..\\..\\..\\..\\..\\..\\components\\ble\\ble_services\\ble_dis\\ble_dis.h"
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+ 
+typedef struct
+{
+    uint64_t manufacturer_id;                                    
+    uint32_t organizationally_unique_id;                         
+} ble_dis_sys_id_t;
+
+ 
+typedef struct
+{
+    uint8_t *  p_list;                                           
+    uint8_t    list_len;                                         
+} ble_dis_reg_cert_data_list_t;
+
+ 
+typedef struct
+{
+    uint8_t  vendor_id_source;                                   
+    uint16_t vendor_id;                                          
+    uint16_t product_id;                                         
+    uint16_t product_version;                                    
+} ble_dis_pnp_id_t;
+
+
+
+ 
+typedef struct
+{
+    ble_srv_utf8_str_t             manufact_name_str;            
+    ble_srv_utf8_str_t             model_num_str;                
+    ble_srv_utf8_str_t             serial_num_str;               
+    ble_srv_utf8_str_t             hw_rev_str;                   
+    ble_srv_utf8_str_t             fw_rev_str;                   
+    ble_srv_utf8_str_t             sw_rev_str;                   
+    ble_dis_sys_id_t *             p_sys_id;                     
+    ble_dis_reg_cert_data_list_t * p_reg_cert_data_list;         
+    ble_dis_pnp_id_t *             p_pnp_id;                     
+    ble_srv_security_mode_t        dis_attr_md;                  
+} ble_dis_init_t;
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+uint32_t ble_dis_init(const ble_dis_init_t * p_dis_init);
+
+
+
+
+
+
+
+
+ 
+#line 90 "..\\..\\..\\main.c"
 #line 1 "..\\..\\..\\..\\..\\..\\components\\libraries\\bsp\\bsp_btn_switch.h"
 
 
@@ -28603,7 +28740,7 @@ void bsp_btn_switch_event_handler(bsp_event_t event);
 
 
 
-#line 90 "..\\..\\..\\main.c"
+#line 91 "..\\..\\..\\main.c"
 
 
 
@@ -28634,7 +28771,7 @@ void bsp_btn_switch_event_handler(bsp_event_t event);
 
 
 
-#line 128 "..\\..\\..\\main.c"
+#line 129 "..\\..\\..\\main.c"
 
 
 
@@ -28680,12 +28817,12 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
     {
         case PM_EVT_BONDED_PEER_CONNECTED:
         {
-            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected to a previously bonded device.\r\n"); };
+            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected to a previously bonded device.\r\n"); };
         } break;
 
         case PM_EVT_CONN_SEC_SUCCEEDED:
         {
-            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connection secured. Role: %d. conn_handle: %d, Procedure: %d\r\n", ble_conn_state_role(p_evt->conn_handle), p_evt->conn_handle, p_evt->params . conn_sec_succeeded . procedure); };
+            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connection secured. Role: %d. conn_handle: %d, Procedure: %d\r\n", ble_conn_state_role(p_evt->conn_handle), p_evt->conn_handle, p_evt->params . conn_sec_succeeded . procedure); };
 
 
 
@@ -28856,9 +28993,23 @@ static void services_init(void)
 {
 	uint32_t err_code;
 	ble_sls_init_t sls_init;
+	
+	
 	err_code= ble_sls_init( &m_sls ,&sls_init);
 	do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 
@@ -28989,7 +29140,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
     switch (ble_adv_evt)
     {
         case BLE_ADV_EVT_FAST:
-            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Fast advertising\r\n"); };
+            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Fast advertising\r\n"); };
             err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
             do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
             break;
@@ -29015,17 +29166,13 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
-            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Disconnected.\r\n"); };
+            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Disconnected.\r\n"); };
             err_code = bsp_indication_set(BSP_INDICATE_IDLE);
             do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
-				
-				   err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
-				   do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
-				   if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "restart adverting...\r\n"); };
             break; 
 
         case BLE_GAP_EVT_CONNECTED:
-            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected.\r\n"); };
+            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected.\r\n"); };
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
@@ -29033,7 +29180,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 
         case BLE_GATTC_EVT_TIMEOUT:
             
-            if ((3 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Client Timeout.\r\n"); };
+            if ((4 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Client Timeout.\r\n"); };
             err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
                                              0x13);
             do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
@@ -29041,7 +29188,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 
         case BLE_GATTS_EVT_TIMEOUT:
             
-            if ((3 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Server Timeout.\r\n"); };
+            if ((4 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Server Timeout.\r\n"); };
             err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
                                              0x13);
             do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
@@ -29081,7 +29228,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             }
         } break; 
 
-#line 581 "..\\..\\..\\main.c"
+#line 592 "..\\..\\..\\main.c"
 
         default:
             
@@ -29105,9 +29252,8 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     pm_on_ble_evt(p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
     
-    on_ble_evt(p_ble_evt);
     ble_advertising_on_ble_evt(p_ble_evt);
-	
+	  on_ble_evt(p_ble_evt);
 	  ble_sls_on_ble_evt(&m_sls,p_ble_evt);
 	
     
@@ -29145,7 +29291,7 @@ static void ble_stack_init(void)
 {
     uint32_t err_code;
 
-    nrf_clock_lf_cfg_t clock_lf_cfg = {. source = (0), . rc_ctiv = 2, . rc_temp_ctiv = 0, . xtal_accuracy = (7)};
+    nrf_clock_lf_cfg_t clock_lf_cfg = {. source = (1), . rc_ctiv = 0, . rc_temp_ctiv = 0, . xtal_accuracy = (7)};
 
     
     do { static uint32_t BLE_EVT_BUFFER[((((sizeof(ble_evt_t) + (23))) + (sizeof(uint32_t)) - 1) / (sizeof(uint32_t)))]; uint32_t ERR_CODE; ERR_CODE = softdevice_handler_init((&clock_lf_cfg), BLE_EVT_BUFFER, sizeof(BLE_EVT_BUFFER), 0); do { const uint32_t LOCAL_ERR_CODE = (ERR_CODE); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0); } while (0);
@@ -29347,7 +29493,7 @@ int main(void)
     peer_manager_init(erase_bonds);
     if (erase_bonds == 1)
     {
-        if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Bonds erased!\r\n"); };
+        if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Bonds erased!\r\n"); };
     }
     gap_params_init();
     advertising_init();
@@ -29355,7 +29501,7 @@ int main(void)
     conn_params_init();
 
     
-    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "smart locker started!\r\n"); };
+    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "smart locker started!\r\n"); };
     application_timers_start();
     err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
     do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);

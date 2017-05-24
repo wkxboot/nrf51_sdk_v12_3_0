@@ -22456,10 +22456,10 @@ uint32_t sd_check_ram_start(uint32_t sd_req_ram_start)
 #line 533 "..\\..\\..\\..\\..\\..\\components\\softdevice\\common\\softdevice_handler\\softdevice_handler.c"
     if (ram_start != sd_req_ram_start)
     {
-        if ((3 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "RAM START ADDR 0x%x should be adjusted to 0x%x\r\n", ram_start, sd_req_ram_start); };
+        if ((4 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "RAM START ADDR 0x%x should be adjusted to 0x%x\r\n", ram_start, sd_req_ram_start); };
 
 
-        if ((3 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_1(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "RAM SIZE should be adjusted to 0x%x \r\n", ram_end_address_get() - sd_req_ram_start); };
+        if ((4 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_1(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "RAM SIZE should be adjusted to 0x%x \r\n", ram_end_address_get() - sd_req_ram_start); };
 
         return ((0x0) + 0);
     }
@@ -22479,20 +22479,20 @@ uint32_t softdevice_enable(ble_enable_params_t * p_ble_enable_params)
 #line 562 "..\\..\\..\\..\\..\\..\\components\\softdevice\\common\\softdevice_handler\\softdevice_handler.c"
 
     app_ram_base = ram_start;
-    if ((3 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "SDH" ":" "DEBUG:" "sd_ble_enable: RAM start at 0x%x\r\n", app_ram_base); };
+    if ((4 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "SDH" ":" "DEBUG:" "sd_ble_enable: RAM start at 0x%x\r\n", app_ram_base); };
 
     err_code = sd_ble_enable(p_ble_enable_params, &app_ram_base);
 
     if (app_ram_base != ram_start)
     {
-        if ((3 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_1(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "sd_ble_enable: RAM start should be adjusted to 0x%x\r\n", app_ram_base); };
+        if ((4 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_1(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "sd_ble_enable: RAM start should be adjusted to 0x%x\r\n", app_ram_base); };
 
-        if ((3 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_1(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "RAM size should be adjusted to 0x%x \r\n", ram_end_address_get() - app_ram_base); };
+        if ((4 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_1(2U, "\x1B[1;33m" "SDH" ":" "WARNING:" "RAM size should be adjusted to 0x%x \r\n", ram_end_address_get() - app_ram_base); };
 
     }
     else if (err_code != ((0x0) + 0))
     {
-        if ((3 >= 1U) && (1U <= 3)) { nrf_log_frontend_std_1(1U, "\x1B[1;31m" "SDH" ":" "ERROR:" "sd_ble_enable: error 0x%x\r\n", err_code); };
+        if ((4 >= 1U) && (1U <= 4)) { nrf_log_frontend_std_1(1U, "\x1B[1;31m" "SDH" ":" "ERROR:" "sd_ble_enable: error 0x%x\r\n", err_code); };
     }
     return err_code;
 

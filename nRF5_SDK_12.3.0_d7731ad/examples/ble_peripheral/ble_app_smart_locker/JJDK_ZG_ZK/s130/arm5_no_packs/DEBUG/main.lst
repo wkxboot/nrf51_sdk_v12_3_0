@@ -16123,7 +16123,7 @@ N
 N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 N//==========================================================
 N#ifndef UART_ENABLED
-N#define UART_ENABLED 1
+N#define UART_ENABLED            1
 N#endif
 N#if  UART_ENABLED
 X#if  1
@@ -16198,7 +16198,7 @@ N
 N// <e> UART0_ENABLED - Enable UART0 instance
 N//==========================================================
 N#ifndef UART0_ENABLED
-N#define UART0_ENABLED 1
+N#define UART0_ENABLED   1
 N#endif
 N#if  UART0_ENABLED
 X#if  1
@@ -17027,7 +17027,7 @@ N// <3=> Info
 N// <4=> Debug 
 N
 N#ifndef NRF_LOG_DEFAULT_LEVEL
-N#define NRF_LOG_DEFAULT_LEVEL 3
+N#define NRF_LOG_DEFAULT_LEVEL 4
 N#endif
 N
 N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -17110,7 +17110,7 @@ N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 30//24 //30 DDB 24 JJYJS
 N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 
@@ -27077,11 +27077,11 @@ N
 N#define SER_CONN_ASSERT_LED_PIN     LED_0
 N
 N// Low frequency clock source to be used by the SoftDevice
-N#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_RC,            \
-N                                 .rc_ctiv       = 2,                                \
+N#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_XTAL,            \
+N                                 .rc_ctiv       = 0,                                \
 N                                 .rc_temp_ctiv  = 0,                                \
 N                                 .xtal_accuracy = NRF_CLOCK_LF_XTAL_ACCURACY_20_PPM}
-X#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_RC,                                             .rc_ctiv       = 2,                                                                 .rc_temp_ctiv  = 0,                                                                 .xtal_accuracy = NRF_CLOCK_LF_XTAL_ACCURACY_20_PPM}
+X#define NRF_CLOCK_LFCLKSRC      {.source        = NRF_CLOCK_LF_SRC_XTAL,                                             .rc_ctiv       = 0,                                                                 .rc_temp_ctiv  = 0,                                                                 .xtal_accuracy = NRF_CLOCK_LF_XTAL_ACCURACY_20_PPM}
 N
 N#ifdef __cplusplus
 S}
@@ -36579,6 +36579,144 @@ N#endif // ble_sls_H__
 N
 N/** @} */
 L 89 "..\..\..\main.c" 2
+N#include "ble_dis.h"
+L 1 "..\..\..\..\..\..\components\ble\ble_services\ble_dis\ble_dis.h" 1
+N/**
+N * Copyright (c) 2012 - 2017, Nordic Semiconductor ASA
+N * 
+N * All rights reserved.
+N * 
+N * Redistribution and use in source and binary forms, with or without modification,
+N * are permitted provided that the following conditions are met:
+N * 
+N * 1. Redistributions of source code must retain the above copyright notice, this
+N *    list of conditions and the following disclaimer.
+N * 
+N * 2. Redistributions in binary form, except as embedded into a Nordic
+N *    Semiconductor ASA integrated circuit in a product or a software update for
+N *    such product, must reproduce the above copyright notice, this list of
+N *    conditions and the following disclaimer in the documentation and/or other
+N *    materials provided with the distribution.
+N * 
+N * 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+N *    contributors may be used to endorse or promote products derived from this
+N *    software without specific prior written permission.
+N * 
+N * 4. This software, with or without modification, must only be used with a
+N *    Nordic Semiconductor ASA integrated circuit.
+N * 
+N * 5. Any software provided in binary form under this license must not be reverse
+N *    engineered, decompiled, modified and/or disassembled.
+N * 
+N * THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+N * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+N * OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+N * DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+N * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+N * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+N * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+N * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+N * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+N * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+N * 
+N */
+N
+N/** @file
+N *
+N * @defgroup ble_dis Device Information Service
+N * @{
+N * @ingroup ble_sdk_srv
+N * @brief Device Information Service module.
+N *
+N * @details This module implements the Device Information Service.
+N *          During initialization it adds the Device Information Service to the BLE stack database.
+N *          It then encodes the supplied information, and adds the curresponding characteristics.
+N *
+N * @note Attention!
+N *  To maintain compliance with Nordic Semiconductor ASA Bluetooth profile
+N *  qualification listings, this section of source code must not be modified.
+N */
+N
+N#ifndef BLE_DIS_H__
+N#define BLE_DIS_H__
+N
+N#include <stdint.h>
+N#include "ble_srv_common.h"
+N
+N#ifdef __cplusplus
+Sextern "C" {
+N#endif
+N
+N/** @defgroup DIS_VENDOR_ID_SRC_VALUES Vendor ID Source values
+N * @{
+N */
+N#define BLE_DIS_VENDOR_ID_SRC_BLUETOOTH_SIG   1                 /**< Vendor ID assigned by Bluetooth SIG. */
+N#define BLE_DIS_VENDOR_ID_SRC_USB_IMPL_FORUM  2                 /**< Vendor ID assigned by USB Implementer's Forum. */
+N/** @} */
+N
+N/**@brief System ID parameters */
+Ntypedef struct
+N{
+N    uint64_t manufacturer_id;                                   /**< Manufacturer ID. Only 5 LSOs shall be used. */
+N    uint32_t organizationally_unique_id;                        /**< Organizationally unique ID. Only 3 LSOs shall be used. */
+N} ble_dis_sys_id_t;
+N
+N/**@brief IEEE 11073-20601 Regulatory Certification Data List Structure */
+Ntypedef struct
+N{
+N    uint8_t *  p_list;                                          /**< Pointer the byte array containing the encoded opaque structure based on IEEE 11073-20601 specification. */
+N    uint8_t    list_len;                                        /**< Length of the byte array. */
+N} ble_dis_reg_cert_data_list_t;
+N
+N/**@brief PnP ID parameters */
+Ntypedef struct
+N{
+N    uint8_t  vendor_id_source;                                  /**< Vendor ID Source. see @ref DIS_VENDOR_ID_SRC_VALUES. */
+N    uint16_t vendor_id;                                         /**< Vendor ID. */
+N    uint16_t product_id;                                        /**< Product ID. */
+N    uint16_t product_version;                                   /**< Product Version. */
+N} ble_dis_pnp_id_t;
+N
+N/**@brief Device Information Service init structure. This contains all possible characteristics
+N *        needed for initialization of the service.
+N */
+Ntypedef struct
+N{
+N    ble_srv_utf8_str_t             manufact_name_str;           /**< Manufacturer Name String. */
+N    ble_srv_utf8_str_t             model_num_str;               /**< Model Number String. */
+N    ble_srv_utf8_str_t             serial_num_str;              /**< Serial Number String. */
+N    ble_srv_utf8_str_t             hw_rev_str;                  /**< Hardware Revision String. */
+N    ble_srv_utf8_str_t             fw_rev_str;                  /**< Firmware Revision String. */
+N    ble_srv_utf8_str_t             sw_rev_str;                  /**< Software Revision String. */
+N    ble_dis_sys_id_t *             p_sys_id;                    /**< System ID. */
+N    ble_dis_reg_cert_data_list_t * p_reg_cert_data_list;        /**< IEEE 11073-20601 Regulatory Certification Data List. */
+N    ble_dis_pnp_id_t *             p_pnp_id;                    /**< PnP ID. */
+N    ble_srv_security_mode_t        dis_attr_md;                 /**< Initial Security Setting for Device Information Characteristics. */
+N} ble_dis_init_t;
+N
+N/**@brief Function for initializing the Device Information Service.
+N *
+N * @details This call allows the application to initialize the device information service.
+N *          It adds the DIS service and DIS characteristics to the database, using the initial
+N *          values supplied through the p_dis_init parameter. Characteristics which are not to be
+N *          added, shall be set to NULL in p_dis_init.
+N *
+N * @param[in]   p_dis_init   The structure containing the values of characteristics needed by the
+N *                           service.
+N *
+N * @return      NRF_SUCCESS on successful initialization of service.
+N */
+Nuint32_t ble_dis_init(const ble_dis_init_t * p_dis_init);
+N
+N
+N#ifdef __cplusplus
+S}
+N#endif
+N
+N#endif // BLE_DIS_H__
+N
+N/** @} */
+L 90 "..\..\..\main.c" 2
 N#include "bsp_btn_switch.h"
 L 1 "..\..\..\..\..\..\components\libraries\bsp\bsp_btn_switch.h" 1
 N#ifndef BSP_BTN_SWITCH_H
@@ -36614,7 +36752,7 @@ N
 N
 N
 N#endif
-L 90 "..\..\..\main.c" 2
+L 91 "..\..\..\main.c" 2
 N
 N
 N#define IS_SRVC_CHANGED_CHARACT_PRESENT 1                                           /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
@@ -36629,8 +36767,8 @@ N
 N#define CENTRAL_LINK_COUNT              0                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
 N#define PERIPHERAL_LINK_COUNT           1                                           /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 N
-N#define DEVICE_NAME                     "SMART_LOCKER"                           /**< Name of device. Will be included in the advertising data. */
-N#define MANUFACTURER_NAME               "CHANGHONG"                       /**< Manufacturer. Will be passed to Device Information Service. */
+N#define DEVICE_NAME                     "SMART_LOCKER"                              /**< Name of device. Will be included in the advertising data. */
+N#define MANUFACTURER_NAME               "CHANGHONG"                                 /**< Manufacturer. Will be passed to Device Information Service. */
 N#define APP_ADV_INTERVAL                300                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
 N#define APP_ADV_TIMEOUT_IN_SECONDS      180                                         /**< The advertising timeout in units of seconds. */
 N
@@ -36703,7 +36841,7 @@ N    {
 N        case PM_EVT_BONDED_PEER_CONNECTED:
 N        {
 N            NRF_LOG_INFO("Connected to a previously bonded device.\r\n");
-X            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected to a previously bonded device.\r\n"); };
+X            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected to a previously bonded device.\r\n"); };
 N        } break;
 N
 N        case PM_EVT_CONN_SEC_SUCCEEDED:
@@ -36712,7 +36850,7 @@ N            NRF_LOG_INFO("Connection secured. Role: %d. conn_handle: %d, Proced
 N                         ble_conn_state_role(p_evt->conn_handle),
 N                         p_evt->conn_handle,
 N                         p_evt->params.conn_sec_succeeded.procedure);
-X            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connection secured. Role: %d. conn_handle: %d, Procedure: %d\r\n", ble_conn_state_role(p_evt->conn_handle), p_evt->conn_handle, p_evt->params . conn_sec_succeeded . procedure); };
+X            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_3(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connection secured. Role: %d. conn_handle: %d, Procedure: %d\r\n", ble_conn_state_role(p_evt->conn_handle), p_evt->conn_handle, p_evt->params . conn_sec_succeeded . procedure); };
 N        } break;
 N
 N        case PM_EVT_CONN_SEC_FAILED:
@@ -36896,10 +37034,24 @@ Nstatic void services_init(void)
 N{
 N	uint32_t err_code;
 N	ble_sls_init_t sls_init;
+N	//ble_dis_init_t dis_init;
+N	
 N	err_code= ble_sls_init( &m_sls ,&sls_init);
 N	APP_ERROR_CHECK(err_code);
 X	do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
-N	
+N
+N//	memset(&dis_init,0,sizeof(dis_init));
+N//	
+N//	dis_init.fw_rev_str.p_str="0.0.1";
+N//	dis_init.fw_rev_str.length=sizeof("0.0.1");
+N//	
+N//	dis_init.hw_rev_str.p_str="0.0.2";
+N//	dis_init.hw_rev_str.length=sizeof("0.0.2");
+N//	
+N//	dis_init.manufact_name_str.p_str=MANUFACTURER_NAME;
+N//	dis_init.manufact_name_str.length=sizeof(MANUFACTURER_NAME);
+N//	err_code=ble_dis_init(&dis_init);
+N//	APP_ERROR_CHECK(err_code);
 N    /* YOUR_JOB: Add code to initialize the services used by the application.
 N       uint32_t                           err_code;
 N       ble_xxs_init_t                     xxs_init;
@@ -37041,7 +37193,7 @@ N    switch (ble_adv_evt)
 N    {
 N        case BLE_ADV_EVT_FAST:
 N            NRF_LOG_INFO("Fast advertising\r\n");
-X            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Fast advertising\r\n"); };
+X            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Fast advertising\r\n"); };
 N            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
 N            APP_ERROR_CHECK(err_code);
 X            do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
@@ -37070,21 +37222,15 @@ N    switch (p_ble_evt->header.evt_id)
 N    {
 N        case BLE_GAP_EVT_DISCONNECTED:
 N            NRF_LOG_INFO("Disconnected.\r\n");
-X            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Disconnected.\r\n"); };
+X            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Disconnected.\r\n"); };
 N            err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 N            APP_ERROR_CHECK(err_code);
 X            do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
-N				
-N				   err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
-N				   APP_ERROR_CHECK(err_code);
-X				   do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
-N				   NRF_LOG_INFO("restart adverting...\r\n");
-X				   if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "restart adverting...\r\n"); };
 N            break; // BLE_GAP_EVT_DISCONNECTED
 N
 N        case BLE_GAP_EVT_CONNECTED:
 N            NRF_LOG_INFO("Connected.\r\n");
-X            if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected.\r\n"); };
+X            if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Connected.\r\n"); };
 N            err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
 N            APP_ERROR_CHECK(err_code);
 X            do { const uint32_t LOCAL_ERR_CODE = (err_code); if (LOCAL_ERR_CODE != ((0x0) + 0)) { do { app_error_handler_bare((LOCAL_ERR_CODE)); } while (0); } } while (0);
@@ -37094,7 +37240,7 @@ N
 N        case BLE_GATTC_EVT_TIMEOUT:
 N            // Disconnect on GATT Client timeout event.
 N            NRF_LOG_DEBUG("GATT Client Timeout.\r\n");
-X            if ((3 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Client Timeout.\r\n"); };
+X            if ((4 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Client Timeout.\r\n"); };
 N            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
 N                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
 X                                             0x13);
@@ -37105,7 +37251,7 @@ N
 N        case BLE_GATTS_EVT_TIMEOUT:
 N            // Disconnect on GATT Server timeout event.
 N            NRF_LOG_DEBUG("GATT Server Timeout.\r\n");
-X            if ((3 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Server Timeout.\r\n"); };
+X            if ((4 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "MAIN.c" ":" "DEBUG:" "GATT Server Timeout.\r\n"); };
 N            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
 N                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
 X                                             0x13);
@@ -37189,9 +37335,8 @@ N    ble_conn_state_on_ble_evt(p_ble_evt);
 N    pm_on_ble_evt(p_ble_evt);
 N    ble_conn_params_on_ble_evt(p_ble_evt);
 N    //bsp_btn_ble_on_ble_evt(p_ble_evt);
-N    on_ble_evt(p_ble_evt);
 N    ble_advertising_on_ble_evt(p_ble_evt);
-N	
+N	  on_ble_evt(p_ble_evt);
 N	  ble_sls_on_ble_evt(&m_sls,p_ble_evt);
 N	
 N    /*YOUR_JOB add calls to _on_ble_evt functions from each service your application is using
@@ -37230,7 +37375,7 @@ N{
 N    uint32_t err_code;
 N
 N    nrf_clock_lf_cfg_t clock_lf_cfg = NRF_CLOCK_LFCLKSRC;
-X    nrf_clock_lf_cfg_t clock_lf_cfg = {. source = (0), . rc_ctiv = 2, . rc_temp_ctiv = 0, . xtal_accuracy = (7)};
+X    nrf_clock_lf_cfg_t clock_lf_cfg = {. source = (1), . rc_ctiv = 0, . rc_temp_ctiv = 0, . xtal_accuracy = (7)};
 N
 N    // Initialize the SoftDevice handler module.
 N    SOFTDEVICE_HANDLER_INIT(&clock_lf_cfg, NULL);
@@ -37480,7 +37625,7 @@ N    if (erase_bonds == true)
 X    if (erase_bonds == 1)
 N    {
 N        NRF_LOG_INFO("Bonds erased!\r\n");
-X        if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Bonds erased!\r\n"); };
+X        if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "Bonds erased!\r\n"); };
 N    }
 N    gap_params_init();
 N    advertising_init();
@@ -37489,7 +37634,7 @@ N    conn_params_init();
 N
 N    // Start execution.
 N    NRF_LOG_INFO("smart locker started!\r\n");
-X    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "smart locker started!\r\n"); };
+X    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "MAIN.c" ":" "INFO:" "smart locker started!\r\n"); };
 N    application_timers_start();
 N    err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
 N    APP_ERROR_CHECK(err_code);

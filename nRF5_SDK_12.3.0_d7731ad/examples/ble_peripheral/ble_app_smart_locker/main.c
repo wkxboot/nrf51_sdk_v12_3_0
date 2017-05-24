@@ -86,6 +86,7 @@
 #include "nrf_log_ctrl.h"
 
 #include "ble_sls.h"
+#include "ble_dis.h"
 #include "bsp_btn_switch.h"
 
 
@@ -100,9 +101,9 @@
 #define CENTRAL_LINK_COUNT              0                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
 #define PERIPHERAL_LINK_COUNT           1                                           /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
-#define DEVICE_NAME                     "SMART_LOCKER"                           /**< Name of device. Will be included in the advertising data. */
-#define MANUFACTURER_NAME               "CHANGHONG"                       /**< Manufacturer. Will be passed to Device Information Service. */
-#define APP_ADV_INTERVAL                300                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
+#define DEVICE_NAME                     "SMART_LOCKER"                              /**< Name of device. Will be included in the advertising data. */
+#define MANUFACTURER_NAME               "CHANGHONG"                                 /**< Manufacturer. Will be passed to Device Information Service. */
+#define APP_ADV_INTERVAL                150                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
 #define APP_ADV_TIMEOUT_IN_SECONDS      180                                         /**< The advertising timeout in units of seconds. */
 
 #define APP_TIMER_PRESCALER             0                                           /**< Value of the RTC1 PRESCALER register. */
@@ -157,6 +158,22 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
     app_error_handler(DEAD_BEEF, line_num, p_file_name);
 }
 
+void app_error_fault_handler(uint32_t id, uint32_t pc, uint32_t info)
+{
+	error_info_t *err_info=(error_info_t *)info;
+	NRF_LOG_INFO("*****************APP ERROR START!**********************\r\n");
+	NRF_LOG_INFO("err_id:0x%X\r\n pc:0x%X\r\n err_info->err_code:0x%X\r\n err_info->line_num:%u\r\n derr_info->file_name:%s\r\n",
+	              id,
+	              pc,
+	              err_info->err_code,
+	              err_info->line_num,
+	              (uint32_t)err_info->p_file_name);
+	
+	
+	NRF_LOG_INFO("*****************APP ERROR END  !**********************\r\n");
+	
+	
+}
 
 /**@brief Function for handling Peer Manager events.
  *
@@ -346,9 +363,24 @@ static void services_init(void)
 {
 	uint32_t err_code;
 	ble_sls_init_t sls_init;
+	ble_dis_init_t dis_init;
+	
 	err_code= ble_sls_init( &m_sls ,&sls_init);
 	APP_ERROR_CHECK(err_code);
+
+	memset(&dis_init,0,sizeof(dis_init));
 	
+	dis_init.fw_rev_str.p_str="0.0.1";
+	dis_init.fw_rev_str.length=sizeof("0.0.1");
+	
+	dis_init.hw_rev_str.p_str="0.0.2";
+	dis_init.hw_rev_str.length=sizeof("0.0.2");
+	
+	dis_init.manufact_name_str.p_str=MANUFACTURER_NAME;
+	dis_init.manufact_name_str.length=sizeof(MANUFACTURER_NAME);
+	BLE_GAP_CONN_SEC_MODE_SET_OPEN(&dis_init.dis_attr_md.read_perm);
+	err_code=ble_dis_init(&dis_init);
+	APP_ERROR_CHECK(err_code);
     /* YOUR_JOB: Add code to initialize the services used by the application.
        uint32_t                           err_code;
        ble_xxs_init_t                     xxs_init;
@@ -485,7 +517,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
             break;
 
         case BLE_ADV_EVT_IDLE:
-            //sleep_mode_enter();
+             NRF_LOG_INFO("adverting idle\r\n");//sleep_mode_enter();
             break;
 
         default:
@@ -508,10 +540,6 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             NRF_LOG_INFO("Disconnected.\r\n");
             err_code = bsp_indication_set(BSP_INDICATE_IDLE);
             APP_ERROR_CHECK(err_code);
-				
-				   err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
-				   APP_ERROR_CHECK(err_code);
-				   NRF_LOG_INFO("restart adverting...\r\n");
             break; // BLE_GAP_EVT_DISCONNECTED
 
         case BLE_GAP_EVT_CONNECTED:
@@ -520,7 +548,10 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break; // BLE_GAP_EVT_CONNECTED
-
+        case BLE_GAP_EVT_TIMEOUT:
+            // Disconnect on GATT Client timeout event.
+            NRF_LOG_DEBUG("adverting Timeout.\r\n");
+            break; // BLE_GATTC_EVT_TIMEOUT
         case BLE_GATTC_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
             NRF_LOG_DEBUG("GATT Client Timeout.\r\n");
@@ -600,10 +631,9 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     ble_conn_state_on_ble_evt(p_ble_evt);
     pm_on_ble_evt(p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
+	  on_ble_evt(p_ble_evt);
     //bsp_btn_ble_on_ble_evt(p_ble_evt);
-    on_ble_evt(p_ble_evt);
     ble_advertising_on_ble_evt(p_ble_evt);
-	
 	  ble_sls_on_ble_evt(&m_sls,p_ble_evt);
 	
     /*YOUR_JOB add calls to _on_ble_evt functions from each service your application is using
@@ -836,7 +866,6 @@ int main(void)
     // Initialize.
     err_code = NRF_LOG_INIT(NULL);
     APP_ERROR_CHECK(err_code);
-
     timers_init();
     buttons_switchs_leds_init(&erase_bonds);
     ble_stack_init();

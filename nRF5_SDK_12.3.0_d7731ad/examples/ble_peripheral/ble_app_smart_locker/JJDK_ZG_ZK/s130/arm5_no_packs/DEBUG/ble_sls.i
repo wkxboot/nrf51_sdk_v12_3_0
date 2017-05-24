@@ -22945,17 +22945,17 @@ void ble_sls_on_ble_evt(ble_sls_t * p_sls, ble_evt_t * p_ble_evt)
     {
         case BLE_GAP_EVT_CONNECTED:
             on_connect(p_sls, p_ble_evt);
-				    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BLE_SLS.c" ":" "INFO:" "sls connected!\r\n"); };
+				    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BLE_SLS.c" ":" "INFO:" "sls connected!\r\n"); };
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
             on_disconnect(p_sls, p_ble_evt);
-				    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BLE_SLS.c" ":" "INFO:" "sls disconnected!\r\n"); };
+				    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BLE_SLS.c" ":" "INFO:" "sls disconnected!\r\n"); };
             break;
 
         case BLE_GATTS_EVT_WRITE:
             on_write(p_sls, p_ble_evt);
-				    if ((3 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BLE_SLS.c" ":" "INFO:" "sls writed!\r\n"); };
+				    if ((4 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "BLE_SLS.c" ":" "INFO:" "sls writed!\r\n"); };
             break;
 
         default:

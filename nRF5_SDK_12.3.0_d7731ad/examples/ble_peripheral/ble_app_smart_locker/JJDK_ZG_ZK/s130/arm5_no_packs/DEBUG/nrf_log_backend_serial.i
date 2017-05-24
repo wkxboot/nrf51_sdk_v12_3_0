@@ -16853,7 +16853,7 @@ ret_code_t nrf_log_backend_init(_Bool blocking)
     nrf_drv_uart_config_t uart_config = { . pseltxd = 0xFFFFFFFF, . pselrxd = 0xFFFFFFFF, . pselcts = 0xFFFFFFFF, . pselrts = 0xFFFFFFFF, . p_context = 0, . hwfc = (nrf_uart_hwfc_t)0, . parity = (nrf_uart_parity_t)0, . baudrate = (nrf_uart_baudrate_t)30924800, . interrupt_priority = 3, };
     uart_config.hwfc     =
             (nrf_uart_hwfc_t)0;
-    uart_config.pseltxd  = 24;
+    uart_config.pseltxd  = 30;
     uart_config.pselrxd  = 11;
     uart_config.pselrts  = 8;
     uart_config.pselcts  = 10;

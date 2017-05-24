@@ -690,7 +690,7 @@
 ;;;552    #if defined ( __CC_ARM )
 ;;;553        extern uint32_t Image$$RW_IRAM1$$Base;
 ;;;554        const volatile uint32_t ram_start = (uint32_t) &Image$$RW_IRAM1$$Base;
-000004  4811              LDR      r0,|L10.76|
+000004  4814              LDR      r0,|L10.88|
 000006  9000              STR      r0,[sp,#0]
 ;;;555    #elif defined ( __ICCARM__ )
 ;;;556        extern uint32_t __ICFEDIT_region_RAM_start__;
@@ -704,98 +704,118 @@
 000008  9800              LDR      r0,[sp,#0]
 00000a  9001              STR      r0,[sp,#4]
 ;;;564        NRF_LOG_DEBUG("sd_ble_enable: RAM start at 0x%x\r\n",
+00000c  a113              ADR      r1,|L10.92|
+00000e  2004              MOVS     r0,#4
+000010  9a01              LDR      r2,[sp,#4]
+000012  f7fffffe          BL       nrf_log_frontend_std_1
 ;;;565                        app_ram_base);
 ;;;566        err_code = sd_ble_enable(p_ble_enable_params, &app_ram_base);
-00000c  a901              ADD      r1,sp,#4
-00000e  4628              MOV      r0,r5
-000010  df60              SVC      #0x60
-000012  4604              MOV      r4,r0
+000016  a901              ADD      r1,sp,#4
+000018  4628              MOV      r0,r5
+00001a  df60              SVC      #0x60
+00001c  4604              MOV      r4,r0
 ;;;567    
 ;;;568        if (app_ram_base != ram_start)
-000014  9900              LDR      r1,[sp,#0]
-000016  9801              LDR      r0,[sp,#4]
-000018  4288              CMP      r0,r1
-00001a  d00e              BEQ      |L10.58|
+00001e  9900              LDR      r1,[sp,#0]
+000020  9801              LDR      r0,[sp,#4]
+000022  4288              CMP      r0,r1
+000024  d00e              BEQ      |L10.68|
 ;;;569        {
 ;;;570            NRF_LOG_WARNING("sd_ble_enable: RAM start should be adjusted to 0x%x\r\n",
-00001c  490c              LDR      r1,|L10.80|
-00001e  2002              MOVS     r0,#2
-000020  9a01              LDR      r2,[sp,#4]
-000022  f7fffffe          BL       nrf_log_frontend_std_1
+000026  491a              LDR      r1,|L10.144|
+000028  2002              MOVS     r0,#2
+00002a  9a01              LDR      r2,[sp,#4]
+00002c  f7fffffe          BL       nrf_log_frontend_std_1
 ;;;571                    app_ram_base);
 ;;;572            NRF_LOG_WARNING("RAM size should be adjusted to 0x%x \r\n",
-000026  f7fffffe          BL       ram_end_address_get
-00002a  9901              LDR      r1,[sp,#4]
-00002c  1a46              SUBS     r6,r0,r1
-00002e  4632              MOV      r2,r6
-000030  a108              ADR      r1,|L10.84|
-000032  2002              MOVS     r0,#2
-000034  f7fffffe          BL       nrf_log_frontend_std_1
-000038  e006              B        |L10.72|
-                  |L10.58|
+000030  f7fffffe          BL       ram_end_address_get
+000034  9901              LDR      r1,[sp,#4]
+000036  1a46              SUBS     r6,r0,r1
+000038  4632              MOV      r2,r6
+00003a  a116              ADR      r1,|L10.148|
+00003c  2002              MOVS     r0,#2
+00003e  f7fffffe          BL       nrf_log_frontend_std_1
+000042  e006              B        |L10.82|
+                  |L10.68|
 ;;;573                    ram_end_address_get() - app_ram_base);
 ;;;574        }
 ;;;575        else if (err_code != NRF_SUCCESS)
-00003a  2c00              CMP      r4,#0
-00003c  d004              BEQ      |L10.72|
+000044  2c00              CMP      r4,#0
+000046  d004              BEQ      |L10.82|
 ;;;576        {
 ;;;577            NRF_LOG_ERROR("sd_ble_enable: error 0x%x\r\n", err_code);
-00003e  4622              MOV      r2,r4
-000040  a113              ADR      r1,|L10.144|
-000042  2001              MOVS     r0,#1
-000044  f7fffffe          BL       nrf_log_frontend_std_1
-                  |L10.72|
+000048  4622              MOV      r2,r4
+00004a  a121              ADR      r1,|L10.208|
+00004c  2001              MOVS     r0,#1
+00004e  f7fffffe          BL       nrf_log_frontend_std_1
+                  |L10.82|
 ;;;578        }
 ;;;579        return err_code;
-000048  4620              MOV      r0,r4
+000052  4620              MOV      r0,r4
 ;;;580    #else
 ;;;581        return NRF_SUCCESS;
 ;;;582    #endif   //defined(S130) || defined(S132) || defined(S332)
 ;;;583    
 ;;;584    }
-00004a  bd7c              POP      {r2-r6,pc}
+000054  bd7c              POP      {r2-r6,pc}
 ;;;585    /*lint -restore*/
                           ENDP
 
-                  |L10.76|
+000056  0000              DCW      0x0000
+                  |L10.88|
                           DCD      ||Image$$RW_IRAM1$$Base||
-                  |L10.80|
-                          DCD      ||.conststring||+0x44
-                  |L10.84|
-000054  1b5b313b          DCB      27,"[1;33mSDH:WARNING:RAM size should be adjusted to 0x%"
-000058  33336d53
-00005c  44483a57
-000060  41524e49
-000064  4e473a52
-000068  414d2073
-00006c  697a6520
-000070  73686f75
-000074  6c642062
-000078  65206164
-00007c  6a757374
-000080  65642074
-000084  6f203078
-000088  25      
-000089  78200d0a          DCB      "x \r\n",0
-00008d  00      
-00008e  00                DCB      0
+                  |L10.92|
+00005c  1b5b313b          DCB      27,"[1;32mSDH:DEBUG:sd_ble_enable: RAM start at 0x%x\r\n"
+000060  33326d53
+000064  44483a44
+000068  45425547
+00006c  3a73645f
+000070  626c655f
+000074  656e6162
+000078  6c653a20
+00007c  52414d20
+000080  73746172
+000084  74206174
+000088  20307825
+00008c  780d0a  
 00008f  00                DCB      0
                   |L10.144|
-000090  1b5b313b          DCB      27,"[1;31mSDH:ERROR:sd_ble_enable: error 0x%x\r\n",0
-000094  33316d53
-000098  44483a45
-00009c  52524f52
-0000a0  3a73645f
-0000a4  626c655f
-0000a8  656e6162
-0000ac  6c653a20
-0000b0  6572726f
-0000b4  72203078
-0000b8  25780d0a
-0000bc  00      
-0000bd  00                DCB      0
-0000be  00                DCB      0
-0000bf  00                DCB      0
+                          DCD      ||.conststring||+0x44
+                  |L10.148|
+000094  1b5b313b          DCB      27,"[1;33mSDH:WARNING:RAM size should be adjusted to 0x%"
+000098  33336d53
+00009c  44483a57
+0000a0  41524e49
+0000a4  4e473a52
+0000a8  414d2073
+0000ac  697a6520
+0000b0  73686f75
+0000b4  6c642062
+0000b8  65206164
+0000bc  6a757374
+0000c0  65642074
+0000c4  6f203078
+0000c8  25      
+0000c9  78200d0a          DCB      "x \r\n",0
+0000cd  00      
+0000ce  00                DCB      0
+0000cf  00                DCB      0
+                  |L10.208|
+0000d0  1b5b313b          DCB      27,"[1;31mSDH:ERROR:sd_ble_enable: error 0x%x\r\n",0
+0000d4  33316d53
+0000d8  44483a45
+0000dc  52524f52
+0000e0  3a73645f
+0000e4  626c655f
+0000e8  656e6162
+0000ec  6c653a20
+0000f0  6572726f
+0000f4  72203078
+0000f8  25780d0a
+0000fc  00      
+0000fd  00                DCB      0
+0000fe  00                DCB      0
+0000ff  00                DCB      0
 
                           AREA ||i.softdevice_enable_get_default_config||, CODE, READONLY, ALIGN=1
 

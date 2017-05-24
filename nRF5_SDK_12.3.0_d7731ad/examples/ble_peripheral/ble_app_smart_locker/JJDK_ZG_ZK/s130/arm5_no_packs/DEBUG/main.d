@@ -75,4 +75,5 @@
 .\debug\main.o: ..\..\..\..\..\..\components\libraries\log\nrf_log_ctrl.h
 .\debug\main.o: ..\..\..\..\..\..\components\libraries\log\src\nrf_log_ctrl_internal.h
 .\debug\main.o: ..\..\..\..\..\..\components\ble\ble_services\ble_sls\ble_sls.h
+.\debug\main.o: ..\..\..\..\..\..\components\ble\ble_services\ble_dis\ble_dis.h
 .\debug\main.o: ..\..\..\..\..\..\components\libraries\bsp\bsp_btn_switch.h

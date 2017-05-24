@@ -18679,7 +18679,7 @@ ret_code_t nrf_drv_uart_init(const nrf_drv_uart_t * p_instance, nrf_drv_uart_con
     if (p_cb->state != NRF_DRV_STATE_UNINITIALIZED)
     {
         err_code = ((0x0) + 8);
-        if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+        if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
         return err_code;
     }
 
@@ -18702,7 +18702,7 @@ ret_code_t nrf_drv_uart_init(const nrf_drv_uart_t * p_instance, nrf_drv_uart_con
     p_cb->tx_buffer_length = 0;
     p_cb->state = NRF_DRV_STATE_INITIALIZED;
     p_cb->rx_enabled = 0;
-    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
     return err_code;
 }
 
@@ -18721,7 +18721,7 @@ void nrf_drv_uart_uninit(const nrf_drv_uart_t * p_instance)
 
     p_cb->state = NRF_DRV_STATE_UNINITIALIZED;
     p_cb->handler = 0;
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Instance uninitialized: %d.\r\n", p_instance ->drv_inst_idx); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Instance uninitialized: %d.\r\n", p_instance ->drv_inst_idx); };
 }
 
 
@@ -18771,7 +18771,7 @@ static __inline ret_code_t nrf_drv_uart_tx_for_uart(const nrf_drv_uart_t * p_ins
         p_cb->tx_buffer_length = 0;
     }
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
     return err_code;
 }
 
@@ -18793,16 +18793,16 @@ ret_code_t nrf_drv_uart_tx(const nrf_drv_uart_t * p_instance, uint8_t const * co
     if (nrf_drv_uart_tx_in_progress(p_instance))
     {
         err_code = ((0x0) + 17);
-        if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+        if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
         return err_code;
     }
     p_cb->tx_buffer_length = length;
     p_cb->p_tx_buffer      = p_data;
     p_cb->tx_counter       = 0;
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Transfer tx_len: %d.\r\n", p_cb->tx_buffer_length); };
-    if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "UART" ":" "DEBUG:" "Tx data:\r\n"); };
-    if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_hexdump(4U, "\x1B[1;32m" "UART" ":" "DEBUG:" "\r\n", ((uint8_t *)p_cb->p_tx_buffer), (p_cb->tx_buffer_length * sizeof(p_cb->p_tx_buffer))); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Transfer tx_len: %d.\r\n", p_cb->tx_buffer_length); };
+    if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_0(4U, "\x1B[1;32m" "UART" ":" "DEBUG:" "Tx data:\r\n"); };
+    if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_hexdump(4U, "\x1B[1;32m" "UART" ":" "DEBUG:" "\r\n", ((uint8_t *)p_cb->p_tx_buffer), (p_cb->tx_buffer_length * sizeof(p_cb->p_tx_buffer))); };
 
     
 
@@ -18879,14 +18879,14 @@ static __inline ret_code_t nrf_drv_uart_rx_for_uart(const nrf_drv_uart_t * p_ins
         if (error)
         {
             err_code = ((0x0) + 3);
-            if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+            if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
             return err_code;
         }
 
         if (rxto)
         {
             err_code = ((0x0) + 15);
-            if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+            if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
             return err_code;
         }
 
@@ -18905,7 +18905,7 @@ static __inline ret_code_t nrf_drv_uart_rx_for_uart(const nrf_drv_uart_t * p_ins
         nrf_uart_int_enable(p_instance->reg.p_uart, NRF_UART_INT_MASK_RXDRDY | NRF_UART_INT_MASK_ERROR);
     }
     err_code = ((0x0) + 0);
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
     return err_code;
 }
 
@@ -18953,7 +18953,7 @@ ret_code_t nrf_drv_uart_rx(const nrf_drv_uart_t * p_instance, uint8_t * p_data, 
 
             }
             err_code = ((0x0) + 17);
-            if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+            if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "UART" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
             return err_code;
         }
         second_buffer = 1;
@@ -18972,7 +18972,7 @@ ret_code_t nrf_drv_uart_rx(const nrf_drv_uart_t * p_instance, uint8_t * p_data, 
         p_cb->rx_secondary_buffer_length = length;
     }
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Transfer rx_len: %d.\r\n", length); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_1(3U, "\x1B[1;32m" "UART" ":" "INFO:" "Transfer rx_len: %d.\r\n", length); };
 
 
     
@@ -19058,7 +19058,7 @@ void nrf_drv_uart_tx_abort(const nrf_drv_uart_t * p_instance)
 #line 759 "..\\..\\..\\..\\..\\..\\components\\drivers_nrf\\uart\\nrf_drv_uart.c"
     { nrf_uart_task_trigger(p_instance ->reg . p_uart, NRF_UART_TASK_STOPTX); if (p_cb->handler) { tx_done_event(p_cb, p_cb->tx_counter); } else { p_cb->tx_counter = 256; } }
 #line 771 "..\\..\\..\\..\\..\\..\\components\\drivers_nrf\\uart\\nrf_drv_uart.c"
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "UART" ":" "INFO:" "TX transaction aborted.\r\n"); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "UART" ":" "INFO:" "TX transaction aborted.\r\n"); };
 }
 
 void nrf_drv_uart_rx_abort(const nrf_drv_uart_t * p_instance)
@@ -19072,7 +19072,7 @@ void nrf_drv_uart_rx_abort(const nrf_drv_uart_t * p_instance)
 
 
 
-    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "UART" ":" "INFO:" "RX transaction aborted.\r\n"); };
+    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "UART" ":" "INFO:" "RX transaction aborted.\r\n"); };
 }
 
 
@@ -19084,7 +19084,7 @@ static __inline void uart_irq_handler(NRF_UART_Type * p_uart, uart_control_block
     {
         nrf_drv_uart_event_t event;
         nrf_uart_event_clear(p_uart, NRF_UART_EVENT_ERROR);
-        if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "UART" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
+        if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "UART" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
         nrf_uart_int_disable(p_uart, NRF_UART_INT_MASK_RXDRDY | NRF_UART_INT_MASK_ERROR);
         if (!p_cb->rx_enabled)
         {

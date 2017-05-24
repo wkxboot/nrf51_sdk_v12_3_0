@@ -33,6 +33,8 @@
 .\debug\nrf_log_backend_serial.o: ..\..\..\..\..\..\components\libraries\util\app_error_weak.h
 .\debug\nrf_log_backend_serial.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 .\debug\nrf_log_backend_serial.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
+.\debug\nrf_log_backend_serial.o: ..\..\..\..\..\..\external\segger_rtt\SEGGER_RTT_Conf.h
+.\debug\nrf_log_backend_serial.o: ..\..\..\..\..\..\external\segger_rtt\SEGGER_RTT.h
 .\debug\nrf_log_backend_serial.o: ..\..\..\..\..\..\components\drivers_nrf\uart\nrf_drv_uart.h
 .\debug\nrf_log_backend_serial.o: ..\..\..\..\..\..\components\drivers_nrf\hal\nrf_uart.h
 .\debug\nrf_log_backend_serial.o: ..\..\..\..\..\..\components\drivers_nrf\hal\nrf_peripherals.h

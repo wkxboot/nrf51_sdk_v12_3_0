@@ -18794,7 +18794,8 @@ static void on_disconnected(ble_evt_t const * p_ble_evt)
 
     if (p_ble_evt->evt.gap_evt.conn_handle == m_current_slave_link_conn_handle)
     {
-       ret = ble_advertising_start(BLE_ADV_MODE_DIRECTED);
+       
+		  	ret = ble_advertising_start(m_adv_mode_current);
        if ((ret != ((0x0) + 0)) && (m_error_handler != 0))
        {
            m_error_handler(ret);
@@ -18818,8 +18819,8 @@ static void on_timeout(ble_evt_t const * p_ble_evt)
     }
 
     
-    ret = ble_advertising_start(adv_mode_next_get(m_adv_mode_current));
-
+    
+    ret = ble_advertising_start(m_adv_mode_current);
     if ((ret != ((0x0) + 0)) && (m_error_handler != 0))
     {
         m_error_handler(ret);

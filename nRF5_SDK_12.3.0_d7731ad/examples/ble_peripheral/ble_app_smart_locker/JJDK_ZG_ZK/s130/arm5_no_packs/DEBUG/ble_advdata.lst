@@ -21168,7 +21168,7 @@ N
 N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 N//==========================================================
 N#ifndef UART_ENABLED
-N#define UART_ENABLED 1
+N#define UART_ENABLED            1
 N#endif
 N#if  UART_ENABLED
 X#if  1
@@ -21243,7 +21243,7 @@ N
 N// <e> UART0_ENABLED - Enable UART0 instance
 N//==========================================================
 N#ifndef UART0_ENABLED
-N#define UART0_ENABLED 1
+N#define UART0_ENABLED   1
 N#endif
 N#if  UART0_ENABLED
 X#if  1
@@ -22072,7 +22072,7 @@ N// <3=> Info
 N// <4=> Debug 
 N
 N#ifndef NRF_LOG_DEFAULT_LEVEL
-N#define NRF_LOG_DEFAULT_LEVEL 3
+N#define NRF_LOG_DEFAULT_LEVEL 4
 N#endif
 N
 N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -22155,7 +22155,7 @@ N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 30//24 //30 DDB 24 JJYJS
 N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 

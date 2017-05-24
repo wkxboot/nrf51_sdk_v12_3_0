@@ -15338,7 +15338,7 @@ N
 N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 N//==========================================================
 N#ifndef UART_ENABLED
-N#define UART_ENABLED 1
+N#define UART_ENABLED            1
 N#endif
 N#if  UART_ENABLED
 X#if  1
@@ -15413,7 +15413,7 @@ N
 N// <e> UART0_ENABLED - Enable UART0 instance
 N//==========================================================
 N#ifndef UART0_ENABLED
-N#define UART0_ENABLED 1
+N#define UART0_ENABLED   1
 N#endif
 N#if  UART0_ENABLED
 X#if  1
@@ -16242,7 +16242,7 @@ N// <3=> Info
 N// <4=> Debug 
 N
 N#ifndef NRF_LOG_DEFAULT_LEVEL
-N#define NRF_LOG_DEFAULT_LEVEL 3
+N#define NRF_LOG_DEFAULT_LEVEL 4
 N#endif
 N
 N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -16325,7 +16325,7 @@ N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 30//24 //30 DDB 24 JJYJS
 N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 
@@ -21969,7 +21969,7 @@ N__WEAK void app_error_fault_handler(uint32_t id, uint32_t pc, uint32_t info)
 X__weak void app_error_fault_handler(uint32_t id, uint32_t pc, uint32_t info)
 N{
 N    NRF_LOG_ERROR("Fatal\r\n");
-X    if ((3 >= 1U) && (1U <= 3)) { nrf_log_frontend_std_0(1U, "\x1B[1;31m" "APP_ERROR" ":" "ERROR:" "Fatal\r\n"); };
+X    if ((4 >= 1U) && (1U <= 4)) { nrf_log_frontend_std_0(1U, "\x1B[1;31m" "APP_ERROR" ":" "ERROR:" "Fatal\r\n"); };
 N    NRF_LOG_FINAL_FLUSH();
 X    do { (void)nrf_log_blocking_backend_set(); do { while (nrf_log_frontend_dequeue()); } while(0); ; } while(0);
 N    // On assert, the system can only recover with a reset.

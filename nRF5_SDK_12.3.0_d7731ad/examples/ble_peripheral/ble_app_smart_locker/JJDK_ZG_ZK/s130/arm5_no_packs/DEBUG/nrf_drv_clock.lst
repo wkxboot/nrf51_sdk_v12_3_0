@@ -3693,7 +3693,7 @@ N
 N// <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver
 N//==========================================================
 N#ifndef UART_ENABLED
-N#define UART_ENABLED 1
+N#define UART_ENABLED            1
 N#endif
 N#if  UART_ENABLED
 X#if  1
@@ -3768,7 +3768,7 @@ N
 N// <e> UART0_ENABLED - Enable UART0 instance
 N//==========================================================
 N#ifndef UART0_ENABLED
-N#define UART0_ENABLED 1
+N#define UART0_ENABLED   1
 N#endif
 N#if  UART0_ENABLED
 X#if  1
@@ -4597,7 +4597,7 @@ N// <3=> Info
 N// <4=> Debug 
 N
 N#ifndef NRF_LOG_DEFAULT_LEVEL
-N#define NRF_LOG_DEFAULT_LEVEL 3
+N#define NRF_LOG_DEFAULT_LEVEL 4
 N#endif
 N
 N// <e> NRF_LOG_DEFERRED - Enable deffered logger.
@@ -4680,7 +4680,7 @@ N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_TX_PIN - UART TX pin 
 N#ifndef NRF_LOG_BACKEND_SERIAL_UART_TX_PIN
-N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 24
+N#define NRF_LOG_BACKEND_SERIAL_UART_TX_PIN 30//24 //30 DDB 24 JJYJS
 N#endif
 N
 N// <o> NRF_LOG_BACKEND_SERIAL_UART_RX_PIN - UART RX pin 
@@ -30088,7 +30088,7 @@ N    }
 N
 N    NRF_LOG_INFO("Function: %s, error code: %s.\r\n",
 N        (uint32_t)__func__, (uint32_t)ERR_TO_STR(err_code));
-X    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+X    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_2(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 N    return err_code;
 N}
 N
@@ -30104,7 +30104,7 @@ N    hfclk_stop();
 N    m_clock_cb.module_initialized = false;
 X    m_clock_cb.module_initialized = 0;
 N    NRF_LOG_INFO("Uninitialized.\r\n");
-X    if ((0 >= 3U) && (3U <= 3)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Uninitialized.\r\n"); };
+X    if ((0 >= 3U) && (3U <= 4)) { nrf_log_frontend_std_0(3U, "\x1B[1;32m" "CLOCK" ":" "INFO:" "Uninitialized.\r\n"); };
 N}
 N
 Nstatic void item_enqueue(nrf_drv_clock_handler_item_t ** p_head,
@@ -30348,7 +30348,7 @@ N#else
 N    err_code = NRF_ERROR_FORBIDDEN;
 X    err_code = ((0x0) + 15);
 N    NRF_LOG_WARNING("Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)ERR_TO_STR(err_code));
-X    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+X    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 N    return err_code;
 N#endif // CALIBRATION_SUPPORT
 N}
@@ -30387,7 +30387,7 @@ N#else
 N    err_code = NRF_ERROR_FORBIDDEN;
 X    err_code = ((0x0) + 15);
 N    NRF_LOG_WARNING("Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)ERR_TO_STR(err_code));
-X    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+X    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 N    return err_code;
 N#endif // CALIBRATION_SUPPORT
 N}
@@ -30407,7 +30407,7 @@ N#else
 N    err_code = NRF_ERROR_FORBIDDEN;
 X    err_code = ((0x0) + 15);
 N    NRF_LOG_WARNING("Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)ERR_TO_STR(err_code));
-X    if ((0 >= 2U) && (2U <= 3)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
+X    if ((0 >= 2U) && (2U <= 4)) { nrf_log_frontend_std_2(2U, "\x1B[1;33m" "CLOCK" ":" "WARNING:" "Function: %s, error code: %s.\r\n", (uint32_t)__func__, (uint32_t)m_sdk_errors_name[err_code]); };
 N    return err_code;
 N#endif // CALIBRATION_SUPPORT
 N}
@@ -30448,7 +30448,7 @@ N    if (nrf_clock_event_check(NRF_CLOCK_EVENT_HFCLKSTARTED))
 N    {
 N        nrf_clock_event_clear(NRF_CLOCK_EVENT_HFCLKSTARTED);
 N        NRF_LOG_DEBUG("Event: %s.\r\n", (uint32_t)EVT_TO_STR(NRF_CLOCK_EVENT_HFCLKSTARTED));
-X        if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
+X        if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
 N        nrf_clock_int_disable(NRF_CLOCK_INT_HF_STARTED_MASK);
 N        m_clock_cb.hfclk_on = true;
 X        m_clock_cb.hfclk_on = 1;
@@ -30458,7 +30458,7 @@ N    if (nrf_clock_event_check(NRF_CLOCK_EVENT_LFCLKSTARTED))
 N    {
 N        nrf_clock_event_clear(NRF_CLOCK_EVENT_LFCLKSTARTED);
 N        NRF_LOG_DEBUG("Event: %s.\r\n", (uint32_t)EVT_TO_STR(NRF_CLOCK_EVENT_LFCLKSTARTED));
-X        if ((0 >= 4U) && (4U <= 3)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
+X        if ((0 >= 4U) && (4U <= 4)) { nrf_log_frontend_std_1(4U, "\x1B[1;32m" "CLOCK" ":" "DEBUG:" "Event: %s.\r\n", (uint32_t)""); };
 N        nrf_clock_int_disable(NRF_CLOCK_INT_LF_STARTED_MASK);
 N        m_clock_cb.lfclk_on = true;
 X        m_clock_cb.lfclk_on = 1;
