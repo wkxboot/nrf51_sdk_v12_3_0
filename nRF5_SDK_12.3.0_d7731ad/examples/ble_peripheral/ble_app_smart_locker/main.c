@@ -821,7 +821,7 @@ static void buttons_switchs_leds_init(bool * p_erase_bonds)
 {
    // bsp_event_t startup_event;
 
-    uint32_t err_code = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS,
+    uint32_t err_code = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS|BSP_INIT_SWITCHS,
                                  APP_TIMER_TICKS(100, APP_TIMER_PRESCALER),
                                  bsp_event_handler);
 

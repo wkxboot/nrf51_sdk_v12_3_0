@@ -68,11 +68,11 @@ extern "C" {
 #define SWITCHS_NUMBER           4 
 #define SWITCH_START             1
 #define SWITCH_1                 1  
-#define SWITCH_2                 6//SWITCH_UV_LAMP           6        //??????
-#define SWITCH_3                 7//SWITCH_FAN_NEGATIVE_ION  7        //?????????
-#define SWITCH_4                 11//SWITCH_ELEC_LOCK         11       //?????
+#define SWITCH_2                 6//SWITCH_UV_LAMP           6 消毒紫外灯
+#define SWITCH_3                 7//SWITCH_FAN_NEGATIVE_ION  7 风扇和负氧离子
+#define SWITCH_4                 11//SWITCH_ELEC_LOCK        11电磁锁
 #define SWITCH_STOP              11
-#define SWITCH_ACTIVE_STATE      1
+#define SWITCHS_ACTIVE_STATE     1
 
 #define SWITCHS_LIST { SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4 }
   
@@ -100,7 +100,7 @@ extern "C" {
 #define BSP_BUTTON_2   BUTTON_3
 
 
-#define RX_PIN_NUMBER  11
+#define RX_PIN_NUMBER  10
 #define TX_PIN_NUMBER  24 
 #define CTS_PIN_NUMBER 10
 #define RTS_PIN_NUMBER 8

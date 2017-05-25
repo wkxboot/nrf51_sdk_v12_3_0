@@ -172,27 +172,27 @@ uint32_t bsp_board_button_idx_to_pin(uint32_t button_idx)
 #if SWITCHS_NUMBER > 0
 bool bsp_board_switch_state_get(uint32_t switch_idx)
 {
-    ASSERT(switch_idx < LEDS_NUMBER);
+    ASSERT(switch_idx < SWITCHS_NUMBER);
     bool pin_set = nrf_gpio_pin_out_read(m_board_switch_list[switch_idx]) ? true : false;
-    return (pin_set == (LEDS_ACTIVE_STATE ? true : false));
+    return (pin_set == (SWITCHS_ACTIVE_STATE ? true : false));
 }
 
 void bsp_board_switch_on(uint32_t switch_idx)
 {
-        ASSERT(switch_idx < LEDS_NUMBER);
-        nrf_gpio_pin_write(m_board_switch_list[switch_idx], LEDS_ACTIVE_STATE ? 1 : 0);
+        ASSERT(switch_idx < SWITCHS_NUMBER);
+        nrf_gpio_pin_write(m_board_switch_list[switch_idx], SWITCHS_ACTIVE_STATE ? 1 : 0);
 }
 
 void bsp_board_switch_off(uint32_t switch_idx)
 {
-    ASSERT(switch_idx < LEDS_NUMBER);
-    nrf_gpio_pin_write(m_board_switch_list[switch_idx], LEDS_ACTIVE_STATE ? 0 : 1);
+    ASSERT(switch_idx < SWITCHS_NUMBER);
+    nrf_gpio_pin_write(m_board_switch_list[switch_idx], SWITCHS_ACTIVE_STATE ? 0 : 1);
 }
 
 void bsp_board_switchs_off(void)
 {
     uint32_t i;
-    for(i = 0; i < LEDS_NUMBER; ++i)
+    for(i = 0; i < SWITCHS_NUMBER; ++i)
     {
         bsp_board_switch_off(i);
     }
@@ -201,7 +201,7 @@ void bsp_board_switchs_off(void)
 void bsp_board_switchs_on(void)
 {
     uint32_t i;
-    for(i = 0; i < LEDS_NUMBER; ++i)
+    for(i = 0; i < SWITCHS_NUMBER; ++i)
     {
         bsp_board_switch_on(i);
     }
@@ -209,14 +209,14 @@ void bsp_board_switchs_on(void)
 
 void bsp_board_switch_invert(uint32_t switch_idx)
 {
-    ASSERT(switch_idx < LEDS_NUMBER);
+    ASSERT(switch_idx < SWITCHS_NUMBER);
     nrf_gpio_pin_toggle(m_board_switch_list[switch_idx]);
 }
 
 void bsp_board_switchs_init(void)
 {
     uint32_t i;
-    for(i = 0; i < LEDS_NUMBER; ++i)
+    for(i = 0; i < SWITCHS_NUMBER; ++i)
     {
         nrf_gpio_cfg_output(m_board_switch_list[i]);
     }
@@ -225,7 +225,7 @@ void bsp_board_switchs_init(void)
 
 uint32_t bsp_board_switch_idx_to_pin(uint32_t switch_idx)
 {
-    ASSERT(switch_idx < LEDS_NUMBER);
+    ASSERT(switch_idx < SWITCHS_NUMBER);
     return m_board_switch_list[switch_idx];
 }
 
@@ -233,7 +233,7 @@ uint32_t bsp_board_pin_to_switch_idx(uint32_t pin_number)
 {
     uint32_t ret = 0xFFFFFFFF;
     uint32_t i;
-    for(i = 0; i < LEDS_NUMBER; ++i)
+    for(i = 0; i < SWITCHS_NUMBER; ++i)
     {
         if (m_board_switch_list[i] == pin_number)
         {

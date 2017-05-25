@@ -80,7 +80,7 @@ static void detection_delay_timeout_handler(void * p_context)
         {
             m_pin_transition &= ~btn_mask;
             bool pin_is_set = nrf_drv_gpiote_in_is_set(p_btn->pin_no);
-            if ((m_pin_state & (1 << p_btn->pin_no)) == (pin_is_set << p_btn->pin_no))
+           // if ((m_pin_state & (1 << p_btn->pin_no)) == (pin_is_set << p_btn->pin_no))
             {
                 uint32_t transition = !(pin_is_set ^ (p_btn->active_state == APP_BUTTON_ACTIVE_HIGH));
 
@@ -110,8 +110,8 @@ static void gpiote_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t
         return;
     }
 
-    if (!(m_pin_transition & pin_mask))
-    {
+//    if (!(m_pin_transition & pin_mask))
+//    {
         if (nrf_drv_gpiote_in_is_set(pin))
         {
             m_pin_state |= pin_mask;
@@ -128,11 +128,11 @@ static void gpiote_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t
             // The impact in app_button of the app_timer queue running full is losing a button press.
             // The current implementation ensures that the system will continue working as normal.
         }
-    }
-    else
-    {
-        m_pin_transition &= ~pin_mask;
-    }
+//    }
+//    else
+//    {
+//        m_pin_transition &= ~pin_mask;
+//    }
 }
 
 uint32_t app_button_init(app_button_cfg_t const *       p_buttons,
@@ -164,7 +164,7 @@ uint32_t app_button_init(app_button_cfg_t const *       p_buttons,
     {
         app_button_cfg_t const * p_btn = &p_buttons[button_count];
 
-        nrf_drv_gpiote_in_config_t config = GPIOTE_CONFIG_IN_SENSE_TOGGLE(false);
+        nrf_drv_gpiote_in_config_t config = GPIOTE_CONFIG_IN_SENSE_TOGGLE(true);
         config.pull = p_btn->pull_cfg;
 
         err_code = nrf_drv_gpiote_in_init(p_btn->pin_no, &config, gpiote_event_handler);

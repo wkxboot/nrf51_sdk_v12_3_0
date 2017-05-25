@@ -67,7 +67,7 @@ static void bsp_close_fan_negative_ion_and_indicator_led(void)
 static void bsp_open_elec_lock(void)
 {
 	static uint8_t open_try_times=DEFAULT_OPEN_LOCK_TRY_TIMES;
-	NRF_LOG_INFO("cur open time_remain:%d",open_try_times);
+	NRF_LOG_INFO("cur open time_remain:%d\r\n",open_try_times);
   if(elec_lock_status==DEVICE_STATUS_CLOSED && open_try_times>0)
   {	
 	 open_try_times--;
