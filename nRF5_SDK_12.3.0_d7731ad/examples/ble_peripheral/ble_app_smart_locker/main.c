@@ -118,16 +118,19 @@
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(30000, APP_TIMER_PRESCALER) /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
 
-#define SEC_PARAM_BOND                  1                                           /**< Perform bonding. */
-#define SEC_PARAM_MITM                  0                                           /**< Man In The Middle protection not required. */
+#define SEC_PARAM_BOND                  0                                           /**< Perform bonding. */
+#define SEC_PARAM_MITM                  1                                           /**< Man In The Middle protection not required. */
 #define SEC_PARAM_LESC                  0                                           /**< LE Secure Connections not enabled. */
 #define SEC_PARAM_KEYPRESS              0                                           /**< Keypress notifications not enabled. */
-#define SEC_PARAM_IO_CAPABILITIES       BLE_GAP_IO_CAPS_NONE                        /**< No I/O capabilities. */
+#define SEC_PARAM_IO_CAPABILITIES       BLE_GAP_IO_CAPS_DISPLAY_ONLY                        /**< No I/O capabilities. */
 #define SEC_PARAM_OOB                   0                                           /**< Out Of Band data not available. */
 #define SEC_PARAM_MIN_KEY_SIZE          7                                           /**< Minimum encryption key size. */
 #define SEC_PARAM_MAX_KEY_SIZE          16                                          /**< Maximum encryption key size. */
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
+
+#define SMART_LOCKER_PASSKEY_STATIC     "888888"                                    /**<配对链路认证密码>**/
+#define SMART_LOCKER_PASSKEY_RAMDOM     NULL                                        
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
 
@@ -140,7 +143,7 @@ ble_sls_t  m_sls;
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}}; /**< Universally unique service identifiers. */
 
-static void advertising_start(void);
+//static void advertising_start(void);
 
 /**@brief Callback function for asserts in the SoftDevice.
  *
@@ -206,6 +209,13 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
              * Sometimes, it cannot be restarted until the link is disconnected and reconnected.
              * Sometimes it is impossible, to secure the link, or the peer device does not support it.
              * How to handle this error is highly application dependent. */
+					  NRF_LOG_INFO("安全连接失败，主动断开连接！！！\r\n");
+					  err_code = sd_ble_gap_disconnect(m_conn_handle,
+                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            if (err_code != NRF_ERROR_INVALID_STATE)
+            {
+                APP_ERROR_CHECK(err_code);
+            }
         } break;
 
         case PM_EVT_CONN_SEC_CONFIG_REQ:
@@ -231,7 +241,8 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
 
         case PM_EVT_PEERS_DELETE_SUCCEEDED:
         {
-            advertising_start();
+					NRF_LOG_INFO("PM_EVT_PEERS_DELETE_SUCCEEDED!\r\n");
+          //advertising_start();
         } break;
 
         case PM_EVT_LOCAL_DB_CACHE_APPLY_FAILED:
@@ -251,10 +262,10 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
             // Assert.
             APP_ERROR_CHECK(p_evt->params.peer_delete_failed.error);
         } break;
-
         case PM_EVT_PEERS_DELETE_FAILED:
         {
             // Assert.
+					  NRF_LOG_INFO("PM_EVT_PEERS_DELETE_FAILED!\r\n");
             APP_ERROR_CHECK(p_evt->params.peers_delete_failed_evt.error);
         } break;
 
@@ -265,6 +276,9 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
         } break;
 
         case PM_EVT_CONN_SEC_START:
+					
+				NRF_LOG_INFO("配对开始...\r\n");
+				break;
         case PM_EVT_PEER_DATA_UPDATE_SUCCEEDED:
         case PM_EVT_PEER_DELETE_SUCCEEDED:
         case PM_EVT_LOCAL_DB_CACHE_APPLIED:
@@ -533,20 +547,28 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 static void on_ble_evt(ble_evt_t * p_ble_evt)
 {
     uint32_t err_code = NRF_SUCCESS;
-
+    ble_gap_sec_params_t sec_param={0};
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
-            NRF_LOG_INFO("Disconnected.\r\n");
+            NRF_LOG_INFO("smart locker ble4.0 Disconnected.\r\n");
+				
+				    //err_code = pm_peers_delete();
+            //APP_ERROR_CHECK(err_code);
             err_code = bsp_indication_set(BSP_INDICATE_IDLE);
             APP_ERROR_CHECK(err_code);
             break; // BLE_GAP_EVT_DISCONNECTED
 
         case BLE_GAP_EVT_CONNECTED:
-            NRF_LOG_INFO("Connected.\r\n");
+            NRF_LOG_INFO("smart locker ble4.0 Connected.\r\n");
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+				    
+			    	sec_param.bond=SEC_PARAM_BOND;
+				    sec_param.mitm=SEC_PARAM_MITM;
+				    err_code=sd_ble_gap_authenticate(m_conn_handle,&sec_param);//直接请求安全认证
+				    APP_ERROR_CHECK(err_code); 
             break; // BLE_GAP_EVT_CONNECTED
         case BLE_GAP_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
@@ -572,7 +594,6 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             err_code = sd_ble_user_mem_reply(p_ble_evt->evt.gattc_evt.conn_handle, NULL);
             APP_ERROR_CHECK(err_code);
             break; // BLE_EVT_USER_MEM_REQUEST
-
         case BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST:
         {
             ble_gatts_evt_rw_authorize_request_t  req;
@@ -617,6 +638,74 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 }
 
 
+//链路认证（配对）密码设置，静态或者随机或者无
+static void pairing_and_bonding_init()
+{
+	uint32_t err_code;
+	ble_opt_t opt;
+	opt.gap_opt.passkey.p_passkey=SMART_LOCKER_PASSKEY_STATIC;
+	err_code=sd_ble_opt_set(BLE_GAP_OPT_PASSKEY,&opt);
+  APP_ERROR_CHECK(err_code);
+	
+}
+
+
+//链路认证（配对）结果处理
+
+/**@brief Function for processing the @ref BLE_GAP_EVT_AUTH_STATUS event from the SoftDevice.
+ *
+ * @param[in]  p_gap_evt  The event from the SoftDevice.
+ */
+static void auth_status_process(ble_gap_evt_t * p_gap_evt)
+{
+	  uint32_t auth_status,err_code;
+	  auth_status=p_gap_evt->params.auth_status.auth_status;
+    switch (auth_status)
+    {
+        case BLE_GAP_SEC_STATUS_SUCCESS:
+        NRF_LOG_INFO("配对成功，链路已加密！！\r\n");
+        break;
+
+        default:
+				NRF_LOG_INFO("链路认证状态值：%d\r\n",auth_status);
+        NRF_LOG_INFO("配对失败，链路没有加密！主动断开连接！\r\n");
+			  err_code = sd_ble_gap_disconnect(m_conn_handle,
+                                        BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+        if (err_code != NRF_ERROR_INVALID_STATE)
+         {
+            APP_ERROR_CHECK(err_code);
+         }
+    }
+}
+
+//配对和链路认证处理过程，这个过程在security_manager.c中已经有处理的，代码在这里只是为了查看这个过程
+static void pairing_on_ble_evt(ble_evt_t * p_ble_evt)
+{
+	ble_gap_sec_params_t sec_param;
+	uint8_t *ppasskey;
+	switch(p_ble_evt->header.evt_id)
+	{
+		case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
+		sec_param=p_ble_evt->evt.gap_evt.params.sec_params_request.peer_params;
+		NRF_LOG_INFO("收到配对请求！\r\nsec_param.bond:%d\r\nsec_param.io_caps:%d\r\nsec_param.keypress:%d\r\n",sec_param.bond,sec_param.io_caps,sec_param.keypress);
+		break;
+		case BLE_GAP_EVT_PASSKEY_DISPLAY:
+		ppasskey=p_ble_evt->evt.gap_evt.params.passkey_display.passkey;	
+		NRF_LOG_INFO("收到密码显示请求，密码为：\r\nnpasskey->%s\r\n",(uint32_t)ppasskey);
+		break;
+		case BLE_GAP_EVT_AUTH_STATUS://链路认证（配对）结果
+    auth_status_process(&(p_ble_evt->evt.gap_evt));
+    break;
+		default:
+			
+	  break;
+		
+		
+	}
+	
+	
+	
+}
 /**@brief Function for dispatching a BLE stack event to all modules with a BLE stack event handler.
  *
  * @details This function is called from the BLE Stack event interrupt handler after a BLE stack
@@ -635,7 +724,7 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     //bsp_btn_ble_on_ble_evt(p_ble_evt);
     ble_advertising_on_ble_evt(p_ble_evt);
 	  ble_sls_on_ble_evt(&m_sls,p_ble_evt);
-	
+	  pairing_on_ble_evt(p_ble_evt);
     /*YOUR_JOB add calls to _on_ble_evt functions from each service your application is using
        ble_xxs_on_ble_evt(&m_xxs, p_ble_evt);
        ble_yys_on_ble_evt(&m_yys, p_ble_evt);
@@ -701,7 +790,6 @@ static void ble_stack_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
-
 /**@brief Function for the Peer Manager initialization.
  *
  * @param[in] erase_bonds  Indicates whether bonding information should be cleared from
@@ -732,18 +820,22 @@ static void peer_manager_init(bool erase_bonds)
     sec_param.oob            = SEC_PARAM_OOB;
     sec_param.min_key_size   = SEC_PARAM_MIN_KEY_SIZE;
     sec_param.max_key_size   = SEC_PARAM_MAX_KEY_SIZE;
+		
+		if(SEC_PARAM_BOND)//如果绑定就分配秘钥
+		{
     sec_param.kdist_own.enc  = 1;
     sec_param.kdist_own.id   = 1;
     sec_param.kdist_peer.enc = 1;
     sec_param.kdist_peer.id  = 1;
+		}
 
     err_code = pm_sec_params_set(&sec_param);
     APP_ERROR_CHECK(err_code);
 
     err_code = pm_register(pm_evt_handler);
     APP_ERROR_CHECK(err_code);
+		pairing_and_bonding_init();
 }
-
 
 /**@brief Function for handling events from the BSP module.
  *
@@ -848,13 +940,14 @@ static void power_manage(void)
 
 /**@brief Function for starting advertising.
  */
+/*
 static void advertising_start(void)
 {
     uint32_t err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
 
     APP_ERROR_CHECK(err_code);
 }
-
+*/
 
 /**@brief Function for application main entry.
  */
